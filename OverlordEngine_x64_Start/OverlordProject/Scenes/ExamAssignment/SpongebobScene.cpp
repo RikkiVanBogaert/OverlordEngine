@@ -2,6 +2,8 @@
 #include "SpongebobScene.h"
 
 #include "Prefabs/Character.h"
+#include "Prefabs/Pickup.h"
+
 #include "Materials/ColorMaterial.h"
 #include "Materials/DiffuseMaterial.h"
 #include "Materials/DiffuseMaterial_Skinned.h"
@@ -81,6 +83,15 @@ void SpongebobScene::Initialize()
 
 	pLevelObject->GetTransform()->Scale(0.5f);
 
+	//Objects
+	m_pSpatula = new Spatula();
+	m_pSpatula->GetTransform()->Translate(2, 0, 5);
+	AddChild(m_pSpatula);
+
+	auto pUnderwear = new Underwear();
+	pUnderwear->GetTransform()->Translate(-2, 0, 5);
+	AddChild(pUnderwear);
+
 	//Input
 	auto inputAction = InputAction(CharacterMoveLeft, InputState::down, 'A');
 	m_SceneContext.pInput->AddInputAction(inputAction);
@@ -119,6 +130,7 @@ void SpongebobScene::Update()
 	m_pSpongebobMesh->GetTransform()->Rotate(0, rot, 0);
 
 	PlayCorrectAnimation();
+	CheckDeletedObjects();
 }
 
 void SpongebobScene::PlayCorrectAnimation()
@@ -149,5 +161,14 @@ void SpongebobScene::PlayCorrectAnimation()
 	{
 		pAnimator->SetAnimation(m_AnimationClipId);
 		pAnimator->Play();
+	}
+}
+
+void SpongebobScene::CheckDeletedObjects()
+{
+	for (auto child : this->GetChildren())
+	{
+		if (child->NeedsDeleting())
+			this->RemoveChild(child);
 	}
 }

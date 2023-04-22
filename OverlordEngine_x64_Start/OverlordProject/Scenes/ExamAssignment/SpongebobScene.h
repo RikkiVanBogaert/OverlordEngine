@@ -28,7 +28,9 @@ private:
 	};
 
 	Character* m_pCharacter{};
-	GameObject* m_pSpongebobMesh{}; //maybe local
+	GameObject* m_pSpongebobMesh{};
+
+	GameObject* m_pSpatula{};
 
 	//Animations
 	ModelAnimator* pAnimator{};
@@ -40,5 +42,7 @@ private:
 	UINT m_ClipCount{};
 
 	void PlayCorrectAnimation();
+
+	void CheckDeletedObjects();
 };
 

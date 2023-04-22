@@ -48,6 +48,10 @@ public:
 
 	void SetOnTriggerCallBack(PhysicsCallback callback);
 
+	//Other
+	bool NeedsDeleting() { return m_NeedsDeleting; }
+	void MarkForDeletion() { m_NeedsDeleting = true; }
+
 #pragma region
 	template <class T>
 	bool HasComponent(bool searchChildren = false)
@@ -165,4 +169,7 @@ private:
 	TransformComponent* m_pTransform{};
 	PhysicsCallback m_OnTriggerCallback{};
 	std::wstring m_Tag{};
+
+	//Other
+	bool m_NeedsDeleting{};
 };

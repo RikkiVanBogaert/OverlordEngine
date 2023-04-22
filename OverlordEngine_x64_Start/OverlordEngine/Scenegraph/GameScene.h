@@ -38,6 +38,9 @@ public:
 	PhysxProxy* GetPhysxProxy() const { return m_pPhysxProxy; }
 	void SetActiveCamera(CameraComponent* pCameraComponent);
 
+	//Other
+	std::vector<GameObject*> GetChildren() { return m_pChildren; }
+
 protected:
 	virtual void Initialize() = 0;
 	virtual void PostInitialize() {};
