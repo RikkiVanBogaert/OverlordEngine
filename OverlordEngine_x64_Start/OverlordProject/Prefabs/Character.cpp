@@ -99,6 +99,18 @@ void Character::Update(const SceneContext& /*sceneContext*/)
 		auto moveAcc = m_MoveAcceleration * elapsedTime;
 
 		//If the character is moving (= input is pressed)
+
+		//ATTACK LOGIC
+		if (GetScene()->GetSceneContext().pInput->IsActionTriggered(m_CharacterDesc.actionId_Attack))
+		{
+			isMoving = false;
+			m_IsAttacking = true;
+		}
+		else
+		{
+			m_IsAttacking = false;
+		}
+
 		if(isMoving)
 		{
 			//Calculate & Store the current direction (m_CurrentDirection) >> based on the forward/right vectors and the pressed input

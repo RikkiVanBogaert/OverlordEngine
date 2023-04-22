@@ -29,6 +29,7 @@ struct CharacterDesc
 	int actionId_MoveForward{ -1 };
 	int actionId_MoveBackward{ -1 };
 	int actionId_Jump{ -1 };
+	int actionId_Attack{ -1 };
 };
 
 class Character : public GameObject
@@ -46,6 +47,7 @@ public:
 
 	//Other
 	XMFLOAT3 GetVelocity() const { return m_TotalVelocity; }
+	bool IsAttacking() const { return m_IsAttacking; }
 
 protected:
 	void Initialize(const SceneContext&) override;
@@ -66,5 +68,6 @@ private:
 
 	//Other
 	XMFLOAT3 m_CameraOffset{};
+	bool m_IsAttacking{};
 };
 

@@ -23,10 +23,22 @@ private:
 		CharacterMoveRight,
 		CharacterMoveForward,
 		CharacterMoveBackward,
-		CharacterJump
+		CharacterJump,
+		Attack
 	};
 
 	Character* m_pCharacter{};
 	GameObject* m_pSpongebobMesh{}; //maybe local
+
+	//Animations
+	ModelAnimator* pAnimator{};
+
+	int m_AnimationClipId{ 0 };
+	float m_AnimationSpeed{ 0.5f };
+
+	char** m_ClipNames{};
+	UINT m_ClipCount{};
+
+	void PlayCorrectAnimation();
 };
 
