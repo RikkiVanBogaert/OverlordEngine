@@ -169,24 +169,24 @@ void SpongebobScene::CreateLevel()
 
 	//Simple Level
 	const auto pLevelObject = AddChild(new GameObject());
-	const auto pLevelMesh = pLevelObject->AddComponent(new ModelComponent(L"Exam/Meshes/Level.ovm"));
+	const auto pLevelMesh = pLevelObject->AddComponent(new ModelComponent(L"Exam/Meshes/Level4.ovm"));
 	pLevelMesh->SetMaterial(MaterialManager::Get()->CreateMaterial<ColorMaterial>());
 
 	const auto pLevelActor = pLevelObject->AddComponent(new RigidBodyComponent(true));
-	const auto pPxTriangleMesh = ContentManager::Load<PxTriangleMesh>(L"Exam/Meshes/Level.ovpt");
+	const auto pPxTriangleMesh = ContentManager::Load<PxTriangleMesh>(L"Exam/Meshes/Level3.ovpt");
 	const float levelScale = 2.f;
 	pLevelActor->AddCollider(PxTriangleMeshGeometry(pPxTriangleMesh, PxMeshScale({ levelScale, levelScale, levelScale })), *pDefaultMaterial);
 
 	pLevelObject->GetTransform()->Scale(levelScale);
 
-	/*for (int i{}; i < 16; ++i)
+	for (int i{}; i < 16; ++i)
 	{
 		std::wstring name{ L"Exam/Textures/Level/t" + std::to_wstring(i)};
 		name += L".png";
 		auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
 		pMat->SetDiffuseTexture(name);
 		pLevelMesh->SetMaterial(pMat);
-	}*/
+	}
 
 	
 

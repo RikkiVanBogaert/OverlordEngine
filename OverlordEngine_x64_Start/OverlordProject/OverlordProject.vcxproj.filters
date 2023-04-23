@@ -30,6 +30,8 @@
     <ClCompile Include="Scenes\Week 7\PickingScene.cpp" />
     <ClCompile Include="Prefabs\Character.cpp" />
     <ClCompile Include="Prefabs\Pickup.cpp" />
+    <ClCompile Include="Scenes\ExamAssignment\TestScene.cpp" />
+    <ClCompile Include="Prefabs\Tiki.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -61,5 +63,7 @@
     <ClInclude Include="Prefabs\Character.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="Prefabs\Pickup.h" />
+    <ClInclude Include="Scenes\ExamAssignment\TestScene.h" />
+    <ClInclude Include="Prefabs\Tiki.h" />
   </ItemGroup>
 </Project>

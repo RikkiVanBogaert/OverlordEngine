@@ -8,6 +8,7 @@ void Spatula::Initialize(const SceneContext&)
 	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
 	pMat->SetDiffuseTexture(L"Exam/Textures/spatula_golden.png");
 
+
 	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/Spatula.ovm");
 	AddComponent<ModelComponent>(pModel);
 	pModel->SetMaterial(pMat);
@@ -16,17 +17,17 @@ void Spatula::Initialize(const SceneContext&)
 	auto& phys = PxGetPhysics();
 	auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
 
-	auto pRB = new GameObject();
-	auto pRigidBodyCp = pRB->AddComponent(new RigidBodyComponent(true));
+	//auto pRB = new GameObject();
+	auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
 	const XMFLOAT3 size{ 1, 1 ,1 };
 	pRigidBodyCp->AddCollider(PxSphereGeometry(1.f), *pBouncyMaterial, true);
-	AddChild(pRB);
 
 	auto parentPos = this->GetTransform()->GetPosition();
-	pRB->GetTransform()->Translate(parentPos.x, 1.f, parentPos.z);
 
-	auto onTrigger = [&](GameObject*, GameObject*, PxTriggerAction action)
+	auto onTrigger = [&](GameObject*, GameObject* other, PxTriggerAction action)
 	{
+		if (other->GetTag() != L"Player") return;
+
 		if (action == PxTriggerAction::ENTER)
 		{
 			std::cout << "SPATULA PICKED UP\n";
@@ -34,7 +35,7 @@ void Spatula::Initialize(const SceneContext&)
 		}
 	};
 
-	pRB->SetOnTriggerCallBack(onTrigger);
+	SetOnTriggerCallBack(onTrigger);
 }
 
 void Underwear::Initialize(const SceneContext&)
@@ -59,8 +60,10 @@ void Underwear::Initialize(const SceneContext&)
 	auto parentPos = this->GetTransform()->GetPosition();
 	pRB->GetTransform()->Translate(parentPos.x, 1.f, parentPos.z);
 
-	auto onTrigger = [&](GameObject*, GameObject*, PxTriggerAction action)
+	auto onTrigger = [&](GameObject*, GameObject* other, PxTriggerAction action)
 	{
+		if (other->GetTag() != L"Player") return;
+		
 		if (action == PxTriggerAction::ENTER)
 		{
 			std::cout << "UNDERWEAR PICKED UP\n";
