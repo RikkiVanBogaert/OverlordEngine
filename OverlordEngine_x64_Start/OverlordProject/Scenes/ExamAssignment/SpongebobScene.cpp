@@ -46,12 +46,12 @@ void SpongebobScene::Initialize()
 	//Spongebob
 	m_pSpongebobMesh = new GameObject();
 	
-	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Skinned>();
-	pMat->SetDiffuseTexture(L"Exam/Textures/Spongebob.png");
+	auto pSpongeMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Skinned>();
+	pSpongeMat->SetDiffuseTexture(L"Exam/Textures/Spongebob.png");
 
 	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/Sponge.ovm");
 	m_pSpongebobMesh->AddComponent<ModelComponent>(pModel);
-	pModel->SetMaterial(pMat);
+	pModel->SetMaterial(pSpongeMat);
 	m_pSpongebobMesh->GetTransform()->Scale(0.2f);
 	
 	AddChild(m_pSpongebobMesh);
@@ -72,17 +72,8 @@ void SpongebobScene::Initialize()
 		strncpy_s(m_ClipNames[i], clipSize + 1, clipName.c_str(), clipSize);
 	}
 
-	//Simple Level
-	const auto pLevelObject = AddChild(new GameObject());
-	const auto pLevelMesh = pLevelObject->AddComponent(new ModelComponent(L"Meshes/SimpleLevel.ovm"));
-	pLevelMesh->SetMaterial(MaterialManager::Get()->CreateMaterial<ColorMaterial>());
-
-	const auto pLevelActor = pLevelObject->AddComponent(new RigidBodyComponent(true));
-	const auto pPxTriangleMesh = ContentManager::Load<PxTriangleMesh>(L"Meshes/SimpleLevel.ovpt");
-	pLevelActor->AddCollider(PxTriangleMeshGeometry(pPxTriangleMesh, PxMeshScale({ .5f,.5f,.5f })), *pDefaultMaterial);
-
-	pLevelObject->GetTransform()->Scale(0.5f);
-
+	CreateLevel();
+	
 	//Objects
 	m_pSpatula = new Spatula();
 	m_pSpatula->GetTransform()->Translate(2, 0, 5);
@@ -124,7 +115,6 @@ void SpongebobScene::Update()
 	auto pos = m_pCharacter->GetTransform()->GetPosition();
 	pos.y -= 1.3f; //offset to put spongebob on same height as capsule
 	m_pSpongebobMesh->GetTransform()->Translate(pos);
-
 	
 	auto rot = std::atan2f(m_pCharacter->GetVelocity().z,-m_pCharacter->GetVelocity().x) * float(180 / M_PI) + 90;
 	m_pSpongebobMesh->GetTransform()->Rotate(0, rot, 0);
@@ -171,4 +161,33 @@ void SpongebobScene::CheckDeletedObjects()
 		if (child->NeedsDeleting())
 			this->RemoveChild(child);
 	}
+}
+
+void SpongebobScene::CreateLevel()
+{
+	const auto pDefaultMaterial = PxGetPhysics().createMaterial(0.5f, 0.5f, 0.5f);
+
+	//Simple Level
+	const auto pLevelObject = AddChild(new GameObject());
+	const auto pLevelMesh = pLevelObject->AddComponent(new ModelComponent(L"Exam/Meshes/Level.ovm"));
+	pLevelMesh->SetMaterial(MaterialManager::Get()->CreateMaterial<ColorMaterial>());
+
+	const auto pLevelActor = pLevelObject->AddComponent(new RigidBodyComponent(true));
+	const auto pPxTriangleMesh = ContentManager::Load<PxTriangleMesh>(L"Exam/Meshes/Level.ovpt");
+	const float levelScale = 2.f;
+	pLevelActor->AddCollider(PxTriangleMeshGeometry(pPxTriangleMesh, PxMeshScale({ levelScale, levelScale, levelScale })), *pDefaultMaterial);
+
+	pLevelObject->GetTransform()->Scale(levelScale);
+
+	/*for (int i{}; i < 16; ++i)
+	{
+		std::wstring name{ L"Exam/Textures/Level/t" + std::to_wstring(i)};
+		name += L".png";
+		auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+		pMat->SetDiffuseTexture(name);
+		pLevelMesh->SetMaterial(pMat);
+	}*/
+
+	
+
 }

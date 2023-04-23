@@ -44,5 +44,6 @@ private:
 	void PlayCorrectAnimation();
 
 	void CheckDeletedObjects();
+	void CreateLevel();
 };
 
