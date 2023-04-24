@@ -13,5 +13,7 @@ protected:
 private:
 	bool m_IsVulnerable{};
 	Character* m_pPlayer{};
+
+	void SpawnFlowers();
 };
 

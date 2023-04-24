@@ -76,16 +76,20 @@ void TestScene::Initialize()
 
 	//Objects
 	m_pSpatula = new Spatula();
-	m_pSpatula->GetTransform()->Translate(2, 0, 5);
+	m_pSpatula->GetTransform()->Translate(2, 0, 10);
 	AddChild(m_pSpatula);
 
 	auto pUnderwear = new Underwear();
-	pUnderwear->GetTransform()->Translate(-2, 0, 5);
+	pUnderwear->GetTransform()->Translate(-2, 0, 10);
 	AddChild(pUnderwear);
 
 	auto pTiki = new Tiki();
-	pTiki->GetTransform()->Translate(0, 0, 7);
+	pTiki->GetTransform()->Translate(0, 0, 12);
 	AddChild(pTiki);
+
+	auto pFlower = new Flower();
+	pFlower->GetTransform()->Translate(0, 0, 4);
+	AddChild(pFlower);
 
 	//Input
 	auto inputAction = InputAction(CharacterMoveLeft, InputState::down, 'A');
@@ -109,7 +113,36 @@ void TestScene::Initialize()
 }
 
 void TestScene::OnGUI()
-{}
+{
+	if (ImGui::Button(pAnimator->IsPlaying() ? "PAUSE" : "PLAY"))
+	{
+		if (pAnimator->IsPlaying())pAnimator->Pause();
+		else pAnimator->Play();
+	}
+
+	if (ImGui::Button("RESET"))
+	{
+		pAnimator->Reset();
+	}
+
+	ImGui::Dummy({ 0,5 });
+
+	bool reversed = pAnimator->IsReversed();
+	if (ImGui::Checkbox("Play Reversed", &reversed))
+	{
+		pAnimator->SetPlayReversed(reversed);
+	}
+
+	if (ImGui::ListBox("Animation Clip", &m_AnimationClipId, m_ClipNames, static_cast<int>(m_ClipCount)))
+	{
+		pAnimator->SetAnimation(m_AnimationClipId);
+	}
+
+	if (ImGui::SliderFloat("Animation Speed", &m_AnimationSpeed, 0.f, 4.f))
+	{
+		pAnimator->SetAnimationSpeed(m_AnimationSpeed);
+	}
+}
 
 void TestScene::Update()
 {

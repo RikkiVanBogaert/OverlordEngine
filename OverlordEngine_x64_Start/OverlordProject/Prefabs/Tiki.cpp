@@ -11,22 +11,25 @@ void Tiki::Initialize(const SceneContext&)
 	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
 	pMat->SetDiffuseTexture(L"Exam/Textures/tiki.png");
 
+	auto pModelObject = new GameObject();
 	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/Tiki.ovm");
-	AddComponent<ModelComponent>(pModel);
+	pModelObject->AddComponent<ModelComponent>(pModel);
 	pModel->SetMaterial(pMat);
+	AddChild(pModelObject);
+	pModel->GetTransform()->Translate(0, 0, 0);
 
 	//Collision
 	auto& phys = PxGetPhysics();
 	auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
 
-	auto pRB = new GameObject();
-	auto pRigidBodyCp = pRB->AddComponent(new RigidBodyComponent(true));
-	const XMFLOAT3 size{ 1, 1 ,1 };
-	pRigidBodyCp->AddCollider(PxSphereGeometry(1.f), *pBouncyMaterial, true);
-	AddChild(pRB);
 
-	auto parentPos = this->GetTransform()->GetPosition();
-	pRB->GetTransform()->Translate(parentPos.x, 1.f, parentPos.z);
+	auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
+	const XMFLOAT3 size{ 1, 1 ,1 };
+
+	pRigidBodyCp->AddCollider(PxSphereGeometry(1.8f), *pBouncyMaterial, true);
+
+	auto pConvexMesh = ContentManager::Load<PxConvexMesh>(L"Exam/Meshes/Tiki.ovpc");
+	pRigidBodyCp->AddCollider(PxConvexMeshGeometry{ pConvexMesh }, *pBouncyMaterial);
 
 	auto onTrigger = [&](GameObject*, GameObject* other, PxTriggerAction action)
 	{
@@ -44,7 +47,7 @@ void Tiki::Initialize(const SceneContext&)
 		}
 	};
 
-	pRB->SetOnTriggerCallBack(onTrigger);
+	SetOnTriggerCallBack(onTrigger);
 }
 
 void Tiki::Update(const SceneContext& )
@@ -54,11 +57,23 @@ void Tiki::Update(const SceneContext& )
 
 	if (m_pPlayer->IsAttacking())
 	{
-		auto spatula = new Spatula();
-		auto pos = GetTransform()->GetPosition();
-		spatula->GetTransform()->Translate(pos.x, pos.y + 5, pos.z + 5);
-		GetScene()->AddChild(spatula);
+		SpawnFlowers();
 
 		MarkForDeletion();
+	}
+}
+
+void Tiki::SpawnFlowers()
+{
+	for (int i{}; i < 5; ++i)
+	{
+		auto spatula = new Flower();
+		auto pos = GetTransform()->GetPosition();
+
+		const int rndX{rand() % 13 - 6};
+		const int rndZ{ rand() % 13 - 6 };
+
+		spatula->GetTransform()->Translate(pos.x + rndX, pos.y + 3, pos.z + rndZ);
+		GetScene()->AddChild(spatula);
 	}
 }
