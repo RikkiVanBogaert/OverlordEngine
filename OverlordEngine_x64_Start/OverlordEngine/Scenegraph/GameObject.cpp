@@ -67,6 +67,7 @@ void GameObject::RootPostInitialize(const SceneContext& sceneContext)
 
 void GameObject::RootUpdate(const SceneContext& sceneContext)
 {
+	if (m_NeedsDeleting) return;
 	//User-Object Update
 	Update(sceneContext);
 	
