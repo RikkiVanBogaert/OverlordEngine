@@ -85,10 +85,6 @@ void SpongebobScene::Initialize()
 	pUnderwear->GetTransform()->Translate(-2, 0, 5);
 	AddChild(pUnderwear);
 
-	auto pTripleTiki = new ThreeTikis();
-	AddChild(pTripleTiki);
-	pTripleTiki->GetTransform()->Translate(startPos.x, startPos.y, startPos.z + 5);
-	
 
 	//Input
 	auto inputAction = InputAction(CharacterMoveLeft, InputState::down, 'A');
@@ -177,24 +173,35 @@ void SpongebobScene::CreateLevel()
 	//Simple Level
 	const auto pLevelObject = AddChild(new GameObject());
 	const auto pLevelMesh = pLevelObject->AddComponent(new ModelComponent(L"Exam/Meshes/Level.ovm"));
-	pLevelMesh->SetMaterial(MaterialManager::Get()->CreateMaterial<ColorMaterial>());
+
 
 	const auto pLevelActor = pLevelObject->AddComponent(new RigidBodyComponent(true));
-	const auto pPxTriangleMesh = ContentManager::Load<PxTriangleMesh>(L"Exam/Meshes/Level.ovpt");
+	const auto pPxTriangleMesh = ContentManager::Load<PxTriangleMesh>(L"Exam/Meshes/Level2.ovpt");
 	const float levelScale = 2.f;
 	pLevelActor->AddCollider(PxTriangleMeshGeometry(pPxTriangleMesh, PxMeshScale({ levelScale, levelScale, levelScale })), *pDefaultMaterial);
 
 	pLevelObject->GetTransform()->Scale(levelScale);
 
-	for (int i{}; i < 16; ++i)
+
+	auto pDefault = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+	pLevelMesh->SetMaterial(pDefault);
+
+	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+	pMat->SetDiffuseTexture(L"Exam/Textures/Level/t11.png");
+	//pLevelMesh->SetMaterial(pMat);
+
+	auto pMat2 = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+	pMat2->SetDiffuseTexture(L"Exam/Textures/Level/t0092_0.png");
+
+	for (int i{}; i < 195; ++i)
 	{
-		std::wstring name{ L"Exam/Textures/Level/t" + std::to_wstring(i)};
-		name += L".png";
-		auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-		pMat->SetDiffuseTexture(name);
-		pLevelMesh->SetMaterial(pMat);
+		if(i % 2 == 0)
+			pLevelMesh->SetMaterial(pMat, UINT8(i));
+		else
+			pLevelMesh->SetMaterial(pMat2, UINT8(i));
 	}
 
+	//pLevelMesh->SetMaterial(pMat, UINT8(33));
 	
 
 }
