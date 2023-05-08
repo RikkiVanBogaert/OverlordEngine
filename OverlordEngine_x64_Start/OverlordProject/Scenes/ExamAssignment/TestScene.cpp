@@ -4,6 +4,7 @@
 #include "Prefabs/Character.h"
 #include "Prefabs/Pickup.h"
 #include "Prefabs/Tiki.h"
+#include "Prefabs/ThreeTikis.h"
 
 #include "Materials/ColorMaterial.h"
 #include "Materials/DiffuseMaterial.h"
@@ -79,13 +80,10 @@ void TestScene::Initialize()
 	m_pSpatula->GetTransform()->Translate(2, 0, 10);
 	AddChild(m_pSpatula);
 
-	auto pUnderwear = new Underwear();
-	pUnderwear->GetTransform()->Translate(-2, 0, 10);
-	AddChild(pUnderwear);
-
+	
 	auto pTiki = new Tiki();
-	pTiki->GetTransform()->Translate(0, 0, 12);
 	AddChild(pTiki);
+	pTiki->GetTransform()->Translate(0, 0, 12);
 
 	auto pFlower = new Flower();
 	pFlower->GetTransform()->Translate(0, 0, 4);

@@ -3,6 +3,7 @@
 
 #include "Prefabs/Character.h"
 #include "Prefabs/Pickup.h"
+#include "Prefabs/ThreeTikis.h"
 
 #include "Materials/ColorMaterial.h"
 #include "Materials/DiffuseMaterial.h"
@@ -41,7 +42,8 @@ void SpongebobScene::Initialize()
 	characterDesc.actionId_Attack = Attack;
 
 	m_pCharacter = AddChild(new Character(characterDesc, {0, 0, -10}));
-	m_pCharacter->GetTransform()->Translate(0.f, 5.f, 0.f);
+	const XMFLOAT3 startPos{65, 10, -190};
+	m_pCharacter->GetTransform()->Translate(startPos);
 	
 	//Spongebob
 	m_pSpongebobMesh = new GameObject();
@@ -82,6 +84,11 @@ void SpongebobScene::Initialize()
 	auto pUnderwear = new Underwear();
 	pUnderwear->GetTransform()->Translate(-2, 0, 5);
 	AddChild(pUnderwear);
+
+	auto pTripleTiki = new ThreeTikis();
+	AddChild(pTripleTiki);
+	pTripleTiki->GetTransform()->Translate(startPos.x, startPos.y, startPos.z + 5);
+	
 
 	//Input
 	auto inputAction = InputAction(CharacterMoveLeft, InputState::down, 'A');

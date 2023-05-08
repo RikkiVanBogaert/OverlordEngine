@@ -16,8 +16,7 @@ void Tiki::Initialize(const SceneContext&)
 	pModelObject->AddComponent<ModelComponent>(pModel);
 	pModel->SetMaterial(pMat);
 	AddChild(pModelObject);
-	pModel->GetTransform()->Translate(0, 0, 0);
-
+	
 	//Collision
 	auto& phys = PxGetPhysics();
 	auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);

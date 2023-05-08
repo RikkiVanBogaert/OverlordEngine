@@ -136,6 +136,7 @@
     <ClCompile Include="Materials\UberMaterial.cpp" />
     <ClCompile Include="Scenes\ExamAssignment\TestScene.cpp" />
     <ClCompile Include="Prefabs\Tiki.cpp" />
+    <ClCompile Include="Prefabs\ThreeTikis.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OverlordEngine\OverlordEngine.vcxproj">
@@ -174,6 +175,7 @@
     <ClInclude Include="Materials\UberMaterial.h" />
     <ClInclude Include="Scenes\ExamAssignment\TestScene.h" />
     <ClInclude Include="Prefabs\Tiki.h" />
+    <ClInclude Include="Prefabs\ThreeTikis.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

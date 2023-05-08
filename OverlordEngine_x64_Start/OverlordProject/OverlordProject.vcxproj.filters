@@ -32,6 +32,7 @@
     <ClCompile Include="Prefabs\Pickup.cpp" />
     <ClCompile Include="Scenes\ExamAssignment\TestScene.cpp" />
     <ClCompile Include="Prefabs\Tiki.cpp" />
+    <ClCompile Include="Prefabs\ThreeTikis.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -65,5 +66,6 @@
     <ClInclude Include="Prefabs\Pickup.h" />
     <ClInclude Include="Scenes\ExamAssignment\TestScene.h" />
     <ClInclude Include="Prefabs\Tiki.h" />
+    <ClInclude Include="Prefabs\ThreeTikis.h" />
   </ItemGroup>
 </Project>
