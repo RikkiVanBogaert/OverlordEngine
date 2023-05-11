@@ -34,6 +34,8 @@
     <ClCompile Include="Prefabs\Tiki.cpp" />
     <ClCompile Include="Prefabs\ThreeTikis.cpp" />
     <ClCompile Include="Scenes\ExamAssignment\MainMenuScene.cpp" />
+    <ClCompile Include="Prefabs\UIElement.cpp" />
+    <ClCompile Include="Prefabs\HUDPrefab.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -69,5 +71,7 @@
     <ClInclude Include="Prefabs\Tiki.h" />
     <ClInclude Include="Prefabs\ThreeTikis.h" />
     <ClInclude Include="Scenes\ExamAssignment\MainMenuScene.h" />
+    <ClInclude Include="Prefabs\UIElement.h" />
+    <ClInclude Include="Prefabs\HUDPrefab.h" />
   </ItemGroup>
 </Project>

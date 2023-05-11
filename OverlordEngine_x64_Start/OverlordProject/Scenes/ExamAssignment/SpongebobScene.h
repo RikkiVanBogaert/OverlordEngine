@@ -1,4 +1,5 @@
 #pragma once
+class UIElement;
 class Character;
 
 class SpongebobScene : public GameScene
@@ -41,7 +42,11 @@ private:
 	char** m_ClipNames{};
 	UINT m_ClipCount{};
 
+	//HUD
+	UIElement* m_pUISpatula;
+
 	void PlayCorrectAnimation();
+	void UpdateHUDElements();
 
 	void CheckDeletedObjects();
 	void CreateLevel();

@@ -13,6 +13,8 @@
 #include <math.h>
 
 #include "Helpers.h"
+#include "Prefabs/HUDPrefab.h"
+#include "Prefabs/UIElement.h"
 
 SpongebobScene::~SpongebobScene()
 {
@@ -105,10 +107,16 @@ void SpongebobScene::Initialize()
 	inputAction = InputAction(CharacterJump, InputState::pressed, VK_SPACE, -1, XINPUT_GAMEPAD_A);
 	m_SceneContext.pInput->AddInputAction(inputAction);
 
+
+	//HUD
+	auto pHud = new HUDPrefab();
+	AddChild(pHud);
 }
 
 void SpongebobScene::OnGUI()
-{}
+{
+	
+}
 
 void SpongebobScene::Update()
 {
@@ -123,6 +131,8 @@ void SpongebobScene::Update()
 	m_pSpongebobMesh->GetTransform()->Rotate(0, rot, 0);
 
 	PlayCorrectAnimation();
+	UpdateHUDElements();
+
 	CheckDeletedObjects();
 }
 
@@ -155,6 +165,22 @@ void SpongebobScene::PlayCorrectAnimation()
 		pAnimator->SetAnimation(m_AnimationClipId);
 		pAnimator->Play();
 	}
+}
+
+void SpongebobScene::UpdateHUDElements()
+{
+	/*auto pos = m_pCharacter->GetCamera()->GetTransform()->GetWorldPosition();
+	XMFLOAT3 toPlayer = { m_pCharacter->GetTransform()->GetPosition().x - pos.x,
+		m_pCharacter->GetTransform()->GetPosition().y - pos.y,
+		m_pCharacter->GetTransform()->GetPosition().z - pos.z };
+
+	const float toPlayerLength = sqrtf(toPlayer.x * toPlayer.x + toPlayer.y * toPlayer.y + toPlayer.z * toPlayer.z);
+	XMFLOAT3 camToPlayerNorm = { toPlayer.x };
+	const float length = 1.5f;
+	const XMFLOAT3 newPos{ pos.x + toPlayer.x * length, pos.y + toPlayer.y * length ,
+	pos.z + toPlayer.z * length };
+	
+	m_pUISpatula->GetTransform()->Translate(newPos);*/
 }
 
 void SpongebobScene::CheckDeletedObjects()

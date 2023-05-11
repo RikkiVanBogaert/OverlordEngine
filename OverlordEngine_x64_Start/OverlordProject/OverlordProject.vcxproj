@@ -93,6 +93,7 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Prefabs\HUDPrefab.cpp" />
     <ClCompile Include="Scenes\ExamAssignment\MainMenuScene.cpp" />
     <ClCompile Include="Materials\DiffuseMaterial_Skinned.cpp" />
     <ClCompile Include="Prefabs\Pickup.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="Scenes\ExamAssignment\TestScene.cpp" />
     <ClCompile Include="Prefabs\Tiki.cpp" />
     <ClCompile Include="Prefabs\ThreeTikis.cpp" />
+    <ClCompile Include="Prefabs\UIElement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OverlordEngine\OverlordEngine.vcxproj">
@@ -146,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Helpers.h" />
+    <ClInclude Include="Prefabs\HUDPrefab.h" />
     <ClInclude Include="Scenes\ExamAssignment\MainMenuScene.h" />
     <ClInclude Include="Materials\DiffuseMaterial_Skinned.h" />
     <ClInclude Include="Prefabs\Pickup.h" />
@@ -178,6 +181,7 @@
     <ClInclude Include="Scenes\ExamAssignment\TestScene.h" />
     <ClInclude Include="Prefabs\Tiki.h" />
     <ClInclude Include="Prefabs\ThreeTikis.h" />
+    <ClInclude Include="Prefabs\UIElement.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

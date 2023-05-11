@@ -3,6 +3,7 @@
 
 #include "Materials/ColorMaterial.h"
 #include "Materials/DiffuseMaterial.h"
+#include "Prefabs/UIElement.h"
 
 
 MainMenuScene::~MainMenuScene()
@@ -17,27 +18,21 @@ void MainMenuScene::Initialize()
 	//GameScene::GetSceneSettings().drawGrid = false;
 	//GameScene::GetSceneSettings().drawPhysXDebug = false;
 
-	auto pGameObject = new GameObject();
-
 	auto pCamera = new FixedCamera();
 	AddChild(pCamera);
 	pCamera->GetTransform()->Rotate(90, 0, 0);
 	pCamera->GetTransform()->Translate(0, 40, 0);
 	pCamera->GetComponent<CameraComponent>()->SetActive();
 
-	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	pMat->SetDiffuseTexture(L"Exam/HUD/MainMenu.png");
-	ModelComponent* pModel = new ModelComponent(L"Exam/HUD/Plane.ovm");
-	pGameObject->AddComponent<ModelComponent>(pModel);
-	pModel->SetMaterial(pMat);
-
-	pModel->GetTransform()->Scale(2.35f, 1, 1.35f);
+	auto pGameObject = new GameObject();
+	auto pSprite = new SpriteComponent(L"Exam/HUD/MainMenu.png");
+	pGameObject->AddComponent<SpriteComponent>(pSprite);
 
 	AddChild(pGameObject);
 
 	//Buttons-----
-	auto pButtonObject = new GameObject();
-	ModelComponent* pButtonPlane = new ModelComponent(L"Exam/HUD/Plane.ovm");
+	const auto pButtonObject = new GameObject();
+	const auto pButtonPlane = new ModelComponent(L"Exam/HUD/Plane.ovm");
 	pButtonObject->AddComponent<ModelComponent>(pButtonPlane);
 
 	auto pButtonMat = MaterialManager::Get()->CreateMaterial<ColorMaterial>();
@@ -71,4 +66,5 @@ void MainMenuScene::Update()
 			SceneManager::Get()->SetActiveGameScene(L"TestScene");
 		}
 	}
+
 }

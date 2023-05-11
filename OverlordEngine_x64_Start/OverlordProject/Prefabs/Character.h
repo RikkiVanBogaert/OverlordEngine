@@ -48,6 +48,7 @@ public:
 	//Other
 	XMFLOAT3 GetVelocity() const { return m_TotalVelocity; }
 	bool IsAttacking() const { return m_IsAttacking; }
+	CameraComponent* GetCamera() const { return m_pCameraComponent; }
 
 protected:
 	void Initialize(const SceneContext&) override;
