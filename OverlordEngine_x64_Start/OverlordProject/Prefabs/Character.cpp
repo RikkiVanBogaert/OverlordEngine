@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Character.h"
 
+#include <corecrt_math_defines.h>
+
 Character::Character(const CharacterDesc& characterDesc, const XMFLOAT3 cameraOffset) :
 	m_CharacterDesc{ characterDesc },
 	m_MoveAcceleration(characterDesc.maxMoveSpeed / characterDesc.moveAccelerationTime),
@@ -90,6 +92,8 @@ void Character::Update(const SceneContext& /*sceneContext*/)
 		m_TotalPitch += m_CharacterDesc.rotationSpeed * elapsedTime * look.y;
 		//Rotate this character based on the TotalPitch (X) and TotalYaw (Y)
 		GetTransform()->Rotate(m_TotalPitch, m_TotalYaw, 0);
+
+		
 
 		//********
 		//MOVEMENT

@@ -50,7 +50,7 @@ void TestScene::Initialize()
 	auto pSpongeMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Skinned>();
 	pSpongeMat->SetDiffuseTexture(L"Exam/Textures/Spongebob.png");
 
-	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/Sponge.ovm");
+	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/SpongebobNew.ovm");
 	m_pSpongebobMesh->AddComponent<ModelComponent>(pModel);
 	pModel->SetMaterial(pSpongeMat);
 	m_pSpongebobMesh->GetTransform()->Scale(0.2f);
@@ -161,10 +161,10 @@ void TestScene::Update()
 void TestScene::PlayCorrectAnimation()
 {
 	if (m_pCharacter->IsAttacking() &&
-		m_AnimationClipId != 2)
+		m_AnimationClipId != 3)
 	{
 		pAnimator->Pause();
-		m_AnimationClipId = 2;
+		m_AnimationClipId = 3;
 	}
 	else if (!m_pCharacter->IsAttacking())
 	{

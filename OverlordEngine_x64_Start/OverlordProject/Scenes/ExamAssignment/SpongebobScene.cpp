@@ -104,7 +104,7 @@ void SpongebobScene::Initialize()
 
 	inputAction = InputAction(CharacterJump, InputState::pressed, VK_SPACE, -1, XINPUT_GAMEPAD_A);
 	m_SceneContext.pInput->AddInputAction(inputAction);
-	
+
 }
 
 void SpongebobScene::OnGUI()
