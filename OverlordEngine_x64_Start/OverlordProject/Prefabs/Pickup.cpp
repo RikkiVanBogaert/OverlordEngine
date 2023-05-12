@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "Pickup.h"
+
+#include "Character.h"
+#include "HUDPrefab.h"
 #include "Materials/DiffuseMaterial.h"
 #include "SpherePrefab.h"
 
@@ -27,13 +30,21 @@ void Spatula::Initialize(const SceneContext&)
 
 	auto onTrigger = [&](GameObject*, GameObject* other, PxTriggerAction action)
 	{
-		if (other->GetTag() != L"Player") return;
+		//if (other->GetTag() != L"Player") return;
 
-		if (action == PxTriggerAction::ENTER)
+		if (action != PxTriggerAction::ENTER) return;
+
+		if(auto pChar = dynamic_cast<Character*>(other))
 		{
+			if(auto pHUD = pChar->GetChild<HUDPrefab>())
+			{
+				pHUD->IncreaseAmountSpatulas(1);
+			}
+
 			std::cout << "SPATULA PICKED UP\n";
 			MarkForDeletion();
 		}
+		
 	};
 
 	SetOnTriggerCallBack(onTrigger);

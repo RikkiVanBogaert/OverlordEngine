@@ -63,7 +63,7 @@ void MainMenuScene::Update()
 		{
 			//RemoveChild(pPickedObject, true);
 
-			SceneManager::Get()->SetActiveGameScene(L"TestScene");
+			SceneManager::Get()->SetActiveGameScene(L"SpongebobScene");
 		}
 	}
 

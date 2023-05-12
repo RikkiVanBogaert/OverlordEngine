@@ -4,12 +4,26 @@ class HUDPrefab final : public GameObject
 {
 public:
 	HUDPrefab() = default;
+	~HUDPrefab() override = default;
+
+	HUDPrefab(const HUDPrefab& other) = delete;
+	HUDPrefab(HUDPrefab&& other) noexcept = delete;
+	HUDPrefab& operator=(const HUDPrefab& other) = delete;
+	HUDPrefab& operator=(HUDPrefab&& other) noexcept = delete;
 
 	void Update(const SceneContext&) override;
+
+	void SetAmountSpatulas(int amount);
+	void IncreaseAmountSpatulas(int value);
 
 protected:
 	void Initialize(const SceneContext& sceneContext) override;
 
-private:
 
+private:
+	SpriteFont* m_pFont;
+
+	SpriteComponent* pSprite;
+	XMFLOAT2 m_SpatulaPos{};
+	int m_SpatulaAmount{};
 };

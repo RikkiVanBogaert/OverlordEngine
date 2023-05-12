@@ -46,14 +46,17 @@ void SpongebobScene::Initialize()
 	m_pCharacter = AddChild(new Character(characterDesc, {0, 0, -10}));
 	const XMFLOAT3 startPos{65, 10, -190};
 	m_pCharacter->GetTransform()->Translate(startPos);
-	
+
+	auto pHUD = new HUDPrefab();
+	m_pCharacter->AddChild(pHUD);
+
 	//Spongebob
 	m_pSpongebobMesh = new GameObject();
 	
 	auto pSpongeMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Skinned>();
 	pSpongeMat->SetDiffuseTexture(L"Exam/Textures/Spongebob.png");
 
-	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/Sponge.ovm");
+	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/SpongebobNew.ovm");
 	m_pSpongebobMesh->AddComponent<ModelComponent>(pModel);
 	pModel->SetMaterial(pSpongeMat);
 	m_pSpongebobMesh->GetTransform()->Scale(0.2f);
@@ -80,7 +83,7 @@ void SpongebobScene::Initialize()
 	
 	//Objects
 	m_pSpatula = new Spatula();
-	m_pSpatula->GetTransform()->Translate(2, 0, 5);
+	m_pSpatula->GetTransform()->Translate(startPos.x + 2, startPos.y, startPos.z + 5);
 	AddChild(m_pSpatula);
 
 	auto pUnderwear = new Underwear();
@@ -139,10 +142,10 @@ void SpongebobScene::Update()
 void SpongebobScene::PlayCorrectAnimation()
 {
 	if (m_pCharacter->IsAttacking() &&
-		m_AnimationClipId != 2)
+		m_AnimationClipId != 3)
 	{
 		pAnimator->Pause();
-		m_AnimationClipId = 2;
+		m_AnimationClipId = 3;
 	}
 	else if (!m_pCharacter->IsAttacking())
 	{
