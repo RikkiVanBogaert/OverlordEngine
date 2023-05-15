@@ -42,6 +42,7 @@
     <ClCompile Include="Materials\Shadow\DiffuseMaterial_Shadow.cpp" />
     <ClCompile Include="Materials\Shadow\DiffuseMaterial_Shadow_Skinned.cpp" />
     <ClCompile Include="Scenes\Week 8\ShadowMappingScene.cpp" />
+    <ClCompile Include="Scenes\Week 9\ParticleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -85,5 +86,6 @@
     <ClInclude Include="Materials\Shadow\DiffuseMaterial_Shadow.h" />
     <ClInclude Include="Materials\Shadow\DiffuseMaterial_Shadow_Skinned.h" />
     <ClInclude Include="Scenes\Week 8\ShadowMappingScene.h" />
+    <ClInclude Include="Scenes\Week 9\ParticleScene.h" />
   </ItemGroup>
 </Project>
