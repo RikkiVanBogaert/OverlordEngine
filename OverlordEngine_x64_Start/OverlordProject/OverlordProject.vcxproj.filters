@@ -36,6 +36,9 @@
     <ClCompile Include="Scenes\ExamAssignment\MainMenuScene.cpp" />
     <ClCompile Include="Prefabs\UIElement.cpp" />
     <ClCompile Include="Prefabs\HUDPrefab.cpp" />
+    <ClCompile Include="Scenes\Week 10\PostProcessingScene.cpp" />
+    <ClCompile Include="Materials\Post\PostGrayscale.cpp" />
+    <ClCompile Include="Materials\Post\PostBlur.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -73,5 +76,8 @@
     <ClInclude Include="Scenes\ExamAssignment\MainMenuScene.h" />
     <ClInclude Include="Prefabs\UIElement.h" />
     <ClInclude Include="Prefabs\HUDPrefab.h" />
+    <ClInclude Include="Scenes\Week 10\PostProcessingScene.h" />
+    <ClInclude Include="Materials\Post\PostGrayscale.h" />
+    <ClInclude Include="Materials\Post\PostBlur.h" />
   </ItemGroup>
 </Project>

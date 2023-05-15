@@ -50,5 +50,7 @@ private:
 
 	void CheckDeletedObjects();
 	void CreateLevel();
+
+	std::vector<std::string> mtlParser(const std::string& filename);
 };
 

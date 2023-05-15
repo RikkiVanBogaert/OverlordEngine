@@ -16,6 +16,16 @@
 #include "Prefabs/HUDPrefab.h"
 #include "Prefabs/UIElement.h"
 
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <regex>
+#include <vector>
+
+#include <locale>
+#include <codecvt>
+#include <string>
+
 SpongebobScene::~SpongebobScene()
 {
 	for (UINT i{ 0 }; i < m_ClipCount; ++i)
@@ -44,7 +54,7 @@ void SpongebobScene::Initialize()
 	characterDesc.actionId_Attack = Attack;
 
 	m_pCharacter = AddChild(new Character(characterDesc, {0, 0, -10}));
-	const XMFLOAT3 startPos{65, 10, -190};
+	const XMFLOAT3 startPos{60, 20, -175};
 	m_pCharacter->GetTransform()->Translate(startPos);
 
 	auto pHUD = new HUDPrefab();
@@ -83,7 +93,7 @@ void SpongebobScene::Initialize()
 	
 	//Objects
 	m_pSpatula = new Spatula();
-	m_pSpatula->GetTransform()->Translate(startPos.x + 2, startPos.y, startPos.z + 5);
+	m_pSpatula->GetTransform()->Translate(startPos.x + 2, startPos.y - 3, startPos.z + 5);
 	AddChild(m_pSpatula);
 
 	auto pUnderwear = new Underwear();
@@ -114,6 +124,8 @@ void SpongebobScene::Initialize()
 	//HUD
 	auto pHud = new HUDPrefab();
 	AddChild(pHud);
+
+
 }
 
 void SpongebobScene::OnGUI()
@@ -212,25 +224,77 @@ void SpongebobScene::CreateLevel()
 	pLevelObject->GetTransform()->Scale(levelScale);
 
 
-	auto pDefault = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+	auto pDefault = MaterialManager::Get()->CreateMaterial<ColorMaterial>();
+	pDefault->SetColor({ 0.5f,0.5f,0.5f,1 });
 	pLevelMesh->SetMaterial(pDefault);
 
-	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	pMat->SetDiffuseTexture(L"Exam/Textures/Level/t11.png");
-	//pLevelMesh->SetMaterial(pMat);
+	//auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+	//pMat->SetDiffuseTexture(L"Exam/Textures/Level/t11.png");
+	////pLevelMesh->SetMaterial(pMat);
 
-	auto pMat2 = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	pMat2->SetDiffuseTexture(L"Exam/Textures/Level/t0092_0.png");
+	//auto pMat2 = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+	//pMat2->SetDiffuseTexture(L"Exam/Textures/Level/t0092_0.png");
 
-	for (int i{}; i < 195; ++i)
-	{
-		if(i % 2 == 0)
-			pLevelMesh->SetMaterial(pMat, UINT8(i));
-		else
-			pLevelMesh->SetMaterial(pMat2, UINT8(i));
-	}
+	//for (int i{}; i < 195; ++i)
+	//{
+	//	if(i % 2 == 0)
+	//		pLevelMesh->SetMaterial(pMat, UINT8(i));
+	//	else
+	//		pLevelMesh->SetMaterial(pMat2, UINT8(i));
+	//}
 
 	//pLevelMesh->SetMaterial(pMat, UINT8(33));
-	
 
+	/*auto mtl_contents = mtlParser("../OverlordProject/Resources/Exam/Textures/Level/jellyfishfields.mtl");
+
+	for (UINT8 i{}; i < mtl_contents.size(); ++i)
+	{
+		std::cout << mtl_contents[i] << '\n';
+
+		int wstr_size = MultiByteToWideChar(CP_UTF8, 0, mtl_contents[i].c_str(), -1, NULL, 0);
+		std::wstring wstr(wstr_size, 0);
+		MultiByteToWideChar(CP_UTF8, 0, mtl_contents[i].c_str(), -1, &wstr[0], wstr_size);
+
+		auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+		pMat->SetDiffuseTexture(L"Exam/Textures/Level/" + wstr);
+		pLevelMesh->SetMaterial(pMat, i);
+	}
+
+	std::cout << "Size of mtl_contents: " << mtl_contents.size() << std::endl;*/
+
+
+	//for (UINT8 i{1}; i < 195; ++i)
+	//{
+	//	//t0177_0
+
+	//	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+	//	pMat->SetDiffuseTexture(L"Exam/Textures/Level/t0" + std::to_wstring(i) + L"_0.png");
+	//	pLevelMesh->SetMaterial(pMat, i);
+	//}
+
+	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+	pMat->SetDiffuseTexture(L"Exam/Textures/Level/t0090_0.png");
+	for (UINT8 i{ 80 }; i < 90; ++i)
+	{
+		pLevelMesh->SetMaterial(pMat, i);
+	}
+
+	auto pMat2 = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+	pMat2->SetDiffuseTexture(L"Exam/Textures/Level/t0022_0.png");
+	pLevelMesh->SetMaterial(pMat2, 0);
+}
+
+std::vector<std::string> SpongebobScene::mtlParser(const std::string& filename)
+{
+	std::ifstream file(filename);
+	std::vector<std::string> map_kds;
+	std::string line;
+	while (std::getline(file, line)) {
+		size_t map_kd_pos = line.find("map_Kd ");
+		if (map_kd_pos != std::string::npos) {
+			std::string map_kd_value = line.substr(map_kd_pos + 7);
+			map_kds.push_back(map_kd_value);
+		}
+	}
+	return map_kds;
 }
