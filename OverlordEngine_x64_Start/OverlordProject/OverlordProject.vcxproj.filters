@@ -43,6 +43,8 @@
     <ClCompile Include="Materials\Shadow\DiffuseMaterial_Shadow_Skinned.cpp" />
     <ClCompile Include="Scenes\Week 8\ShadowMappingScene.cpp" />
     <ClCompile Include="Scenes\Week 9\ParticleScene.cpp" />
+    <ClCompile Include="Prefabs\BubbleParticles.cpp" />
+    <ClCompile Include="Materials\Post\PostMyEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -87,5 +89,7 @@
     <ClInclude Include="Materials\Shadow\DiffuseMaterial_Shadow_Skinned.h" />
     <ClInclude Include="Scenes\Week 8\ShadowMappingScene.h" />
     <ClInclude Include="Scenes\Week 9\ParticleScene.h" />
+    <ClInclude Include="Prefabs\BubbleParticles.h" />
+    <ClInclude Include="Materials\Post\PostMyEffect.h" />
   </ItemGroup>
 </Project>

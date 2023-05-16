@@ -143,6 +143,7 @@ void GameScene::RootUpdate()
 	//Root-Scene Update
 	for (const auto pChild : m_pChildren)
 	{
+		if (!pChild) continue;
 		pChild->RootUpdate(m_SceneContext);
 	}
 

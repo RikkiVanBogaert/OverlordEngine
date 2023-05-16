@@ -30,7 +30,7 @@ void Spatula::Initialize(const SceneContext&)
 
 	auto onTrigger = [&](GameObject*, GameObject* other, PxTriggerAction action)
 	{
-		//if (other->GetTag() != L"Player") return;
+		if (other->GetTag() != L"Player") return;
 
 		if (action != PxTriggerAction::ENTER) return;
 

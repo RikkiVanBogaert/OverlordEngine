@@ -13,6 +13,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include "Materials/Post/PostGrayscale.h"
+
 TestScene::~TestScene()
 {
 	for (UINT i{ 0 }; i < m_ClipCount; ++i)
@@ -107,6 +109,10 @@ void TestScene::Initialize()
 
 	inputAction = InputAction(CharacterJump, InputState::pressed, VK_SPACE, -1, XINPUT_GAMEPAD_A);
 	m_SceneContext.pInput->AddInputAction(inputAction);
+
+
+	//auto m_pPostGrayscale = MaterialManager::Get()->CreateMaterial<PostGrayscale>();
+	//AddPostProcessingEffect(m_pPostGrayscale);
 
 }
 

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Tiki.h"
 
+#include "BubbleParticles.h"
 #include "Materials/DiffuseMaterial.h"
 #include "SpherePrefab.h"
 #include "Character.h"
@@ -16,7 +17,8 @@ void Tiki::Initialize(const SceneContext&)
 	pModelObject->AddComponent<ModelComponent>(pModel);
 	pModel->SetMaterial(pMat);
 	AddChild(pModelObject);
-	
+	pModel->GetTransform()->Translate(0, 0.f, 0);
+
 	//Collision
 	auto& phys = PxGetPhysics();
 	auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
@@ -57,6 +59,7 @@ void Tiki::Update(const SceneContext& )
 	if (m_pPlayer->IsAttacking())
 	{
 		SpawnFlowers();
+		SpawnBubbles();
 
 		MarkForDeletion();
 	}
@@ -75,4 +78,11 @@ void Tiki::SpawnFlowers()
 		spatula->GetTransform()->Translate(pos.x + rndX, pos.y + 3, pos.z + rndZ);
 		GetScene()->AddChild(spatula);
 	}
+}
+
+void Tiki::SpawnBubbles()
+{
+	auto pBubbles = new BubbleParticles();
+	pBubbles->GetTransform()->Translate(GetTransform()->GetPosition());
+	GetScene()->AddChild(pBubbles);
 }

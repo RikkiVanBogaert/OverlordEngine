@@ -3,6 +3,7 @@
 
 #include "Prefabs/Character.h"
 #include "Prefabs/Pickup.h"
+#include"Prefabs/Tiki.h"
 #include "Prefabs/ThreeTikis.h"
 
 #include "Materials/ColorMaterial.h"
@@ -25,6 +26,10 @@
 #include <locale>
 #include <codecvt>
 #include <string>
+
+#include "Materials/Post/PostGrayscale.h"
+#include "Materials/Post/PostMyEffect.h"
+#include "Prefabs/BubbleParticles.h"
 
 SpongebobScene::~SpongebobScene()
 {
@@ -54,12 +59,13 @@ void SpongebobScene::Initialize()
 	characterDesc.actionId_Attack = Attack;
 
 	m_pCharacter = AddChild(new Character(characterDesc, {0, 0, -10}));
-	const XMFLOAT3 startPos{60, 20, -175};
+	const XMFLOAT3 startPos{60, 10, -175};
 	m_pCharacter->GetTransform()->Translate(startPos);
+	m_pCharacter->SetTag(L"Player");
 
-	auto pHUD = new HUDPrefab();
-	m_pCharacter->AddChild(pHUD);
-
+	//auto pHUD = new HUDPrefab();
+	//m_pCharacter->AddChild(pHUD);
+	
 	//Spongebob
 	m_pSpongebobMesh = new GameObject();
 	
@@ -96,9 +102,9 @@ void SpongebobScene::Initialize()
 	m_pSpatula->GetTransform()->Translate(startPos.x + 2, startPos.y - 3, startPos.z + 5);
 	AddChild(m_pSpatula);
 
-	auto pUnderwear = new Underwear();
-	pUnderwear->GetTransform()->Translate(-2, 0, 5);
-	AddChild(pUnderwear);
+	auto pTiki = new Tiki();
+	pTiki->GetTransform()->Translate(startPos.x - 2, startPos.y - 3, startPos.z + 5);
+	AddChild(pTiki);
 
 
 	//Input
@@ -122,10 +128,13 @@ void SpongebobScene::Initialize()
 
 
 	//HUD
-	auto pHud = new HUDPrefab();
-	AddChild(pHud);
+	//auto pHud = new HUDPrefab();
+	//AddChild(pHud);
 
 
+	////TEST
+	auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
+	AddPostProcessingEffect(m_pPostEffect);
 }
 
 void SpongebobScene::OnGUI()

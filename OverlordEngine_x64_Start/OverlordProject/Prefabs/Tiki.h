@@ -16,5 +16,6 @@ private:
 	Character* m_pPlayer{};
 
 	void SpawnFlowers();
+	void SpawnBubbles();
 };
 
