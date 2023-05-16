@@ -29,6 +29,8 @@
 
 #include "Materials/Post/PostGrayscale.h"
 #include "Materials/Post/PostMyEffect.h"
+#include "Materials/Shadow/DiffuseMaterial_Shadow.h"
+#include "Materials/Shadow/DiffuseMaterial_Shadow_Skinned.h"
 #include "Prefabs/BubbleParticles.h"
 
 SpongebobScene::~SpongebobScene()
@@ -44,6 +46,8 @@ SpongebobScene::~SpongebobScene()
 void SpongebobScene::Initialize()
 {
 	m_SceneContext.settings.enableOnGUI = true;
+	//m_SceneContext.settings.drawPhysXDebug = false;
+
 
 	//Ground Plane
 	const auto pDefaultMaterial = PxGetPhysics().createMaterial(0.5f, 0.5f, 0.5f);
@@ -58,24 +62,24 @@ void SpongebobScene::Initialize()
 	characterDesc.actionId_Jump = CharacterJump;
 	characterDesc.actionId_Attack = Attack;
 
-	m_pCharacter = AddChild(new Character(characterDesc, {0, 0, -10}));
-	const XMFLOAT3 startPos{60, 10, -175};
+	m_pCharacter = AddChild(new Character(characterDesc, {0, 0, -30}));
+	const XMFLOAT3 startPos{60, 50, -175};
 	m_pCharacter->GetTransform()->Translate(startPos);
 	m_pCharacter->SetTag(L"Player");
 
-	//auto pHUD = new HUDPrefab();
-	//m_pCharacter->AddChild(pHUD);
+	/*auto pHUD = new HUDPrefab();
+	m_pCharacter->AddChild(pHUD);*/
 	
 	//Spongebob
 	m_pSpongebobMesh = new GameObject();
 	
-	auto pSpongeMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Skinned>();
+	auto pSpongeMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow_Skinned>();
 	pSpongeMat->SetDiffuseTexture(L"Exam/Textures/Spongebob.png");
 
 	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/SpongebobNew.ovm");
 	m_pSpongebobMesh->AddComponent<ModelComponent>(pModel);
 	pModel->SetMaterial(pSpongeMat);
-	m_pSpongebobMesh->GetTransform()->Scale(0.2f);
+	m_pSpongebobMesh->GetTransform()->Scale(1.f);
 	
 	AddChild(m_pSpongebobMesh);
 
@@ -128,13 +132,16 @@ void SpongebobScene::Initialize()
 
 
 	//HUD
-	//auto pHud = new HUDPrefab();
-	//AddChild(pHud);
-
+	auto pHud = new HUDPrefab();
+	AddChild(pHud);
 
 	////TEST
 	auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
 	AddPostProcessingEffect(m_pPostEffect);
+
+
+	m_SceneContext.pLights->SetDirectionalLight({ -95.6139526f,66.1346436f,-41.1850471f }, 
+		{ 0.740129888f, -0.597205281f, 0.309117377f });
 }
 
 void SpongebobScene::OnGUI()
@@ -144,6 +151,10 @@ void SpongebobScene::OnGUI()
 
 void SpongebobScene::Update()
 {
+	//Light
+	m_SceneContext.pLights->GetDirectionalLight().position.x = m_pSpongebobMesh->GetTransform()->GetPosition().x - 95;
+	m_SceneContext.pLights->GetDirectionalLight().position.z = m_pSpongebobMesh->GetTransform()->GetPosition().z - 41;
+
 	//used manual position adjustement instead of childing mesh to parent, 
 	//because the mesh always pointed to the camera when it was a child of the characterComponent
 
@@ -207,12 +218,13 @@ void SpongebobScene::UpdateHUDElements()
 	m_pUISpatula->GetTransform()->Translate(newPos);*/
 }
 
+
 void SpongebobScene::CheckDeletedObjects()
 {
-	for (auto child : this->GetChildren())
+	for (auto child : GetChildren())
 	{
 		if (child->NeedsDeleting())
-			this->RemoveChild(child);
+			RemoveChild(child, true);
 	}
 }
 
@@ -227,15 +239,19 @@ void SpongebobScene::CreateLevel()
 
 	const auto pLevelActor = pLevelObject->AddComponent(new RigidBodyComponent(true));
 	const auto pPxTriangleMesh = ContentManager::Load<PxTriangleMesh>(L"Exam/Meshes/Level2.ovpt");
-	const float levelScale = 2.f;
+	const float levelScale = 10.f;
 	pLevelActor->AddCollider(PxTriangleMeshGeometry(pPxTriangleMesh, PxMeshScale({ levelScale, levelScale, levelScale })), *pDefaultMaterial);
 
 	pLevelObject->GetTransform()->Scale(levelScale);
 
 
-	auto pDefault = MaterialManager::Get()->CreateMaterial<ColorMaterial>();
-	pDefault->SetColor({ 0.5f,0.5f,0.5f,1 });
-	pLevelMesh->SetMaterial(pDefault);
+	//auto pDefault = MaterialManager::Get()->CreateMaterial<ColorMaterial>();
+	//pDefault->SetColor({ 0.5f,0.5f,0.5f,1 });
+	//pLevelMesh->SetMaterial(pDefault);
+
+	const auto pGroundMaterial = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
+	pGroundMaterial->SetDiffuseTexture(L"Textures/GroundBrick.jpg");
+	pLevelMesh->SetMaterial(pGroundMaterial);
 
 	//auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
 	//pMat->SetDiffuseTexture(L"Exam/Textures/Level/t11.png");

@@ -24,7 +24,8 @@ void SpriteComponent::Draw(const SceneContext& sceneContext)
 	if (!m_pTexture)
 		return;
 
-	TransformComponent* pTransform{ GetGameObject()->GetComponent<TransformComponent>() };
+	//TransformComponent* pTransform{ GetGameObject()->GetComponent<TransformComponent>() };
+	TransformComponent* pTransform{GetTransform()};
 
 	SpriteRenderer::Get()->DrawImmediate(
 		sceneContext.d3dContext, 

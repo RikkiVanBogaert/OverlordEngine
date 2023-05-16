@@ -4,7 +4,6 @@
 #include "Character.h"
 #include "HUDPrefab.h"
 #include "Materials/DiffuseMaterial.h"
-#include "SpherePrefab.h"
 
 void Spatula::Initialize(const SceneContext&)
 {
