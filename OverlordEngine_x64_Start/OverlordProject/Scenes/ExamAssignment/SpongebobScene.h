@@ -51,6 +51,20 @@ private:
 	void CheckDeletedObjects();
 	void CreateLevel();
 
-	std::vector<std::string> mtlParser(const std::string& filename);
+	struct MaterialInfo
+	{
+		std::string textureName;
+		std::string meshName;
+	};
+	std::vector<MaterialInfo> mtlParser(const std::string& filename);
+
+	struct MeshInfo
+	{
+		std::string name;
+		std::string submeshId;
+	};
+	std::vector<MeshInfo> ParseOBJFile(const std::string& filepath);
+
+	std::wstring ConvertToWideString(const std::string& str);
 };
 

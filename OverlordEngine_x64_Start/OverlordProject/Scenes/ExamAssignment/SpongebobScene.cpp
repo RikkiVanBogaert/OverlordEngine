@@ -246,83 +246,171 @@ void SpongebobScene::CreateLevel()
 	pLevelObject->GetTransform()->Scale(levelScale);
 
 
-	//auto pDefault = MaterialManager::Get()->CreateMaterial<ColorMaterial>();
-	//pDefault->SetColor({ 0.5f,0.5f,0.5f,1 });
-	//pLevelMesh->SetMaterial(pDefault);
-
 	const auto pGroundMaterial = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
 	pGroundMaterial->SetDiffuseTexture(L"Textures/GroundBrick.jpg");
 	pLevelMesh->SetMaterial(pGroundMaterial);
 
-	//auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	//pMat->SetDiffuseTexture(L"Exam/Textures/Level/t11.png");
-	////pLevelMesh->SetMaterial(pMat);
+	auto objInfo = ParseOBJFile("../OverlordProject/Resources/Exam/Meshes/jellyfishfields.obj");
+	auto mtlInfo = mtlParser("../OverlordProject/Resources/Exam/Textures/Level/jellyfishfields.mtl");
 
-	//auto pMat2 = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	//pMat2->SetDiffuseTexture(L"Exam/Textures/Level/t0092_0.png");
-
-	//for (int i{}; i < 195; ++i)
-	//{
-	//	if(i % 2 == 0)
-	//		pLevelMesh->SetMaterial(pMat, UINT8(i));
-	//	else
-	//		pLevelMesh->SetMaterial(pMat2, UINT8(i));
-	//}
-
-	//pLevelMesh->SetMaterial(pMat, UINT8(33));
-
-	/*auto mtl_contents = mtlParser("../OverlordProject/Resources/Exam/Textures/Level/jellyfishfields.mtl");
-
-	for (UINT8 i{}; i < mtl_contents.size(); ++i)
+	for(auto m : mtlInfo)
 	{
-		std::cout << mtl_contents[i] << '\n';
-
-		int wstr_size = MultiByteToWideChar(CP_UTF8, 0, mtl_contents[i].c_str(), -1, NULL, 0);
-		std::wstring wstr(wstr_size, 0);
-		MultiByteToWideChar(CP_UTF8, 0, mtl_contents[i].c_str(), -1, &wstr[0], wstr_size);
-
 		auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-		pMat->SetDiffuseTexture(L"Exam/Textures/Level/" + wstr);
-		pLevelMesh->SetMaterial(pMat, i);
-	}
-
-	std::cout << "Size of mtl_contents: " << mtl_contents.size() << std::endl;*/
-
-
-	//for (UINT8 i{1}; i < 195; ++i)
-	//{
-	//	//t0177_0
-
-	//	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	//	pMat->SetDiffuseTexture(L"Exam/Textures/Level/t0" + std::to_wstring(i) + L"_0.png");
-	//	pLevelMesh->SetMaterial(pMat, i);
-	//}
-
-	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	pMat->SetDiffuseTexture(L"Exam/Textures/Level/t0090_0.png");
-	for (UINT8 i{ 80 }; i < 90; ++i)
-	{
-		pLevelMesh->SetMaterial(pMat, i);
-	}
-
-	auto pMat2 = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	pMat2->SetDiffuseTexture(L"Exam/Textures/Level/t0022_0.png");
-	pLevelMesh->SetMaterial(pMat2, 0);
-}
-
-std::vector<std::string> SpongebobScene::mtlParser(const std::string& filename)
-{
-	std::ifstream file(filename);
-	std::vector<std::string> map_kds;
-	std::string line;
-	while (std::getline(file, line)) 
-	{
-		size_t map_kd_pos = line.find("map_Kd ");
-		if (map_kd_pos != std::string::npos) 
+		for(int i{}; i < objInfo.size(); ++i)
 		{
-			std::string map_kd_value = line.substr(map_kd_pos + 7);
-			map_kds.push_back(map_kd_value);
+			if(objInfo[i].name == m.meshName)
+			{
+				pMat->SetDiffuseTexture(L"Exam/Textures/Level/" + ConvertToWideString(m.textureName));
+				pLevelMesh->SetMaterial(pMat, UINT8(i));
+
+				//std::cout << "Setting texture: " << m.textureName << '\n';
+			}
 		}
 	}
-	return map_kds;
+
+	//for (UINT8 i{ 80 }; i < 90; ++i)
+	//{
+	//	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+	//	pMat->SetDiffuseTexture(L"Exam/Textures/Level/t0090_0.png");
+	//	pLevelMesh->SetMaterial(pMat, i);
+	//}
+}
+
+std::wstring SpongebobScene::ConvertToWideString(const std::string& str)
+{
+	int length = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
+	if (length == 0)
+	{
+		// Error handling if conversion fails
+		std::cerr << "Failed to convert string to wide string." << std::endl;
+		return L"";
+	}
+
+	std::wstring wideStr(length, L'\0');
+	if (MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, &wideStr[0], length) == 0)
+	{
+		// Error handling if conversion fails
+		std::cerr << "Failed to convert string to wide string." << std::endl;
+		return L"";
+	}
+
+	return wideStr;
+}
+
+//std::vector<std::string> SpongebobScene::mtlParser(const std::string& filename)
+//{
+//	std::ifstream file(filename);
+//	std::vector<std::string> map_kds;
+//	std::string line;
+//	while (std::getline(file, line)) 
+//	{
+//		size_t map_kd_pos = line.find("map_Kd ");
+//		if (map_kd_pos != std::string::npos) 
+//		{
+//			std::string map_kd_value = line.substr(map_kd_pos + 7);
+//			map_kds.push_back(map_kd_value);
+//		}
+//	}
+//	return map_kds;
+//}
+
+std::vector<SpongebobScene::MaterialInfo> SpongebobScene::mtlParser(const std::string& filename)
+{
+	std::ifstream file(filename);
+	std::vector<MaterialInfo> materialInfoList;
+
+	if (file.is_open())
+	{
+		std::string line;
+		std::string currentTextureName;
+		std::string currentMeshName;
+
+		while (std::getline(file, line))
+		{
+			std::istringstream iss(line);
+			std::string identifier;
+
+			iss >> identifier;
+
+			if (identifier == "newmtl") // Material identifier
+			{
+				if (!currentTextureName.empty() && !currentMeshName.empty())
+				{
+					materialInfoList.push_back({ currentTextureName, currentMeshName });
+				}
+
+				iss >> currentMeshName;
+			}
+			else if (identifier == "map_Kd") // Texture identifier
+			{
+				iss >> currentTextureName;
+			}
+		}
+
+		// Handle the last material
+		if (!currentTextureName.empty() && !currentMeshName.empty())
+		{
+			materialInfoList.push_back({ currentTextureName, currentMeshName });
+		}
+
+		file.close();
+	}
+	else
+	{
+		std::cerr << "Failed to open file: " << filename << std::endl;
+	}
+
+	return materialInfoList;
+}
+
+
+//TEST
+std::vector<SpongebobScene::MeshInfo> SpongebobScene::ParseOBJFile(const std::string& filepath)
+{
+	std::ifstream file(filepath);
+	std::vector<MeshInfo> materialInfoList;
+
+	if (file.is_open())
+	{
+		std::string line;
+		std::string currentMaterial;
+		std::string currentSubmeshId;
+
+		while (std::getline(file, line))
+		{
+			std::istringstream iss(line);
+			std::string identifier;
+
+			iss >> identifier;
+
+			if (identifier == "g") // Submesh group identifier
+			{
+				if (!currentMaterial.empty() && !currentSubmeshId.empty())
+				{
+					materialInfoList.push_back({ currentMaterial, currentSubmeshId });
+					//std::cout << currentMaterial << '\n';
+				}
+
+				iss >> currentSubmeshId;
+			}
+			else if (identifier == "usemtl") // Material identifier
+			{
+				iss >> currentMaterial;
+			}
+		}
+
+		// Handle the last submesh group
+		if (!currentMaterial.empty() && !currentSubmeshId.empty())
+		{
+			materialInfoList.push_back({ currentMaterial, currentSubmeshId });
+		}
+
+		file.close();
+	}
+	else
+	{
+		std::cerr << "Failed to open file: " << filepath << std::endl;
+	}
+
+	return materialInfoList;
 }
