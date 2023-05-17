@@ -17,31 +17,31 @@ protected:
 	void Update() override;
 
 private:
-	enum InputIds
-	{
-		CharacterMoveLeft,
-		CharacterMoveRight,
-		CharacterMoveForward,
-		CharacterMoveBackward,
-		CharacterJump,
-		Attack
-	};
+	//enum InputIds
+	//{
+	//	CharacterMoveLeft,
+	//	CharacterMoveRight,
+	//	CharacterMoveForward,
+	//	CharacterMoveBackward,
+	//	CharacterJump,
+	//	Attack
+	//};
 
-	Character* m_pCharacter{};
-	GameObject* m_pSpongebobMesh{};
+	//Character* m_pCharacter{};
+	//GameObject* m_pSpongebobMesh{};
 
 	GameObject* m_pSpatula{};
 
-	//Animations
-	ModelAnimator* pAnimator{};
+	////Animations
+	//ModelAnimator* pAnimator{};
 
-	int m_AnimationClipId{ 0 };
-	float m_AnimationSpeed{ 0.5f };
+	//int m_AnimationClipId{ 0 };
+	//float m_AnimationSpeed{ 0.5f };
 
-	char** m_ClipNames{};
-	UINT m_ClipCount{};
+	//char** m_ClipNames{};
+	//UINT m_ClipCount{};
 
-	void PlayCorrectAnimation();
+	//void PlayCorrectAnimation();
 
 	void CheckDeletedObjects();
 	void CreateLevel();

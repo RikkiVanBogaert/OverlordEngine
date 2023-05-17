@@ -1,16 +1,19 @@
 #include "stdafx.h"
 #include "ControllerComponent.h"
 
-ControllerComponent::ControllerComponent(const PxCapsuleControllerDesc& controllerDesc):
-	m_ControllerDesc{ controllerDesc }
-{
-}
+ControllerComponent::ControllerComponent(const PxCapsuleControllerDesc& controllerDesc, float height, float radius):
+	m_ControllerDesc{ controllerDesc },
+	m_CapsuleHeight{ height },
+	m_CapsuleRadius{ radius }
+{}
 
 void ControllerComponent::Initialize(const SceneContext& ) //sceneContext
 {
 	if(!m_IsInitialized)
 	{
 		TODO_W7(L"Complete the ControllerComponent Intialization");
+		m_ControllerDesc.height = m_CapsuleHeight;
+		m_ControllerDesc.radius = m_CapsuleRadius;
 
 		auto pos = GetGameObject()->GetTransform()->GetPosition();
 		m_ControllerDesc.position = { pos.x, pos.y, pos.z };

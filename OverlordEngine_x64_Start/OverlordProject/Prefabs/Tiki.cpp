@@ -12,6 +12,8 @@ void Tiki::Initialize(const SceneContext&)
 	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
 	pMat->SetDiffuseTexture(L"Exam/Textures/tiki.png");
 
+	const float size{ 5 };
+
 	auto pModelObject = new GameObject();
 	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/Tiki.ovm");
 	pModelObject->AddComponent<ModelComponent>(pModel);
@@ -25,12 +27,11 @@ void Tiki::Initialize(const SceneContext&)
 
 
 	auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
-	const XMFLOAT3 size{ 1, 1 ,1 };
 
-	pRigidBodyCp->AddCollider(PxSphereGeometry(1.8f), *pBouncyMaterial, true);
-
+	pRigidBodyCp->AddCollider(PxSphereGeometry(1.8f * size), *pBouncyMaterial, true);
+	
 	auto pConvexMesh = ContentManager::Load<PxConvexMesh>(L"Exam/Meshes/Tiki.ovpc");
-	pRigidBodyCp->AddCollider(PxConvexMeshGeometry{ pConvexMesh }, *pBouncyMaterial);
+	pRigidBodyCp->AddCollider(PxConvexMeshGeometry{ pConvexMesh, PxMeshScale{size} }, *pBouncyMaterial);
 
 	auto onTrigger = [&](GameObject*, GameObject* other, PxTriggerAction action)
 	{
@@ -49,6 +50,8 @@ void Tiki::Initialize(const SceneContext&)
 	};
 
 	SetOnTriggerCallBack(onTrigger);
+
+	GetTransform()->Scale(size);
 }
 
 void Tiki::Update(const SceneContext& )
@@ -69,14 +72,14 @@ void Tiki::SpawnFlowers()
 {
 	for (int i{}; i < 5; ++i)
 	{
-		auto spatula = new Flower();
+		auto pFlower = new Flower();
 		auto pos = GetTransform()->GetPosition();
 
 		const int rndX{rand() % 13 - 6};
 		const int rndZ{ rand() % 13 - 6 };
 
-		spatula->GetTransform()->Translate(pos.x + rndX, pos.y + 3, pos.z + rndZ);
-		GetScene()->AddChild(spatula);
+		pFlower->GetTransform()->Translate(pos.x + rndX, pos.y + 3, pos.z + rndZ);
+		GetScene()->AddChild(pFlower);
 	}
 }
 
@@ -84,5 +87,6 @@ void Tiki::SpawnBubbles()
 {
 	auto pBubbles = new BubbleParticles();
 	pBubbles->GetTransform()->Translate(GetTransform()->GetPosition());
+	pBubbles->GetTransform()->Scale(5);
 	GetScene()->AddChild(pBubbles);
 }

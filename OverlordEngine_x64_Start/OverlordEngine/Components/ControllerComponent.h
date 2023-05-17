@@ -3,7 +3,7 @@
 class ControllerComponent : public BaseComponent
 {
 public:
-	ControllerComponent(const PxCapsuleControllerDesc& controllerDesc);
+	ControllerComponent(const PxCapsuleControllerDesc& controllerDesc, float height = 1, float radius = 0.2f);
 	~ControllerComponent() override = default;
 
 	ControllerComponent(const ControllerComponent& other) = delete;
@@ -22,6 +22,7 @@ public:
 	PxControllerCollisionFlags GetCollisionFlags() const {return m_CollisionFlag;}
 	PxController* GetPxController() const { return m_pController; }
 
+
 protected:
 	void Initialize(const SceneContext& sceneContext) override;
 	void OnSceneDetach(GameScene*) override;
@@ -32,6 +33,8 @@ protected:
 private:
 
 	PxCapsuleControllerDesc m_ControllerDesc{};
+	const float m_CapsuleHeight;
+	const float m_CapsuleRadius; //made these 2 cus lighting wouldnt work on smaller mesh, so collision bigger
 
 	PxController* m_pController{};
 	PxControllerCollisionFlags m_CollisionFlag{};

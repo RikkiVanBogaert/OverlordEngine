@@ -7,7 +7,7 @@
 //#define W5
 //#define W6
 // #define W7
- #define W8
+// #define W8
 // #define W9
 // #define W10
 
@@ -101,8 +101,8 @@ void MainGame::OnGamePreparing(GameContext& gameContext)
 void MainGame::Initialize()
 {
 #ifdef Spongebob
-	SceneManager::Get()->AddGameScene(new SpongebobScene());
 	SceneManager::Get()->AddGameScene(new TestScene());
+	SceneManager::Get()->AddGameScene(new SpongebobScene());
 	SceneManager::Get()->AddGameScene(new MainMenuScene());
 #endif
 

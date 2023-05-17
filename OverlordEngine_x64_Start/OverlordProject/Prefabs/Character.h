@@ -35,7 +35,8 @@ struct CharacterDesc
 class Character : public GameObject
 {
 public:
-	Character(const CharacterDesc& characterDesc, const XMFLOAT3 cameraOffset = {});
+	Character(const CharacterDesc& characterDesc, const XMFLOAT3 cameraOffset = {}, 
+		float capsuleHeight = 1.f, float capsuleRadius = 0.2f);
 	~Character() override = default;
 
 	Character(const Character& other) = delete;
@@ -70,5 +71,7 @@ private:
 	//Other
 	XMFLOAT3 m_CameraOffset{};
 	bool m_IsAttacking{};
+	const float m_CapsuleHeight;
+	const float m_CapsuleRadius;
 };
 

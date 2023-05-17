@@ -3,18 +3,21 @@
 
 #include <corecrt_math_defines.h>
 
-Character::Character(const CharacterDesc& characterDesc, const XMFLOAT3 cameraOffset) :
+Character::Character(const CharacterDesc& characterDesc, const XMFLOAT3 cameraOffset,
+	float capsuleHeight, float capsuleRadius) :
 	m_CharacterDesc{ characterDesc },
 	m_MoveAcceleration(characterDesc.maxMoveSpeed / characterDesc.moveAccelerationTime),
 	m_FallAcceleration(characterDesc.maxFallSpeed / characterDesc.fallAccelerationTime),
-	m_CameraOffset{cameraOffset}
+	m_CameraOffset{cameraOffset},
+	m_CapsuleHeight{capsuleHeight},
+	m_CapsuleRadius{capsuleRadius}
 {}
 
 void Character::Initialize(const SceneContext& /*sceneContext*/)
 {
 	//Controller
-	m_pControllerComponent = AddComponent(new ControllerComponent(m_CharacterDesc.controller));
-
+	m_pControllerComponent = AddComponent(new ControllerComponent(m_CharacterDesc.controller, m_CapsuleHeight, m_CapsuleRadius));
+	
 	//Camera
 	const auto pCamera = AddChild(new FixedCamera());
 	m_pCameraComponent = pCamera->GetComponent<CameraComponent>();
