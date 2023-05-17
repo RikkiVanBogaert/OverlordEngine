@@ -12,7 +12,7 @@ void Tiki::Initialize(const SceneContext&)
 	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
 	pMat->SetDiffuseTexture(L"Exam/Textures/tiki.png");
 
-	const float size{ 5 };
+	constexpr float size{ 5 };
 
 	auto pModelObject = new GameObject();
 	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/Tiki.ovm");
@@ -87,6 +87,5 @@ void Tiki::SpawnBubbles()
 {
 	auto pBubbles = new BubbleParticles();
 	pBubbles->GetTransform()->Translate(GetTransform()->GetPosition());
-	pBubbles->GetTransform()->Scale(5);
 	GetScene()->AddChild(pBubbles);
 }

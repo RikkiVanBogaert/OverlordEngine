@@ -4,6 +4,10 @@ class Pickup : public GameObject
 public:
 	Pickup() = default;
 
+	float GetScale() const { return m_Size; };
+
+private:
+	const float m_Size{5};
 };
 
 class Spatula final : public Pickup

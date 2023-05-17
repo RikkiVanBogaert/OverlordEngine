@@ -16,16 +16,16 @@ void Spatula::Initialize(const SceneContext&)
 	pModelObject->AddComponent<ModelComponent>(pModel);
 	AddChild(pModelObject);
 	pModel->GetTransform()->Translate(0, -0.5f, 0);
+	pModel->GetTransform()->Scale(GetScale());
 
 	//Collision
 	auto& phys = PxGetPhysics();
 	auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
 
 	auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
-	const XMFLOAT3 size{ 1, 1 ,1 };
-	pRigidBodyCp->AddCollider(PxSphereGeometry(1.f), *pBouncyMaterial, true);
+	pRigidBodyCp->AddCollider(PxSphereGeometry(GetScale()), *pBouncyMaterial, true);
 
-	auto parentPos = this->GetTransform()->GetPosition();
+	auto parentPos = GetTransform()->GetPosition();
 
 	auto onTrigger = [&](GameObject*, GameObject* other, PxTriggerAction action)
 	{
@@ -60,14 +60,14 @@ void Underwear::Initialize(const SceneContext&)
 	pModelObject->AddComponent<ModelComponent>(pModel);
 	AddChild(pModelObject);
 	pModel->GetTransform()->Translate(0, -0.5f, 0);
+	pModel->GetTransform()->Scale(GetScale());
 
 	//Collision
 	auto& phys = PxGetPhysics();
 	auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
 
 	auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
-	const XMFLOAT3 size{ 1, 1 ,1 };
-	pRigidBodyCp->AddCollider(PxSphereGeometry(1.f), *pBouncyMaterial, true);
+	pRigidBodyCp->AddCollider(PxSphereGeometry(GetScale()), *pBouncyMaterial, true);
 
 	auto parentPos = this->GetTransform()->GetPosition();
 
@@ -122,14 +122,14 @@ void Flower::Initialize(const SceneContext&)
 	pModelObject->AddComponent<ModelComponent>(pModel);
 	AddChild(pModelObject);
 	pModel->GetTransform()->Translate(0, 0, 0);
+	pModel->GetTransform()->Scale(GetScale());
 
 	//Collision
 	auto& phys = PxGetPhysics();
 	auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
 
 	auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
-	const XMFLOAT3 size{ 1, 1 ,1 };
-	pRigidBodyCp->AddCollider(PxSphereGeometry(1.f), *pBouncyMaterial, true);
+	pRigidBodyCp->AddCollider(PxSphereGeometry(GetScale()), *pBouncyMaterial, true);
 
 	auto parentPos = this->GetTransform()->GetPosition();
 
