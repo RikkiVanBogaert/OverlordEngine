@@ -315,9 +315,11 @@ std::vector<std::string> SpongebobScene::mtlParser(const std::string& filename)
 	std::ifstream file(filename);
 	std::vector<std::string> map_kds;
 	std::string line;
-	while (std::getline(file, line)) {
+	while (std::getline(file, line)) 
+	{
 		size_t map_kd_pos = line.find("map_Kd ");
-		if (map_kd_pos != std::string::npos) {
+		if (map_kd_pos != std::string::npos) 
+		{
 			std::string map_kd_value = line.substr(map_kd_pos + 7);
 			map_kds.push_back(map_kd_value);
 		}

@@ -10,6 +10,8 @@ public:
 	void Initialize(const SceneContext&) override;
 	void Update(const SceneContext&) override;
 
+	void SetControllerPosition(const XMFLOAT3& pos);
+
 private:
 	enum InputIds
 	{

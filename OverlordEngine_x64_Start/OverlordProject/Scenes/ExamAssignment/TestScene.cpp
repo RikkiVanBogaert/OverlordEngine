@@ -48,14 +48,14 @@ void TestScene::Initialize()
 	AddChild(pGroundObj);
 
 	auto pSponge = new Spongebob();
-	pSponge->GetTransform()->Translate(0, 5, 0);
 	AddChild(pSponge);
+	pSponge->SetControllerPosition({ 5, 10, 0 });
 
 	//CreateLevel();
 
 	//Objects
 	m_pSpatula = new Spatula();
-	m_pSpatula->GetTransform()->Translate(2, 0, 10);
+	m_pSpatula->GetTransform()->Translate(20, 25, 0);
 	AddChild(m_pSpatula);
 
 	

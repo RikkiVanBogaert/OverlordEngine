@@ -29,9 +29,7 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	characterDesc.actionId_Jump = CharacterJump;
 	characterDesc.actionId_Attack = Attack;
 
-	m_pCharacter = AddChild(new Character(characterDesc, { 0, 0, -40 }, 5.5f, 3.f));
-	m_pCharacter->GetTransform()->Translate(GetTransform()->GetPosition());
-	//m_pCharacter->GetTransform()->Scale(ion());
+	m_pCharacter = AddChild(new Character(characterDesc, { 0, 0, -40 }, 5.5f, 2));
 	m_pCharacter->SetTag(L"Player");
 	
 	//Mesh
@@ -44,7 +42,7 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	m_pSpongebobMesh->AddComponent<ModelComponent>(pModel);
 	pModel->SetMaterial(pSpongeMat);
 	m_pSpongebobMesh->GetTransform()->Scale(1.f);
-	//m_pSpongebobMesh->GetTransform()->Translate(GetTransform()->GetPosition());
+	m_pSpongebobMesh->GetTransform()->Translate(0,0,0);
 
 	AddChild(m_pSpongebobMesh);
 	
@@ -130,7 +128,7 @@ void Spongebob::Update(const SceneContext& sceneContext)
 	//because the mesh always pointed to the camera when it was a child of the characterComponent
 
 	auto pos = m_pCharacter->GetTransform()->GetPosition();
-	pos.y -= 10.5f; //offset to put spongebob on same height as capsule
+	pos.y -= 4.f; //offset to put spongebob on same height as capsule
 	m_pSpongebobMesh->GetTransform()->Translate(pos);
 
 	auto rot = std::atan2f(m_pCharacter->GetVelocity().z, -m_pCharacter->GetVelocity().x) * float(180 / M_PI) + 90;
@@ -140,4 +138,9 @@ void Spongebob::Update(const SceneContext& sceneContext)
 	//UpdateHUDElements();
 
 	//CheckDeletedObjects();
+}
+
+void Spongebob::SetControllerPosition(const XMFLOAT3& pos)
+{
+	m_pCharacter->GetTransform()->Translate(pos);
 }
