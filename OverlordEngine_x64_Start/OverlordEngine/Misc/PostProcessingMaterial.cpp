@@ -117,31 +117,29 @@ void PostProcessingMaterial::DrawPass(const SceneContext& sceneContext, ID3DX11E
 
 	//1. Bind the Destination RenderTarget (pDestination) to the pipeline
 	//		- Easily achieved by calling OverlordGame::SetRenderTarget (m_GameContext has a reference to OverlordGame)
+	m_GameContext.pGame->SetRenderTarget(pDestination);
 	//2. Clear the destination RT with a Purple color
 	//		- Using purple will make debugging easier, when the screen is purple you'll know something is wrong with your post-processing effects
+	pDestination->Clear(XMFLOAT4(Colors::Purple));
 
 	//3. Set The Pipeline!
 	//		- Set Inputlayout > m_pDefaultInputLayout (The inputlayout for all post-processing effects should 'normally' be the same POSITION/TEXCOORD)
-	//		- Set PrimitiveTopology (check the VertexBuffer for the correct topology)
-	//		- Set VertexBuffer > m_pDefaultVertexBuffer (Represents a full screen quad, already defined in clipping space)
-	//		- Iterate the technique passes (same as usual)
-	//			- apply the pass
-	//			- DRAW! (use the m_VertexCount constant for the number of vertices)
-
-	m_GameContext.pGame->SetRenderTarget(pDestination);
-	pDestination->Clear(XMFLOAT4(Colors::Yellow));
-
 	sceneContext.d3dContext.pDeviceContext->IASetInputLayout(m_pDefaultInputLayout);
+	//		- Set PrimitiveTopology (check the VertexBuffer for the correct topology)
 	sceneContext.d3dContext.pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-	UINT strides = sizeof(VertexPosTex);
-	UINT offset = 0;
+	//		- Set VertexBuffer > m_pDefaultVertexBuffer (Represents a full screen quad, already defined in clipping space)
+	constexpr UINT offset = 0;
+	const UINT strides = sizeof(VertexPosTex);
 	sceneContext.d3dContext.pDeviceContext->IASetVertexBuffers(0, 1, &m_pDefaultVertexBuffer, &strides, &offset);
 
+	//		- Iterate the technique passes (same as usual)
 	D3DX11_TECHNIQUE_DESC desc{};
 	pTechnique->GetDesc(&desc);
 	for (unsigned int Passes{}; Passes < desc.Passes; ++Passes)
 	{
+	//			- apply the pass
 		pTechnique->GetPassByIndex(Passes)->Apply(0, sceneContext.d3dContext.pDeviceContext);
+	//			- DRAW! (use the m_VertexCount constant for the number of vertices)
 		sceneContext.d3dContext.pDeviceContext->Draw(m_VertexCount, 0);
 	}
 }

@@ -17,19 +17,8 @@ void DiffuseMaterial_Shadow_Skinned::InitializeEffectVariables()
 
 void DiffuseMaterial_Shadow_Skinned::OnUpdateModelVariables(const SceneContext& sceneContext, const ModelComponent* pModel) const
 {
-	/*
-	 * TODO_W8
-	 * Update The Shader Variables
-	 * 1. Update the LightWVP > Used to Transform a vertex into Light clipping space
-	 * 	LightWVP = model_world * light_viewprojection
-	 * 	(light_viewprojection [LightVP] can be acquired from the ShadowMapRenderer)
-	 * 
-	 * 2. Update the ShadowMap texture
-	 * 
-	 * 3. Update the Light Direction (retrieve the direction from the LightManager > sceneContext)
-	 * 
-	 * 4. Update Bones
-	*/
+	//TODO_W8
+
 	XMMATRIX lightWVPmatrix = (XMLoadFloat4x4(&pModel->GetGameObject()->GetTransform()->GetWorld()) * XMLoadFloat4x4(&ShadowMapRenderer::Get()->GetLightVP()));
 	XMFLOAT4X4 lightWVP{};
 	XMStoreFloat4x4(&lightWVP, lightWVPmatrix);
@@ -44,7 +33,4 @@ void DiffuseMaterial_Shadow_Skinned::OnUpdateModelVariables(const SceneContext& 
 	auto bones = pAnim->GetBoneTransforms();
 	SetVariable_MatrixArray(L"gBones", (float*)bones.data(), (UINT)bones.size());
 
-	//Update Shadow Variables
-	//const auto pShadowMapRenderer = ShadowMapRenderer::Get();
-	//...
 }

@@ -65,7 +65,7 @@ private:
 	UINT m_ParticleCount{}; //The total amount of particles
 	UINT m_MaxParticles{};
 	UINT m_ActiveParticles{}; //The active particles for the current frame
-	float m_LastParticleSpawn{}; //Total seconds since the last created particle
+	float m_LastParticleInit{}; //Total seconds since the last created particle
 	std::wstring m_AssetFile{};
 
 	bool m_DrawImGui{ false };

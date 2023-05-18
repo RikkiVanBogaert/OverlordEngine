@@ -109,7 +109,7 @@ void ModelComponent::ShadowMapDraw(const SceneContext& sceneContext)
 	//We only draw this Mesh to the ShadowMap if it casts shadows
 	if (!m_CastShadows)return;
 
-	TODO_W8(L"Draw Mesh to ShadowMapRenderer (Static/Skinned)")
+	//TODO_W8(L"Draw Mesh to ShadowMapRenderer (Static/Skinned)")
 	//This function is only called during the ShadowPass (and if m_enableShadowMapDraw is true)
 	//Here we want to Draw this Mesh to the ShadowMap, using the ShadowMapRenderer::DrawMesh function
 

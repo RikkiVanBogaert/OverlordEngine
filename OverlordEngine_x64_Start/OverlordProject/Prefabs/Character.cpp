@@ -3,20 +3,17 @@
 
 #include <corecrt_math_defines.h>
 
-Character::Character(const CharacterDesc& characterDesc, const XMFLOAT3 cameraOffset,
-	float capsuleHeight, float capsuleRadius) :
+Character::Character(const CharacterDesc& characterDesc, const XMFLOAT3 cameraOffset) :
 	m_CharacterDesc{ characterDesc },
 	m_MoveAcceleration(characterDesc.maxMoveSpeed / characterDesc.moveAccelerationTime),
 	m_FallAcceleration(characterDesc.maxFallSpeed / characterDesc.fallAccelerationTime),
-	m_CameraOffset{cameraOffset},
-	m_CapsuleHeight{capsuleHeight},
-	m_CapsuleRadius{capsuleRadius}
+	m_CameraOffset{cameraOffset}
 {}
 
 void Character::Initialize(const SceneContext& /*sceneContext*/)
 {
 	//Controller
-	m_pControllerComponent = AddComponent(new ControllerComponent(m_CharacterDesc.controller, m_CapsuleHeight, m_CapsuleRadius));
+	m_pControllerComponent = AddComponent(new ControllerComponent(m_CharacterDesc.controller));
 	
 	//Camera
 	const auto pCamera = AddChild(new FixedCamera());
@@ -108,7 +105,7 @@ void Character::Update(const SceneContext& /*sceneContext*/)
 		//If the character is moving (= input is pressed)
 
 		//ATTACK LOGIC
-		if (GetScene()->GetSceneContext().pInput->IsActionTriggered(m_CharacterDesc.actionId_Attack))
+		/*if (GetScene()->GetSceneContext().pInput->IsActionTriggered(m_CharacterDesc.actionId_Attack))
 		{
 			isMoving = false;
 			m_IsAttacking = true;
@@ -116,7 +113,7 @@ void Character::Update(const SceneContext& /*sceneContext*/)
 		else
 		{
 			m_IsAttacking = false;
-		}
+		}*/
 
 		if(isMoving)
 		{

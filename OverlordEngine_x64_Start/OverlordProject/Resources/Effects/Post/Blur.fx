@@ -84,7 +84,7 @@ float4 PS(PS_INPUT input) : SV_Target
 	}
 
 	// Step 4: Divide the final color by the number of passes (in this case 5*5)
-	finalColor /= 25.0f;
+	finalColor /= (iterations * iterations);
 
 	// Step 5: Return the final color
 	return finalColor;

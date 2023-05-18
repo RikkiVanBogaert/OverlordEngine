@@ -20,8 +20,7 @@ RasterizerState rasterizerState
 float4 ShadowMapVS(float3 position:POSITION):SV_POSITION
 {
 	//TODO: return the position of the vertex in correct space (hint: seen from the view of the light)
-	return float4(1.0f,1.0f,1.0f,1.0f);
-
+	
 	// Transform the vertex position into world space
 	float4 worldPos = mul(float4(position, 1.0f), gWorld);
 	

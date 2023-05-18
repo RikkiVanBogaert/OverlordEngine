@@ -33,23 +33,11 @@ void ShadowMappingScene::Initialize()
 
 	//Character Mesh
 	//**************
-	/*const auto pObject = AddChild(new GameObject);
+	const auto pObject = AddChild(new GameObject);
 	const auto pModel = pObject->AddComponent(new ModelComponent(L"Meshes/PeasantGirl.ovm"));
-	pModel->SetMaterial(pPeasantMaterial);*/
+	pModel->SetMaterial(pPeasantMaterial);
 
-	auto m_pSpongebobMesh = new GameObject();
-
-	auto pSpongeMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow_Skinned>();
-	pSpongeMat->SetDiffuseTexture(L"Exam/Textures/Spongebob.png");
-
-	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/SpongebobNew.ovm");
-	m_pSpongebobMesh->AddComponent<ModelComponent>(pModel);
-	pModel->SetMaterial(pSpongeMat);
-	m_pSpongebobMesh->GetTransform()->Scale(1.f);
-
-	AddChild(m_pSpongebobMesh);
-
-	m_pSpongebobMesh->GetTransform()->Scale(3.f);
+	pModel->GetTransform()->Scale(0.1f);
 
 	if (const auto pAnimator = pModel->GetAnimator())
 	{

@@ -21,7 +21,7 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	const auto pDefaultMaterial = PxGetPhysics().createMaterial(0.5f, 0.5f, 0.5f);
 
 	//Character
-	CharacterDesc characterDesc{ pDefaultMaterial };
+	CharacterDesc characterDesc{ pDefaultMaterial, 5.5f, 2.f };
 	characterDesc.actionId_MoveForward = CharacterMoveForward;
 	characterDesc.actionId_MoveBackward = CharacterMoveBackward;
 	characterDesc.actionId_MoveLeft = CharacterMoveLeft;
@@ -29,7 +29,13 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	characterDesc.actionId_Jump = CharacterJump;
 	characterDesc.actionId_Attack = Attack;
 
-	m_pCharacter = AddChild(new Character(characterDesc, { 0, 0, -40 }, 5.5f, 2));
+	characterDesc.moveAccelerationTime = 0.1f;
+	characterDesc.maxMoveSpeed = 70.f;
+	characterDesc.fallAccelerationTime = 0.5f;
+	characterDesc.maxFallSpeed = 50.f;
+	characterDesc.JumpSpeed = 40.f;
+
+	m_pCharacter = AddChild(new Character(characterDesc, { 0, 0, -50 }));
 	m_pCharacter->SetTag(L"Player");
 	
 	//Mesh
@@ -122,6 +128,7 @@ void Spongebob::Update(const SceneContext& sceneContext)
 {
 	//Light
 	sceneContext.pLights->GetDirectionalLight().position.x = m_pSpongebobMesh->GetTransform()->GetPosition().x - 10;
+	sceneContext.pLights->GetDirectionalLight().position.y = m_pSpongebobMesh->GetTransform()->GetPosition().y + 5;
 	sceneContext.pLights->GetDirectionalLight().position.z = m_pSpongebobMesh->GetTransform()->GetPosition().z - 5;
 
 	//used manual position adjustement instead of childing mesh to parent, 

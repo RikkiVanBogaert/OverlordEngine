@@ -68,13 +68,13 @@ GameObject* CameraComponent::Pick(CollisionGroup ignoreGroups) const
 	TODO_W7(L"Implement Picking Logic");
 
 	const POINT mousePos = InputManager::GetMousePosition();
-	const float halfWidth = this->GetScene()->GetSceneContext().windowWidth / 2;
-	const float halfHeight = this->GetScene()->GetSceneContext().windowHeight / 2;
+	const float halfWidth = GetScene()->GetSceneContext().windowWidth / 2;
+	const float halfHeight = GetScene()->GetSceneContext().windowHeight / 2;
 	const float xMouseNDC = (mousePos.x - halfWidth) / halfWidth;
 	const float yMouseNDC = (halfHeight - mousePos.y) / halfHeight;
 
-	const XMFLOAT3 mousePosNear = { xMouseNDC, yMouseNDC, 0 };
-	const XMFLOAT3 mousePosFar = { xMouseNDC, yMouseNDC, 1 };
+	/*const XMFLOAT3 mousePosNear = { xMouseNDC, yMouseNDC, 0 };
+	const XMFLOAT3 mousePosFar = { xMouseNDC, yMouseNDC, 1 };*/
 
 	const auto& inverseViewProj{ XMLoadFloat4x4(&m_ViewProjectionInverse) };
 
@@ -86,14 +86,14 @@ GameObject* CameraComponent::Pick(CollisionGroup ignoreGroups) const
 	XMStoreFloat3(&farPoint, farPointVector);
 
 	const PxVec3 rayOrigin{ nearPoint.x, nearPoint.y, nearPoint.z };
-	const PxVec3 rayDirection{ farPoint.x - nearPoint.x, farPoint.y - nearPoint.y, farPoint.z - nearPoint.z };
+	const PxVec3 rayDir{ farPoint.x - nearPoint.x, farPoint.y - nearPoint.y, farPoint.z - nearPoint.z };
 	
 
 	PxQueryFilterData filterData{};
 	filterData.data.word0 = ~UINT(ignoreGroups);
 
 	PxRaycastBuffer hit{};
-	if (this->GetScene()->GetPhysxProxy()->Raycast(rayOrigin, rayDirection.getNormalized(), PX_MAX_F32,
+	if (GetScene()->GetPhysxProxy()->Raycast(rayOrigin, rayDir.getNormalized(), PX_MAX_F32,
 		hit, PxHitFlag::eDEFAULT, filterData))
 	{
 		BaseComponent* pComponent{ static_cast<BaseComponent*>(hit.block.actor->userData) };
