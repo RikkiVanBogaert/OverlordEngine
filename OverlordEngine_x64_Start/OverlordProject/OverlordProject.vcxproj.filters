@@ -49,6 +49,8 @@
     <ClCompile Include="Scenes\ExamAssignment\PauseScene.cpp" />
     <ClCompile Include="Prefabs\ExitGate.cpp" />
     <ClCompile Include="Scenes\ExamAssignment\EndScene.cpp" />
+    <ClCompile Include="Prefabs\Jellyfish.cpp" />
+    <ClCompile Include="Prefabs\Hans.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -99,5 +101,7 @@
     <ClInclude Include="Scenes\ExamAssignment\PauseScene.h" />
     <ClInclude Include="Prefabs\ExitGate.h" />
     <ClInclude Include="Scenes\ExamAssignment\EndScene.h" />
+    <ClInclude Include="Prefabs\Jellyfish.h" />
+    <ClInclude Include="Prefabs\Hans.h" />
   </ItemGroup>
 </Project>

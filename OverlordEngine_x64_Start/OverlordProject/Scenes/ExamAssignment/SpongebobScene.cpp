@@ -33,7 +33,9 @@
 #include "Materials/Shadow/DiffuseMaterial_Shadow_Skinned.h"
 #include "Prefabs/BubbleParticles.h"
 #include "Prefabs/ExitGate.h"
+#include "Prefabs/Hans.h"
 #include "Prefabs/Spongebob.h"
+#include "Prefabs/Jellyfish.h"
 
 SpongebobScene::~SpongebobScene()
 {
@@ -52,34 +54,13 @@ void SpongebobScene::Initialize()
 
 
 	//Ground Plane
-	const auto pDefaultMaterial = PxGetPhysics().createMaterial(0.5f, 0.5f, 0.5f);
-	GameSceneExt::CreatePhysXGroundPlane(*this, pDefaultMaterial);
+	//const auto pDefaultMaterial = PxGetPhysics().createMaterial(0.5f, 0.5f, 0.5f);
+	//GameSceneExt::CreatePhysXGroundPlane(*this, pDefaultMaterial);
 
-	//const XMFLOAT3 startPos{300, 35, -865};
-	const XMFLOAT3 startPos{ 700, 20, 55 };
+	m_StartPos = { 493.961f, 147.045f, 153.425f }; //jellyfish
+	//m_StartPos = { 300.858f, 37.2426f, -865.813f }; //start
 	CreateLevel();
-	
-	//Objects
-	m_pSpatula = new Spatula();
-	m_pSpatula->GetTransform()->Translate(startPos.x + 20, startPos.y - 3, startPos.z + 5);
-	AddChild(m_pSpatula);
-
-	m_pSpatula = new Spatula();
-	m_pSpatula->GetTransform()->Translate(startPos.x - 20, startPos.y - 3, startPos.z + 5);
-	AddChild(m_pSpatula);
-
-	m_pSpatula = new Spatula();
-	m_pSpatula->GetTransform()->Translate(startPos.x + 20, startPos.y - 3, startPos.z + 50);
-	AddChild(m_pSpatula);
-
-	auto pTiki = new Tiki();
-	pTiki->GetTransform()->Translate(startPos.x + 15, startPos.y - 3, startPos.z + 5);
-	AddChild(pTiki);
-
-	auto pGate = new ExitGate();
-	pGate->GetTransform()->Translate(625.9f, 2.6f, -130.2f);
-	pGate->GetTransform()->Rotate(0, 50, 0);
-	AddChild(pGate);
+	CreateObjects();
 
 	//HUD
 	auto pHud = new HUDPrefab();
@@ -88,18 +69,12 @@ void SpongebobScene::Initialize()
 	//Character
 	auto pSponge = new Spongebob(pHud);
 	AddChild(pSponge);
-	pSponge->SetControllerPosition(startPos);
+	pSponge->SetControllerPosition(m_StartPos);
 
-
-	/*auto o = new GameObject();
-	auto pSprite = new SpriteComponent(L"Exam/HUD/goldenSpatula.png");
-	o->AddComponent<SpriteComponent>(pSprite);
-	AddChild(o);*/
 
 	////PostProcessing
 	//auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
 	//AddPostProcessingEffect(m_pPostEffect);
-
 }
 
 void SpongebobScene::OnGUI()
@@ -128,10 +103,10 @@ void SpongebobScene::CreateLevel()
 
 	//Simple Level
 	const auto pLevelObject = AddChild(new GameObject());
-	const auto pLevelMesh = pLevelObject->AddComponent(new ModelComponent(L"Exam/Meshes/NewLevel.ovm"));
+	const auto pLevelMesh = pLevelObject->AddComponent(new ModelComponent(L"Exam/Meshes/Level2.ovm"));
 
 	const auto pLevelActor = pLevelObject->AddComponent(new RigidBodyComponent(true));
-	const auto pPxTriangleMesh = ContentManager::Load<PxTriangleMesh>(L"Exam/Meshes/NewLevel.ovpt");
+	const auto pPxTriangleMesh = ContentManager::Load<PxTriangleMesh>(L"Exam/Meshes/Level.ovpt");
 	const float levelScale = 10.f;
 	pLevelActor->AddCollider(PxTriangleMeshGeometry(pPxTriangleMesh, PxMeshScale({ levelScale, levelScale, levelScale })), *pDefaultMaterial);
 
@@ -141,9 +116,9 @@ void SpongebobScene::CreateLevel()
 	pGroundMaterial->SetDiffuseTexture(L"Textures/GroundBrick.jpg");
 	pLevelMesh->SetMaterial(pGroundMaterial);
 
-	auto objInfo = ParseOBJFile("../OverlordProject/Resources/Exam/Meshes/NewLevel.obj");
+	auto objInfo = ParseOBJFile("../OverlordProject/Resources/Exam/Meshes/jellyfishfields.obj");
 
-	auto mtlInfo = mtlParser("../OverlordProject/Resources/Exam/Meshes/NewLevel.mtl");
+	auto mtlInfo = mtlParser("../OverlordProject/Resources/Exam/Textures/Level/jellyfishfields.mtl");
 	for(auto m : mtlInfo)
 	{
 		auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
@@ -151,7 +126,7 @@ void SpongebobScene::CreateLevel()
 		{
 			if(objInfo[i].name == m.meshName)
 			{
-				pMat->SetDiffuseTexture(L"Exam/Textures/BikiniLevel/" + ConvertToWideString(m.textureName));
+				pMat->SetDiffuseTexture(L"Exam/Textures/Level/" + ConvertToWideString(m.textureName));
 				pLevelMesh->SetMaterial(pMat, UINT8(i));
 				std::cout << "Setting texture: " << m.textureName << " to mesh: " << objInfo[i].name << '\n';
 			}
@@ -162,15 +137,50 @@ void SpongebobScene::CreateLevel()
 	const auto pSkybox = AddChild(new GameObject());
 	const auto pSkyboxMesh = pSkybox->AddComponent(new ModelComponent(L"Exam/Meshes/skybox.ovm"));
 	const auto pSkyMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	pSkyMat->SetDiffuseTexture(L"Exam/Meshes/jf_sky_color.png");
+	pSkyMat->SetDiffuseTexture(L"Exam/Textures/jf_sky_color.png");
 	pSkyboxMesh->SetMaterial(pSkyMat, 0);
 
 	//make transparent
 	const auto pFlowerMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	pFlowerMat->SetDiffuseTexture(L"Exam/Meshes/jf_sky_flowers.png");
+	pFlowerMat->SetDiffuseTexture(L"Exam/Textures/jf_sky_flowers.png");
 	//pSkyboxMesh->SetMaterial(pFlowerMat, 1);
 
 	pSkybox->GetTransform()->Scale(1.5f);
+	//pSkybox->GetTransform()->Rotate(0, 90, 0);
+}
+
+void SpongebobScene::CreateObjects()
+{
+	//Objects
+	m_pSpatula = new Spatula();
+	m_pSpatula->GetTransform()->Translate(174.363f, 38.097f, -590.433f);
+	AddChild(m_pSpatula);
+
+	m_pSpatula = new Spatula();
+	m_pSpatula->GetTransform()->Translate(428.641f, 65.725f, -558.302f);
+	AddChild(m_pSpatula);
+
+	m_pSpatula = new Spatula();
+	m_pSpatula->GetTransform()->Translate(493.961f, 147.045f, 153.425f);
+	AddChild(m_pSpatula);
+
+	auto pTiki = new Tiki();
+	pTiki->GetTransform()->Translate(m_StartPos.x + 15, m_StartPos.y - 3, m_StartPos.z + 5);
+	AddChild(pTiki);
+
+	auto pGate = new ExitGate();
+	pGate->GetTransform()->Translate(388.383f, 0.495f, -176.235f);
+	pGate->GetTransform()->Rotate(0, -30, 0);
+	AddChild(pGate);
+
+	auto pJelly = new Jellyfish();
+	pJelly->GetTransform()->Translate(489.977f, -400.204f, 106.555f);
+	AddChild(pJelly);
+
+	auto pHans = new Hans();
+	pHans->GetTransform()->Translate(492.334f, 160.f, 185.318f);
+	pHans->GetTransform()->Rotate(0, -30, 0);
+	AddChild(pHans);
 }
 
 std::wstring SpongebobScene::ConvertToWideString(const std::string& str)

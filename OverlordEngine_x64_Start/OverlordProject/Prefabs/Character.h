@@ -47,6 +47,7 @@ public:
 
 	//Other
 	XMFLOAT3 GetVelocity() const { return m_TotalVelocity; }
+	void SetVelocity(const XMFLOAT3& vel) { m_TotalVelocity = vel; }
 	bool IsAttacking() const { return m_IsAttacking; }
 	CameraComponent* GetCamera() const { return m_pCameraComponent; }
 
@@ -59,7 +60,7 @@ private:
 	ControllerComponent* m_pControllerComponent{};
 
 	CharacterDesc m_CharacterDesc;
-	float m_TotalPitch{}, m_TotalYaw{180};				//Total camera Pitch(X) and Yaw(Y) rotation
+	float m_TotalPitch{}, m_TotalYaw{};				//Total camera Pitch(X) and Yaw(Y) rotation
 	float m_MoveAcceleration{},						//Acceleration required to reach maxMoveVelocity after 1 second (maxMoveVelocity / moveAccelerationTime)
 		m_FallAcceleration{},						//Acceleration required to reach maxFallVelocity after 1 second (maxFallVelocity / fallAccelerationTime)
 		m_MoveSpeed{};								//MoveSpeed > Horizontal Velocity = MoveDirection * MoveVelocity (= TotalVelocity.xz)

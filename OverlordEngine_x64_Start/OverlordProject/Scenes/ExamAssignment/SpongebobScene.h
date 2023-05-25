@@ -30,6 +30,7 @@ private:
 
 	Character* m_pCharacter{};
 	GameObject* m_pSpongebobMesh{};
+	XMFLOAT3 m_StartPos{};
 
 	GameObject* m_pSpatula{};
 
@@ -56,7 +57,7 @@ private:
 	void UpdateGameState();
 	void CheckDeletedObjects();
 	void CreateLevel();
-
+	void CreateObjects();
 
 	struct MaterialInfo
 	{
