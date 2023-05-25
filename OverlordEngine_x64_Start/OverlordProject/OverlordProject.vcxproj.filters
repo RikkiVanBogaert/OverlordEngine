@@ -46,6 +46,9 @@
     <ClCompile Include="Prefabs\BubbleParticles.cpp" />
     <ClCompile Include="Materials\Post\PostMyEffect.cpp" />
     <ClCompile Include="Prefabs\Spongebob.cpp" />
+    <ClCompile Include="Scenes\ExamAssignment\PauseScene.cpp" />
+    <ClCompile Include="Prefabs\ExitGate.cpp" />
+    <ClCompile Include="Scenes\ExamAssignment\EndScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -93,5 +96,8 @@
     <ClInclude Include="Prefabs\BubbleParticles.h" />
     <ClInclude Include="Materials\Post\PostMyEffect.h" />
     <ClInclude Include="Prefabs\Spongebob.h" />
+    <ClInclude Include="Scenes\ExamAssignment\PauseScene.h" />
+    <ClInclude Include="Prefabs\ExitGate.h" />
+    <ClInclude Include="Scenes\ExamAssignment\EndScene.h" />
   </ItemGroup>
 </Project>

@@ -105,15 +105,18 @@ void Character::Update(const SceneContext& /*sceneContext*/)
 		//If the character is moving (= input is pressed)
 
 		//ATTACK LOGIC
-		/*if (GetScene()->GetSceneContext().pInput->IsActionTriggered(m_CharacterDesc.actionId_Attack))
+		if (GetScene()->GetSceneContext().pInput->IsActionTriggered(m_CharacterDesc.actionId_Attack))
 		{
 			isMoving = false;
 			m_IsAttacking = true;
+			std::cout << GetTransform()->GetPosition().x << ", "
+				<< GetTransform()->GetPosition().y << ", "
+				<< GetTransform()->GetPosition().z << "\n";
 		}
 		else
 		{
 			m_IsAttacking = false;
-		}*/
+		}
 
 		if(isMoving)
 		{

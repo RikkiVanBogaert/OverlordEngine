@@ -48,8 +48,15 @@ private:
 	void PlayCorrectAnimation();
 	void UpdateHUDElements();
 
+	enum State
+	{
+		Playing,
+		Paused
+	};
+	void UpdateGameState();
 	void CheckDeletedObjects();
 	void CreateLevel();
+
 
 	struct MaterialInfo
 	{
@@ -66,5 +73,6 @@ private:
 	std::vector<MeshInfo> ParseOBJFile(const std::string& filepath);
 
 	std::wstring ConvertToWideString(const std::string& str);
+	std::vector<XMFLOAT3> readObjFile(const std::string& filePath);
 };
 

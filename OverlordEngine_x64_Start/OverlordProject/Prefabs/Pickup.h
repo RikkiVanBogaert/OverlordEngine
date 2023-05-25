@@ -32,12 +32,14 @@ class Flower final : public Pickup
 {
 public:
 	Flower(int type = rand() % 5);
+	void Update(const SceneContext&) override;
 
 protected:
 	void Initialize(const SceneContext& sceneContext) override;
-
+	
 private:
 	int m_Type{};
+	bool m_HitGround{};
 };
 
 

@@ -16,6 +16,7 @@
 #include "Materials/Post/PostGrayscale.h"
 #include "Materials/Shadow/DiffuseMaterial_Shadow.h"
 #include "Materials/Shadow/DiffuseMaterial_Shadow_Skinned.h"
+#include "Prefabs/HUDPrefab.h"
 #include "Prefabs/Spongebob.h"
 
 TestScene::~TestScene()
@@ -47,9 +48,9 @@ void TestScene::Initialize()
 
 	AddChild(pGroundObj);
 
-	auto pSponge = new Spongebob();
+	/*auto pSponge = new Spongebob(new HUDPrefab());
 	AddChild(pSponge);
-	pSponge->SetControllerPosition({ 5, 10, 0 });
+	pSponge->SetControllerPosition({ 5, 10, 0 });*/
 
 	//CreateLevel();
 

@@ -83,6 +83,7 @@ void GameObject::RootUpdate(const SceneContext& sceneContext)
 		pChild->RootUpdate(sceneContext);
 	}
 }
+
 void GameObject::RootDraw(const SceneContext& sceneContext)
 {
 	//User-Object Draw

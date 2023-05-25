@@ -13,6 +13,7 @@ public:
 
 	void Update(const SceneContext&) override;
 
+	int GetAmountSpatulas() const { return m_SpatulaAmount; }
 	void SetAmountSpatulas(int amount);
 	void IncreaseAmountSpatulas(int value);
 
@@ -21,9 +22,10 @@ protected:
 
 
 private:
-	SpriteFont* m_pFont;
+	SpriteFont* m_pFont{};
 
-	SpriteComponent* pSprite;
+	GameObject* spriteObj{};
+	SpriteComponent* spriteCp{};
 	XMFLOAT2 m_SpatulaPos{};
 	int m_SpatulaAmount{};
 };

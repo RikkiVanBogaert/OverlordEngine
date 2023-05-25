@@ -1,13 +1,16 @@
 #include "stdafx.h"
 #include "MainGame.h"
 
+#include "Scenes/ExamAssignment/EndScene.h"
+#include "Scenes/ExamAssignment/PauseScene.h"
+
 /*LAB Content*/
 //#define W3
 //#define W4
 //#define W5
 //#define W6
 // #define W7
- #define W8
+// #define W8
 // #define W9
 // #define W10
 
@@ -15,7 +18,7 @@
 // #define MILESTONE_1
 // #define MILESTONE_2
 
-// #define Spongebob
+ #define Spongebob
 
 #ifdef Spongebob
 #include "Scenes/ExamAssignment/SpongebobScene.h"
@@ -101,9 +104,11 @@ void MainGame::OnGamePreparing(GameContext& gameContext)
 void MainGame::Initialize()
 {
 #ifdef Spongebob
-	SceneManager::Get()->AddGameScene(new SpongebobScene());
-	SceneManager::Get()->AddGameScene(new TestScene());
 	SceneManager::Get()->AddGameScene(new MainMenuScene());
+	SceneManager::Get()->AddGameScene(new SpongebobScene());
+	//SceneManager::Get()->AddGameScene(new PauseScene());
+	SceneManager::Get()->AddGameScene(new TestScene());
+	SceneManager::Get()->AddGameScene(new EndScene());
 #endif
 
 #ifdef W3

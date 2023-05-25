@@ -3,6 +3,7 @@
 
 #include "Character.h"
 #include "HUDPrefab.h"
+#include "Spongebob.h"
 #include "Materials/DiffuseMaterial.h"
 
 void Spatula::Initialize(const SceneContext&)
@@ -33,17 +34,14 @@ void Spatula::Initialize(const SceneContext&)
 
 		if (action != PxTriggerAction::ENTER) return;
 
-		if(auto pChar = dynamic_cast<Character*>(other))
+		if (auto sponge = dynamic_cast<Spongebob*>(other->GetParent()))
 		{
-			if(auto pHUD = pChar->GetChild<HUDPrefab>())
-			{
-				pHUD->IncreaseAmountSpatulas(1);
-			}
+			sponge->GetHUD()->IncreaseAmountSpatulas(1);
 
 			std::cout << "SPATULA PICKED UP\n";
 			MarkForDeletion();
+
 		}
-		
 	};
 
 	SetOnTriggerCallBack(onTrigger);
@@ -128,21 +126,33 @@ void Flower::Initialize(const SceneContext&)
 	auto& phys = PxGetPhysics();
 	auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
 
-	auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
-	pRigidBodyCp->AddCollider(PxSphereGeometry(GetScale()), *pBouncyMaterial, true);
 
-	auto parentPos = this->GetTransform()->GetPosition();
+	auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
+
+	const float size{ 5 };
+	pRigidBodyCp->AddCollider(PxSphereGeometry(1.8f * size), *pBouncyMaterial, true);
 
 	auto onTrigger = [&](GameObject*, GameObject* other, PxTriggerAction action)
 	{
-		if (other->GetTag() != L"Player") return;
+		if (other->GetTag() != L"Player") 
+		{
+			m_HitGround = true;
+			return;
+		}
 
 		if (action == PxTriggerAction::ENTER)
 		{
 			std::cout << "FLOWER PICKED UP\n";
 			MarkForDeletion();
+
 		}
+
 	};
 
 	SetOnTriggerCallBack(onTrigger);
+}
+
+void Flower::Update(const SceneContext&)
+{
+
 }

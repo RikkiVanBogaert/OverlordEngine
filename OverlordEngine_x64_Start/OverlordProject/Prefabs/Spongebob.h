@@ -1,16 +1,18 @@
 #pragma once
+class HUDPrefab;
 class Character;
 
 class Spongebob final : public GameObject
 {
 public:
-	Spongebob() = default;
+	Spongebob(HUDPrefab* hud);
 	~Spongebob() override;
 
 	void Initialize(const SceneContext&) override;
 	void Update(const SceneContext&) override;
 
 	void SetControllerPosition(const XMFLOAT3& pos);
+	HUDPrefab* GetHUD() { return m_pHud; };
 
 private:
 	enum InputIds
@@ -26,6 +28,9 @@ private:
 	Character* m_pCharacter{};
 	GameObject* m_pSpongebobMesh{};
 
+	RigidBodyComponent* pRigidBody{};
+
+	HUDPrefab* m_pHud;
 	//Animations
 	ModelAnimator* pAnimator{};
 

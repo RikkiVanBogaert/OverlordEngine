@@ -4,7 +4,12 @@
 #include <corecrt_math_defines.h>
 
 #include "Character.h"
+#include "HUDPrefab.h"
 #include "Materials/Shadow/DiffuseMaterial_Shadow_Skinned.h"
+
+Spongebob::Spongebob(HUDPrefab* hud):
+m_pHud(hud)
+{}
 
 Spongebob::~Spongebob()
 {
@@ -31,13 +36,14 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 
 	characterDesc.moveAccelerationTime = 0.1f;
 	characterDesc.maxMoveSpeed = 70.f;
-	characterDesc.fallAccelerationTime = 0.5f;
-	characterDesc.maxFallSpeed = 50.f;
-	characterDesc.JumpSpeed = 40.f;
+	characterDesc.fallAccelerationTime = 0.3f;
+	characterDesc.maxFallSpeed = 70.f;
+	characterDesc.JumpSpeed = 80.f;
 
 	m_pCharacter = AddChild(new Character(characterDesc, { 0, 0, -50 }));
 	m_pCharacter->SetTag(L"Player");
-	
+
+
 	//Mesh
 	m_pSpongebobMesh = new GameObject();
 
@@ -68,6 +74,7 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 		strncpy_s(m_ClipNames[i], clipSize + 1, clipName.c_str(), clipSize);
 	}
 
+	
 
 	//Input
 	auto inputAction = InputAction(CharacterMoveLeft, InputState::down, 'A');
@@ -135,16 +142,17 @@ void Spongebob::Update(const SceneContext& sceneContext)
 	//because the mesh always pointed to the camera when it was a child of the characterComponent
 
 	auto pos = m_pCharacter->GetTransform()->GetPosition();
-	pos.y -= 4.f; //offset to put spongebob on same height as capsule
+	pos.y -= 6.2f; //offset to put spongebob on same height as capsule
 	m_pSpongebobMesh->GetTransform()->Translate(pos);
 
-	auto rot = std::atan2f(m_pCharacter->GetVelocity().z, -m_pCharacter->GetVelocity().x) * float(180 / M_PI) + 90;
-	m_pSpongebobMesh->GetTransform()->Rotate(0, rot, 0);
+	if ((abs(m_pCharacter->GetVelocity().x) > 0 || abs(m_pCharacter->GetVelocity().z) > 0))
+	{
+		auto rot = std::atan2f(m_pCharacter->GetVelocity().z, -m_pCharacter->GetVelocity().x) * float(180 / M_PI) + 90;
+			m_pSpongebobMesh->GetTransform()->Rotate(0, rot, 0);
+	}
 
 	PlayCorrectAnimation();
-	//UpdateHUDElements();
 
-	//CheckDeletedObjects();
 }
 
 void Spongebob::SetControllerPosition(const XMFLOAT3& pos)

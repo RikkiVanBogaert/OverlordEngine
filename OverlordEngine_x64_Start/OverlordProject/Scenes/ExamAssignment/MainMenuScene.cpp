@@ -32,22 +32,25 @@ void MainMenuScene::Initialize()
 
 	//Buttons-----
 	const auto pButtonObject = new GameObject();
-	const auto pButtonPlane = new ModelComponent(L"Exam/HUD/Plane.ovm");
-	pButtonObject->AddComponent<ModelComponent>(pButtonPlane);
-
-	auto pButtonMat = MaterialManager::Get()->CreateMaterial<ColorMaterial>();
-	pButtonPlane->SetMaterial(pButtonMat);
-
-
-	pButtonPlane->GetTransform()->Scale(0.4f, 1.f, .1f);
 	pButtonObject->GetTransform()->Translate(12, 1, -1.8f);
 
 	const auto pMaterial = PxGetPhysics().createMaterial(.5f, .5f, .5f);
 	const auto pRigidBody = pButtonObject->AddComponent(new RigidBodyComponent(true));
-	const auto scale = pButtonPlane->GetTransform()->GetScale();
+	pRigidBody->SetCollisionGroup(CollisionGroup::Group0);
 	pRigidBody->AddCollider(PxBoxGeometry{ 5, 1, 1 }, *pMaterial);
 
 	AddChild(pButtonObject);
+
+
+	const auto pQuitObject = new GameObject();
+	pQuitObject->GetTransform()->Translate(12, 1, -12.f);
+
+	//const auto pMaterial = PxGetPhysics().createMaterial(.5f, .5f, .5f);
+	const auto pQuitRigidBody = pQuitObject->AddComponent(new RigidBodyComponent(true));
+	pQuitRigidBody->SetCollisionGroup(CollisionGroup::Group1);
+	pQuitRigidBody->AddCollider(PxBoxGeometry{ 5, 1, 1 }, *pMaterial);
+
+	AddChild(pQuitObject);
 }
 
 void MainMenuScene::OnGUI()
@@ -59,11 +62,13 @@ void MainMenuScene::Update()
 {
 	if (InputManager::IsMouseButton(InputState::down, 1))
 	{
-		if (const auto pPickedObject = m_SceneContext.pCamera->Pick())
+		if (m_SceneContext.pCamera->Pick(CollisionGroup::Group1))
 		{
-			//RemoveChild(pPickedObject, true);
-
 			SceneManager::Get()->SetActiveGameScene(L"SpongebobScene");
+		}
+		if (m_SceneContext.pCamera->Pick(CollisionGroup::Group0))
+		{
+			std::exit(0);
 		}
 	}
 

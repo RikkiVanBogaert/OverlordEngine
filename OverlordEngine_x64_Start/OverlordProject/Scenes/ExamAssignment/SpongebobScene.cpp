@@ -32,6 +32,7 @@
 #include "Materials/Shadow/DiffuseMaterial_Shadow.h"
 #include "Materials/Shadow/DiffuseMaterial_Shadow_Skinned.h"
 #include "Prefabs/BubbleParticles.h"
+#include "Prefabs/ExitGate.h"
 #include "Prefabs/Spongebob.h"
 
 SpongebobScene::~SpongebobScene()
@@ -54,26 +55,46 @@ void SpongebobScene::Initialize()
 	const auto pDefaultMaterial = PxGetPhysics().createMaterial(0.5f, 0.5f, 0.5f);
 	GameSceneExt::CreatePhysXGroundPlane(*this, pDefaultMaterial);
 
-	//Character
-	const XMFLOAT3 startPos{300, 35, -865};
-	auto pSponge = new Spongebob();
-	AddChild(pSponge);
-	pSponge->SetControllerPosition(startPos);
-
+	//const XMFLOAT3 startPos{300, 35, -865};
+	const XMFLOAT3 startPos{ 700, 20, 55 };
 	CreateLevel();
 	
 	//Objects
 	m_pSpatula = new Spatula();
-	m_pSpatula->GetTransform()->Translate(startPos.x + 2, startPos.y - 3, startPos.z + 5);
+	m_pSpatula->GetTransform()->Translate(startPos.x + 20, startPos.y - 3, startPos.z + 5);
+	AddChild(m_pSpatula);
+
+	m_pSpatula = new Spatula();
+	m_pSpatula->GetTransform()->Translate(startPos.x - 20, startPos.y - 3, startPos.z + 5);
+	AddChild(m_pSpatula);
+
+	m_pSpatula = new Spatula();
+	m_pSpatula->GetTransform()->Translate(startPos.x + 20, startPos.y - 3, startPos.z + 50);
 	AddChild(m_pSpatula);
 
 	auto pTiki = new Tiki();
 	pTiki->GetTransform()->Translate(startPos.x + 15, startPos.y - 3, startPos.z + 5);
 	AddChild(pTiki);
 
+	auto pGate = new ExitGate();
+	pGate->GetTransform()->Translate(625.9f, 2.6f, -130.2f);
+	pGate->GetTransform()->Rotate(0, 50, 0);
+	AddChild(pGate);
+
 	//HUD
 	auto pHud = new HUDPrefab();
 	AddChild(pHud);
+
+	//Character
+	auto pSponge = new Spongebob(pHud);
+	AddChild(pSponge);
+	pSponge->SetControllerPosition(startPos);
+
+
+	/*auto o = new GameObject();
+	auto pSprite = new SpriteComponent(L"Exam/HUD/goldenSpatula.png");
+	o->AddComponent<SpriteComponent>(pSprite);
+	AddChild(o);*/
 
 	////PostProcessing
 	//auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
@@ -107,39 +128,49 @@ void SpongebobScene::CreateLevel()
 
 	//Simple Level
 	const auto pLevelObject = AddChild(new GameObject());
-	const auto pLevelMesh = pLevelObject->AddComponent(new ModelComponent(L"Exam/Meshes/Level.ovm"));
-
+	const auto pLevelMesh = pLevelObject->AddComponent(new ModelComponent(L"Exam/Meshes/NewLevel.ovm"));
 
 	const auto pLevelActor = pLevelObject->AddComponent(new RigidBodyComponent(true));
-	const auto pPxTriangleMesh = ContentManager::Load<PxTriangleMesh>(L"Exam/Meshes/Level2.ovpt");
+	const auto pPxTriangleMesh = ContentManager::Load<PxTriangleMesh>(L"Exam/Meshes/NewLevel.ovpt");
 	const float levelScale = 10.f;
 	pLevelActor->AddCollider(PxTriangleMeshGeometry(pPxTriangleMesh, PxMeshScale({ levelScale, levelScale, levelScale })), *pDefaultMaterial);
 
 	pLevelObject->GetTransform()->Scale(levelScale);
 
-
 	const auto pGroundMaterial = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
 	pGroundMaterial->SetDiffuseTexture(L"Textures/GroundBrick.jpg");
 	pLevelMesh->SetMaterial(pGroundMaterial);
 
-	auto objInfo = ParseOBJFile("../OverlordProject/Resources/Exam/Meshes/jellyfishfields.obj");
-	auto mtlInfo = mtlParser("../OverlordProject/Resources/Exam/Textures/Level/jellyfishfields.mtl");
+	auto objInfo = ParseOBJFile("../OverlordProject/Resources/Exam/Meshes/NewLevel.obj");
 
+	auto mtlInfo = mtlParser("../OverlordProject/Resources/Exam/Meshes/NewLevel.mtl");
 	for(auto m : mtlInfo)
 	{
-		auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
+		auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
 		for(int i{}; i < objInfo.size(); ++i)
 		{
 			if(objInfo[i].name == m.meshName)
 			{
-				pMat->SetDiffuseTexture(L"Exam/Textures/Level/" + ConvertToWideString(m.textureName));
+				pMat->SetDiffuseTexture(L"Exam/Textures/BikiniLevel/" + ConvertToWideString(m.textureName));
 				pLevelMesh->SetMaterial(pMat, UINT8(i));
-
-				//std::cout << "Setting texture: " << m.textureName << '\n';
+				std::cout << "Setting texture: " << m.textureName << " to mesh: " << objInfo[i].name << '\n';
 			}
 		}
 	}
 
+	//Skybox
+	const auto pSkybox = AddChild(new GameObject());
+	const auto pSkyboxMesh = pSkybox->AddComponent(new ModelComponent(L"Exam/Meshes/skybox.ovm"));
+	const auto pSkyMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+	pSkyMat->SetDiffuseTexture(L"Exam/Meshes/jf_sky_color.png");
+	pSkyboxMesh->SetMaterial(pSkyMat, 0);
+
+	//make transparent
+	const auto pFlowerMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+	pFlowerMat->SetDiffuseTexture(L"Exam/Meshes/jf_sky_flowers.png");
+	//pSkyboxMesh->SetMaterial(pFlowerMat, 1);
+
+	pSkybox->GetTransform()->Scale(1.5f);
 }
 
 std::wstring SpongebobScene::ConvertToWideString(const std::string& str)
@@ -162,23 +193,6 @@ std::wstring SpongebobScene::ConvertToWideString(const std::string& str)
 
 	return wideStr;
 }
-
-//std::vector<std::string> SpongebobScene::mtlParser(const std::string& filename)
-//{
-//	std::ifstream file(filename);
-//	std::vector<std::string> map_kds;
-//	std::string line;
-//	while (std::getline(file, line)) 
-//	{
-//		size_t map_kd_pos = line.find("map_Kd ");
-//		if (map_kd_pos != std::string::npos) 
-//		{
-//			std::string map_kd_value = line.substr(map_kd_pos + 7);
-//			map_kds.push_back(map_kd_value);
-//		}
-//	}
-//	return map_kds;
-//}
 
 std::vector<SpongebobScene::MaterialInfo> SpongebobScene::mtlParser(const std::string& filename)
 {
@@ -230,7 +244,6 @@ std::vector<SpongebobScene::MaterialInfo> SpongebobScene::mtlParser(const std::s
 }
 
 
-//TEST
 std::vector<SpongebobScene::MeshInfo> SpongebobScene::ParseOBJFile(const std::string& filepath)
 {
 	std::ifstream file(filepath);
@@ -278,5 +291,60 @@ std::vector<SpongebobScene::MeshInfo> SpongebobScene::ParseOBJFile(const std::st
 		std::cerr << "Failed to open file: " << filepath << std::endl;
 	}
 
+	materialInfoList.erase(
+		std::remove_if(materialInfoList.begin(), materialInfoList.end(), [](const MeshInfo& mesh) {
+			return mesh.submeshId == "default";
+			}),
+		materialInfoList.end()
+				);
+
 	return materialInfoList;
+}
+
+std::vector<XMFLOAT3> SpongebobScene::readObjFile(const std::string& filePath)
+{
+	std::vector<XMFLOAT3> pivotPositions;
+	std::ifstream file(filePath);
+	if (!file.is_open())
+	{
+		std::cerr << "Failed to open OBJ file: " << filePath << std::endl;
+		return{};
+	}
+
+	std::string line;
+	std::string currentObjectName;
+	XMFLOAT3 currentPivotPosition;
+
+	while (std::getline(file, line))
+	{
+		std::istringstream iss(line);
+		std::string prefix;
+		iss >> prefix;
+
+		if (prefix == "o") // Object name
+		{
+			if (!currentObjectName.empty())
+			{
+				pivotPositions.push_back(currentPivotPosition);
+			}
+
+			iss >> currentObjectName;
+			currentPivotPosition = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		}
+		else if (prefix == "v") // Vertex position
+		{
+			float x, y, z;
+			iss >> x >> y >> z;
+			currentPivotPosition = XMFLOAT3(x, y, z);
+		}
+	}
+
+	if (!currentObjectName.empty())
+	{
+		pivotPositions.push_back(currentPivotPosition);
+	}
+
+	file.close();
+
+	return pivotPositions;
 }

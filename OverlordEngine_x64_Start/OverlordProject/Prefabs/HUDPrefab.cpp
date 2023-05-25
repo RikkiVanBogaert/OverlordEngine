@@ -4,21 +4,24 @@
 
 void HUDPrefab::Initialize(const SceneContext& sceneContext)
 {
-	pSprite = new SpriteComponent(L"Exam/HUD/goldenSpatula.png");
-	AddComponent<SpriteComponent>(pSprite);
-	constexpr float scale{ 0.4f };
-	pSprite->GetTransform()->Scale(0, scale,scale);
-	m_SpatulaPos.x = sceneContext.windowWidth / 2 - pSprite->GetDimensions().x * scale / 2;
-	pSprite->GetTransform()->Translate(m_SpatulaPos.x, 100, 100);
+	constexpr float scale{ 0.5f };
+
+	spriteObj = new GameObject();
+	spriteCp = new SpriteComponent(L"Exam/HUD/goldenSpatula.png");
+	spriteObj->AddComponent<SpriteComponent>(spriteCp);
+	AddChild(spriteObj);
+	spriteObj->GetTransform()->Scale(scale);
+	m_SpatulaPos.x = sceneContext.windowWidth / 2 - spriteCp->GetDimensions().x * scale / 2;
+	spriteObj->GetTransform()->Translate(m_SpatulaPos.x, 0, 0);
 
 	m_pFont = ContentManager::Load<SpriteFont>(L"SpriteFonts/Consolas_32.fnt");
-}
 
+}
 
 void HUDPrefab::Update(const SceneContext&)
 {
-	const XMFLOAT2 spatTextPos = { m_SpatulaPos.x + pSprite->GetDimensions().x * pSprite->GetTransform()->GetScale().x,
-		m_SpatulaPos.y + pSprite->GetDimensions().y * pSprite->GetTransform()->GetScale().y / 2 - 10 };
+	const XMFLOAT2 spatTextPos = { m_SpatulaPos.x + spriteCp->GetDimensions().x * spriteCp->GetTransform()->GetScale().x,
+		m_SpatulaPos.y + spriteCp->GetDimensions().y * spriteCp->GetTransform()->GetScale().y / 2 - 10 };
 	TextRenderer::Get()->DrawText(m_pFont, std::to_wstring(m_SpatulaAmount), spatTextPos);
 }
 

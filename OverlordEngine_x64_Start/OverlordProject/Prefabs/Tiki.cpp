@@ -27,7 +27,6 @@ void Tiki::Initialize(const SceneContext&)
 
 
 	auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
-
 	pRigidBodyCp->AddCollider(PxSphereGeometry(1.8f * size), *pBouncyMaterial, true);
 	
 	auto pConvexMesh = ContentManager::Load<PxConvexMesh>(L"Exam/Meshes/Tiki.ovpc");
@@ -41,6 +40,9 @@ void Tiki::Initialize(const SceneContext&)
 		{
 			m_IsVulnerable = true;
 			m_pPlayer = static_cast<Character*>(other);
+			//SpawnFlowers();
+			//SpawnBubbles();
+			//MarkForDeletion();
 		}
 
 		if (action == PxTriggerAction::LEAVE)
@@ -58,13 +60,15 @@ void Tiki::Update(const SceneContext& )
 {
 	if (!m_IsVulnerable) return;
 	if (!m_pPlayer) return;
+	if (NeedsDeleting()) return;
 
 	if (m_pPlayer->IsAttacking())
 	{
-		SpawnFlowers();
-		SpawnBubbles();
+		//SpawnFlowers();
+		//SpawnBubbles();
 
-		MarkForDeletion();
+		//MarkForDeletion();
+		GetScene()->RemoveChild(this, true);
 	}
 }
 
@@ -75,10 +79,10 @@ void Tiki::SpawnFlowers()
 		auto pFlower = new Flower();
 		auto pos = GetTransform()->GetPosition();
 
-		const int rndX{rand() % 13 - 6};
-		const int rndZ{ rand() % 13 - 6 };
+		const int rndX{rand() % 53 - 12};
+		const int rndZ{ rand() % 53 - 12 };
 
-		pFlower->GetTransform()->Translate(pos.x + rndX, pos.y + 3, pos.z + rndZ);
+		pFlower->GetTransform()->Translate(pos.x + rndX, pos.y + 15, pos.z + rndZ);
 		GetScene()->AddChild(pFlower);
 	}
 }
