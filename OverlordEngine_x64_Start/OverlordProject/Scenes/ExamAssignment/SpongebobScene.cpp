@@ -52,13 +52,8 @@ void SpongebobScene::Initialize()
 	m_SceneContext.settings.enableOnGUI = true;
 	m_SceneContext.settings.drawPhysXDebug = false;
 
-
-	//Ground Plane
-	//const auto pDefaultMaterial = PxGetPhysics().createMaterial(0.5f, 0.5f, 0.5f);
-	//GameSceneExt::CreatePhysXGroundPlane(*this, pDefaultMaterial);
-
-	m_StartPos = { 493.961f, 147.045f, 153.425f }; //jellyfish
-	//m_StartPos = { 300.858f, 37.2426f, -865.813f }; //start
+	//m_StartPos = { 493.961f, 147.045f, 153.425f }; //jellyfish
+	m_StartPos = { 300.858f, 37.2426f, -865.813f }; //start
 	CreateLevel();
 	CreateObjects();
 

@@ -40,6 +40,10 @@ private:
 	char** m_ClipNames{};
 	UINT m_ClipCount{};
 
+	FMOD::Sound* m_pWalkSound{};
+	FMOD::Channel* m_pSoundChannel{};
+	bool m_IsSoundPlaying{};
+
 	void PlayCorrectAnimation();
 };
 

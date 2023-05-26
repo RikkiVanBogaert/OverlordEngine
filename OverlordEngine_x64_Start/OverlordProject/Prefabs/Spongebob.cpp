@@ -98,6 +98,12 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	//Light
 	sceneContext.pLights->SetDirectionalLight({ -5.6139526f,5.1346436f,-4.1850471f },
 		{ 0.740129888f, -0.597205281f, 0.309117377f });
+
+	//Sound
+	// Load the m_pWalkSound
+	auto soundManager = SoundManager::Get();
+	soundManager->GetSystem()->createSound("../OverlordProject/Resources/Exam/WalkingSound.mp3", 
+		FMOD_DEFAULT, nullptr, &m_pWalkSound);
 }
 
 void Spongebob::PlayCorrectAnimation()
@@ -149,6 +155,18 @@ void Spongebob::Update(const SceneContext& sceneContext)
 	{
 		auto rot = std::atan2f(m_pCharacter->GetVelocity().z, -m_pCharacter->GetVelocity().x) * float(180 / M_PI) + 90;
 			m_pSpongebobMesh->GetTransform()->Rotate(0, rot, 0);
+
+			if (!m_IsSoundPlaying)
+			{
+				FMOD::System* fmodSystem = SoundManager::Get()->GetSystem();
+				fmodSystem->playSound(m_pWalkSound, nullptr, false, &m_pSoundChannel);
+				m_IsSoundPlaying = true;
+			}
+	}
+	else if(m_IsSoundPlaying)
+	{
+		m_pSoundChannel->setPaused(true);
+		m_IsSoundPlaying = false;
 	}
 
 	PlayCorrectAnimation();

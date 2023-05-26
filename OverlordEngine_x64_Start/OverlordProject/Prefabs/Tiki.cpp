@@ -60,12 +60,12 @@ void Tiki::Update(const SceneContext& )
 {
 	if (!m_IsVulnerable) return;
 	if (!m_pPlayer) return;
-	if (NeedsDeleting()) return;
+	//if (NeedsDeleting()) return;
 
 	if (m_pPlayer->IsAttacking())
 	{
 		//SpawnFlowers();
-		//SpawnBubbles();
+		SpawnBubbles();
 
 		//MarkForDeletion();
 		GetScene()->RemoveChild(this, true);
