@@ -12,6 +12,7 @@ public:
 	void Update(const SceneContext&) override;
 
 	void SetControllerPosition(const XMFLOAT3& pos);
+	void ResetVariables();
 	HUDPrefab* GetHUD() { return m_pHud; };
 
 private:
@@ -44,6 +45,7 @@ private:
 	FMOD::Channel* m_pSoundChannel{};
 	bool m_IsSoundPlaying{};
 
-	void PlayCorrectAnimation();
+	void UpdateAnimations();
+	void UpdateSounds();
 };
 

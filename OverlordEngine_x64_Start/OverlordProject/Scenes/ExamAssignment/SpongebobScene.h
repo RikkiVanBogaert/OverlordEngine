@@ -1,4 +1,6 @@
 #pragma once
+
+
 class UIElement;
 class Character;
 
@@ -16,6 +18,8 @@ protected:
 	void Initialize() override;
 	void OnGUI() override;
 	void Update() override;
+	void OnSceneActivated() override;
+	void OnSceneDeactivated() override;
 
 private:
 	enum InputIds
@@ -28,11 +32,12 @@ private:
 		Attack
 	};
 
+	GameObject* pSponge;
 	Character* m_pCharacter{};
 	GameObject* m_pSpongebobMesh{};
 	XMFLOAT3 m_StartPos{};
 
-	GameObject* m_pSpatula{};
+	//GameObject* m_pSpatula{};
 
 	//Animations
 	ModelAnimator* pAnimator{};
@@ -46,8 +51,7 @@ private:
 	//HUD
 	UIElement* m_pUISpatula;
 
-	void PlayCorrectAnimation();
-	void UpdateHUDElements();
+	bool m_IsLoaded;
 
 	enum State
 	{
@@ -58,6 +62,7 @@ private:
 	void CheckDeletedObjects();
 	void CreateLevel();
 	void CreateObjects();
+	void CreateItems();
 
 	struct MaterialInfo
 	{

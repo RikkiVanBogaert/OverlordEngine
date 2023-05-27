@@ -53,7 +53,7 @@ void SpongebobScene::Initialize()
 	m_SceneContext.settings.drawPhysXDebug = false;
 
 	//m_StartPos = { 493.961f, 147.045f, 153.425f }; //jellyfish
-	m_StartPos = { 300.858f, 37.2426f, -865.813f }; //start
+	m_StartPos = { 300.858f, 47.2426f, -865.813f }; //start
 	CreateLevel();
 	CreateObjects();
 
@@ -62,19 +62,39 @@ void SpongebobScene::Initialize()
 	AddChild(pHud);
 
 	//Character
-	auto pSponge = new Spongebob(pHud);
+	pSponge = new Spongebob(pHud);
 	AddChild(pSponge);
-	pSponge->SetControllerPosition(m_StartPos);
+
+	//PostProcessing
+	auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
+	AddPostProcessingEffect(m_pPostEffect);
 
 
-	////PostProcessing
-	//auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
-	//AddPostProcessingEffect(m_pPostEffect);
 }
 
 void SpongebobScene::OnGUI()
 {
 	
+}
+
+void SpongebobScene::OnSceneActivated()
+{
+	auto sponge = dynamic_cast<Spongebob*>(pSponge);
+	sponge->SetControllerPosition(m_StartPos);
+	sponge->ResetVariables();
+
+	CreateItems();
+}
+
+void SpongebobScene::OnSceneDeactivated()
+{
+	for(auto c : GetChildren())
+	{
+		if(typeid(c) == typeid(Spatula*) || typeid(c) == typeid(Tiki*))
+		{
+			RemoveChild(c, true);
+		}
+	}
 }
 
 void SpongebobScene::Update()
@@ -146,23 +166,6 @@ void SpongebobScene::CreateLevel()
 
 void SpongebobScene::CreateObjects()
 {
-	//Objects
-	m_pSpatula = new Spatula();
-	m_pSpatula->GetTransform()->Translate(174.363f, 38.097f, -590.433f);
-	AddChild(m_pSpatula);
-
-	m_pSpatula = new Spatula();
-	m_pSpatula->GetTransform()->Translate(428.641f, 65.725f, -558.302f);
-	AddChild(m_pSpatula);
-
-	m_pSpatula = new Spatula();
-	m_pSpatula->GetTransform()->Translate(493.961f, 147.045f, 153.425f);
-	AddChild(m_pSpatula);
-
-	auto pTiki = new Tiki();
-	pTiki->GetTransform()->Translate(m_StartPos.x + 15, m_StartPos.y - 3, m_StartPos.z + 5);
-	AddChild(pTiki);
-
 	auto pGate = new ExitGate();
 	pGate->GetTransform()->Translate(388.383f, 0.495f, -176.235f);
 	pGate->GetTransform()->Rotate(0, -30, 0);
@@ -176,6 +179,26 @@ void SpongebobScene::CreateObjects()
 	pHans->GetTransform()->Translate(492.334f, 160.f, 185.318f);
 	pHans->GetTransform()->Rotate(0, -30, 0);
 	AddChild(pHans);
+}
+
+void SpongebobScene::CreateItems()
+{
+	//Objects
+	auto spat1 = new Spatula();
+	spat1->GetTransform()->Translate(174.363f, 38.097f, -590.433f);
+	AddChild(spat1);
+
+	auto spat2 = new Spatula();
+	spat2->GetTransform()->Translate(428.641f, 65.725f, -558.302f);
+	AddChild(spat2);
+
+	auto spat3 = new Spatula();
+	spat3->GetTransform()->Translate(493.961f, 147.045f, 153.425f);
+	AddChild(spat3);
+
+	auto pTiki = new Tiki();
+	pTiki->GetTransform()->Translate(m_StartPos.x + 15, m_StartPos.y - 3, m_StartPos.z + 5);
+	AddChild(pTiki);
 }
 
 std::wstring SpongebobScene::ConvertToWideString(const std::string& str)

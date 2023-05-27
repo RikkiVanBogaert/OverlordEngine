@@ -50,6 +50,8 @@ public:
 	void SetVelocity(const XMFLOAT3& vel) { m_TotalVelocity = vel; }
 	bool IsAttacking() const { return m_IsAttacking; }
 	CameraComponent* GetCamera() const { return m_pCameraComponent; }
+	void SetCameraPitchYaw(float pitch, float yaw) { m_TotalPitch = pitch; m_TotalYaw = yaw; }
+	bool IsOnGround() const { return m_OnGround; }
 
 protected:
 	void Initialize(const SceneContext&) override;
@@ -71,5 +73,7 @@ private:
 	//Other
 	XMFLOAT3 m_CameraOffset{};
 	bool m_IsAttacking{};
+	bool m_OnGround{};
+	float m_TimeOffGround{};
 };
 

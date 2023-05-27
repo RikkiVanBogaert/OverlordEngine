@@ -50,7 +50,7 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	auto pSpongeMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow_Skinned>();
 	pSpongeMat->SetDiffuseTexture(L"Exam/Textures/Spongebob.png");
 
-	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/SpongebobNew.ovm");
+	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/SpongeMesh.ovm");
 	m_pSpongebobMesh->AddComponent<ModelComponent>(pModel);
 	pModel->SetMaterial(pSpongeMat);
 	m_pSpongebobMesh->GetTransform()->Scale(1.f);
@@ -106,37 +106,6 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 		FMOD_DEFAULT, nullptr, &m_pWalkSound);
 }
 
-void Spongebob::PlayCorrectAnimation()
-{
-	if (m_pCharacter->IsAttacking() &&
-		m_AnimationClipId != 3)
-	{
-		pAnimator->Pause();
-		m_AnimationClipId = 3;
-	}
-	else if (!m_pCharacter->IsAttacking())
-	{
-		if ((abs(m_pCharacter->GetVelocity().x) > 0 || abs(m_pCharacter->GetVelocity().z) > 0) &&
-			m_AnimationClipId != 1)
-		{
-			pAnimator->Pause();
-			m_AnimationClipId = 1;
-		}
-		else if ((abs(m_pCharacter->GetVelocity().x) == 0 && abs(m_pCharacter->GetVelocity().z) == 0) &&
-			m_AnimationClipId != 0)
-		{
-			pAnimator->Pause();
-			m_AnimationClipId = 0;
-		}
-	}
-
-	if (!pAnimator->IsPlaying())
-	{
-		pAnimator->SetAnimation(m_AnimationClipId);
-		pAnimator->Play();
-	}
-}
-
 void Spongebob::Update(const SceneContext& sceneContext)
 {
 	//Light
@@ -151,29 +120,98 @@ void Spongebob::Update(const SceneContext& sceneContext)
 	pos.y -= 6.2f; //offset to put spongebob on same height as capsule
 	m_pSpongebobMesh->GetTransform()->Translate(pos);
 
-	if ((abs(m_pCharacter->GetVelocity().x) > 0 || abs(m_pCharacter->GetVelocity().z) > 0))
+	UpdateAnimations();
+	UpdateSounds();
+}
+
+void Spongebob::UpdateAnimations()
+{
+	if (m_pCharacter->IsAttacking() &&
+		m_AnimationClipId != 2)
+	{
+		pAnimator->Pause();
+		m_AnimationClipId = 2;
+	}
+
+	if(!m_pCharacter->IsOnGround() && !m_pCharacter->IsAttacking())
+	{
+		if(m_AnimationClipId != 1)
+		{
+			pAnimator->Pause();
+			m_AnimationClipId = 1;
+		}
+		
+	}
+	else
+	{
+		if (!m_pCharacter->IsAttacking())
+		{
+			if ((abs(m_pCharacter->GetVelocity().x) > 0 || abs(m_pCharacter->GetVelocity().z) > 0) &&
+				m_AnimationClipId != 3)
+			{
+				pAnimator->Pause();
+				m_AnimationClipId = 3;
+			}
+			else if ((abs(m_pCharacter->GetVelocity().x) == 0 && abs(m_pCharacter->GetVelocity().z) == 0) &&
+				m_AnimationClipId != 0)
+			{
+				pAnimator->Pause();
+				m_AnimationClipId = 0;
+			}
+		}
+	}
+
+	if (!pAnimator->IsPlaying())
+	{
+		pAnimator->SetAnimation(m_AnimationClipId);
+		pAnimator->Play();
+	}
+}
+
+void Spongebob::UpdateSounds()
+{
+	if (abs(m_pCharacter->GetVelocity().x) > 0 || abs(m_pCharacter->GetVelocity().z) > 0)
 	{
 		auto rot = std::atan2f(m_pCharacter->GetVelocity().z, -m_pCharacter->GetVelocity().x) * float(180 / M_PI) + 90;
-			m_pSpongebobMesh->GetTransform()->Rotate(0, rot, 0);
+		m_pSpongebobMesh->GetTransform()->Rotate(0, rot, 0);
 
+		if (m_pCharacter->IsOnGround())
+		{
 			if (!m_IsSoundPlaying)
 			{
 				FMOD::System* fmodSystem = SoundManager::Get()->GetSystem();
 				fmodSystem->playSound(m_pWalkSound, nullptr, false, &m_pSoundChannel);
 				m_IsSoundPlaying = true;
 			}
+		}
+		else if (m_IsSoundPlaying)
+		{
+			m_pSoundChannel->setPaused(true);
+			m_IsSoundPlaying = false;
+		}
 	}
-	else if(m_IsSoundPlaying)
+	else if (m_IsSoundPlaying)
 	{
 		m_pSoundChannel->setPaused(true);
 		m_IsSoundPlaying = false;
 	}
-
-	PlayCorrectAnimation();
-
 }
 
 void Spongebob::SetControllerPosition(const XMFLOAT3& pos)
 {
 	m_pCharacter->GetTransform()->Translate(pos);
+}
+
+void Spongebob::ResetVariables()
+{
+	m_pSpongebobMesh->GetTransform()->Rotate(0,180,0);
+	m_pCharacter->SetCameraPitchYaw(0, 0);
+
+	m_pHud->SetAmountSpatulas(0);
+
+	if (m_IsSoundPlaying)
+	{
+		m_pSoundChannel->setPaused(true);
+		m_IsSoundPlaying = false;
+	}
 }

@@ -9,8 +9,6 @@ void EndScene::Initialize()
 	m_SceneContext.settings.enableOnGUI = true;
 
 	//GameSettings
-	//GameScene::GetSceneSettings().clearColor = {};
-	//GameScene::GetSceneSettings().drawGrid = false;
 	//GameScene::GetSceneSettings().drawPhysXDebug = false;
 
 	auto pCamera = new FixedCamera();
@@ -20,7 +18,7 @@ void EndScene::Initialize()
 	pCamera->GetComponent<CameraComponent>()->SetActive();
 
 	auto pGameObject = new GameObject();
-	auto pSprite = new SpriteComponent(L"Exam/HUD/MainMenu.png");
+	auto pSprite = new SpriteComponent(L"Exam/HUD/TheEnd.jpg");
 	pGameObject->AddComponent<SpriteComponent>(pSprite);
 
 	AddChild(pGameObject);

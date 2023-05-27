@@ -14,8 +14,6 @@ void PauseScene::Initialize()
 	m_SceneContext.settings.enableOnGUI = true;
 
 	//GameSettings
-	//GameScene::GetSceneSettings().clearColor = {};
-	//GameScene::GetSceneSettings().drawGrid = false;
 	//GameScene::GetSceneSettings().drawPhysXDebug = false;
 
 	auto pCamera = new FixedCamera();
@@ -25,30 +23,30 @@ void PauseScene::Initialize()
 	pCamera->GetComponent<CameraComponent>()->SetActive();
 
 	auto pGameObject = new GameObject();
-	auto pSprite = new SpriteComponent(L"Exam/HUD/MainMenu.png");
+	auto pSprite = new SpriteComponent(L"Exam/HUD/PauseMenu.png");
 	pGameObject->AddComponent<SpriteComponent>(pSprite);
-
-	//AddChild(pGameObject);
+	
+	AddChild(pGameObject);
 
 	//Buttons-----
 	const auto pButtonObject = new GameObject();
-	pButtonObject->GetTransform()->Translate(12, 1, -1.8f);
+	pButtonObject->GetTransform()->Translate(-19, 1, 2);
 
 	const auto pMaterial = PxGetPhysics().createMaterial(.5f, .5f, .5f);
 	const auto pRigidBody = pButtonObject->AddComponent(new RigidBodyComponent(true));
 	pRigidBody->SetCollisionGroup(CollisionGroup::Group0);
-	pRigidBody->AddCollider(PxBoxGeometry{ 5, 1, 1 }, *pMaterial);
+	pRigidBody->AddCollider(PxSphereGeometry{ 5 }, *pMaterial);
 
 	AddChild(pButtonObject);
 
 
 	const auto pQuitObject = new GameObject();
-	pQuitObject->GetTransform()->Translate(12, 1, -12.f);
+	pQuitObject->GetTransform()->Translate(0, 1, 2);
 
 	//const auto pMaterial = PxGetPhysics().createMaterial(.5f, .5f, .5f);
 	const auto pQuitRigidBody = pQuitObject->AddComponent(new RigidBodyComponent(true));
 	pQuitRigidBody->SetCollisionGroup(CollisionGroup::Group1);
-	pQuitRigidBody->AddCollider(PxBoxGeometry{ 5, 1, 1 }, *pMaterial);
+	pQuitRigidBody->AddCollider(PxSphereGeometry{ 5 }, *pMaterial);
 
 	AddChild(pQuitObject);
 }
@@ -68,7 +66,7 @@ void PauseScene::Update()
 		}
 		if (m_SceneContext.pCamera->Pick(CollisionGroup::Group0))
 		{
-			//SceneManager::Get()->GetActiveScene()->RemoveAllChildren();
+			std::exit(0);
 		}
 	}
 

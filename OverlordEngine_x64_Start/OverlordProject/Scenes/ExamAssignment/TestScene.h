@@ -41,7 +41,7 @@ private:
 	//char** m_ClipNames{};
 	//UINT m_ClipCount{};
 
-	//void PlayCorrectAnimation();
+	//void UpdateAnimations();
 
 	void CheckDeletedObjects();
 	void CreateLevel();

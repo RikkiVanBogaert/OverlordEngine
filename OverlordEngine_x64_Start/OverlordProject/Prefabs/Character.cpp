@@ -149,9 +149,46 @@ void Character::Update(const SceneContext& /*sceneContext*/)
 		m_TotalVelocity.z = m_CurrentDirection.z * m_MoveSpeed;
 		//It's important that you don't overwrite the y component of m_TotalVelocity (contains the vertical velocity)
 
-		//## Vertical Movement (Jump/Fall)
-		//If the Controller Component is NOT grounded (= freefall)
-		if (!(m_pControllerComponent->GetCollisionFlags() & PxControllerCollisionFlag::eCOLLISION_DOWN))
+		////## Vertical Movement (Jump/Fall)
+		////If the Controller Component is NOT grounded (= freefall)
+		//if (!(m_pControllerComponent->GetCollisionFlags() & PxControllerCollisionFlag::eCOLLISION_DOWN))
+		//{
+		//	//Decrease the y component of m_TotalVelocity with a fraction (ElapsedTime) of the Fall Acceleration (m_FallAcceleration)
+		//	m_TotalVelocity.y -= m_FallAcceleration * elapsedTime;
+		//	//Make sure that the minimum speed stays above -CharacterDesc::maxFallSpeed (negative!)
+		//	if (m_TotalVelocity.y <= -m_CharacterDesc.maxFallSpeed)
+		//	{
+		//		m_TotalVelocity.y = -m_CharacterDesc.maxFallSpeed;
+		//	}
+		//}
+		////Else If the jump action is triggered
+		//else if(GetScene()->GetSceneContext().pInput->IsActionTriggered(m_CharacterDesc.actionId_Jump))
+		//{
+		//	//Set m_TotalVelocity.y equal to CharacterDesc::JumpSpeed
+		//	m_TotalVelocity.y = m_CharacterDesc.JumpSpeed;
+		//}
+		////Else (=Character is grounded, no input pressed)
+		//else
+		//{
+		//	//m_TotalVelocity.y is zero
+		//	m_TotalVelocity.y = 0;
+		//}
+
+		//Raycast check
+		PxRaycastBuffer hit{};
+		const PxVec3 origin = { GetTransform()->GetPosition().x, GetTransform()->GetPosition().y - 6, GetTransform()->GetPosition().z };
+		if (GetScene()->GetPhysxProxy()->Raycast(origin, { 0,-1,0 }, 3, hit))
+		{
+			m_OnGround = true;
+			if (GetScene()->GetSceneContext().pInput->IsActionTriggered(m_CharacterDesc.actionId_Jump))
+			{
+				//Set m_TotalVelocity.y equal to CharacterDesc::JumpSpeed
+				m_TotalVelocity.y = m_CharacterDesc.JumpSpeed;
+			}
+			//std::cout << "ON FLOOR\n";
+			m_TimeOffGround = 0;
+		}
+		else
 		{
 			//Decrease the y component of m_TotalVelocity with a fraction (ElapsedTime) of the Fall Acceleration (m_FallAcceleration)
 			m_TotalVelocity.y -= m_FallAcceleration * elapsedTime;
@@ -160,18 +197,12 @@ void Character::Update(const SceneContext& /*sceneContext*/)
 			{
 				m_TotalVelocity.y = -m_CharacterDesc.maxFallSpeed;
 			}
-		}
-		//Else If the jump action is triggered
-		else if(GetScene()->GetSceneContext().pInput->IsActionTriggered(m_CharacterDesc.actionId_Jump))
-		{
-			//Set m_TotalVelocity.y equal to CharacterDesc::JumpSpeed
-			m_TotalVelocity.y = m_CharacterDesc.JumpSpeed;
-		}
-		//Else (=Character is grounded, no input pressed)
-		else
-		{
-			//m_TotalVelocity.y is zero
-			m_TotalVelocity.y = 0;
+			//std::cout << "NOT ON FLOOR\n";
+			m_TimeOffGround += elapsedTime;
+			if(m_TimeOffGround > .1f)
+			{
+				m_OnGround = false;
+			}
 		}
 
 		//************
