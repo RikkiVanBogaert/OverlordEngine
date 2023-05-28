@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 class DeferredLightRenderer;
 
 class DeferredRenderer : public Singleton<DeferredRenderer>

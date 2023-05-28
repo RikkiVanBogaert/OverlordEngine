@@ -10,10 +10,10 @@ void DeferredRenderingScene::Initialize()
 {
 	//Settings
 	//********
-	//m_SceneContext.useDeferredRendering = true;
+	m_SceneContext.useDeferredRendering = true;
 
 	m_SceneContext.settings.drawGrid = false;
-	//m_SceneContext.settings.enableOnGUI = true;
+	m_SceneContext.settings.enableOnGUI = true;
 
 	//Sponza Mesh
 	//***********

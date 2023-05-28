@@ -9,7 +9,7 @@ DeferredLightRenderer::~DeferredLightRenderer()
 void DeferredLightRenderer::Initialize(const D3D11Context& /*d3dContext*/)
 {
 	//Directional LightPass
-	//...
+	m_pDirectionalLightMaterial = MaterialManager::Get()->CreateMaterial<DirectionalLightMaterial>();
 
 	//Volumetric LightPass
 	//...
@@ -22,7 +22,7 @@ void DeferredLightRenderer::Initialize(const D3D11Context& /*d3dContext*/)
 	//...
 }
 
-void DeferredLightRenderer::DirectionalLightPass(const SceneContext& sceneContext, ID3D11ShaderResourceView* const /*gbufferSRVs*/[]) const
+void DeferredLightRenderer::DirectionalLightPass(const SceneContext& sceneContext, ID3D11ShaderResourceView* const gbufferSRVs[]) const
 {
 	//Retrieve Directional light
 	const auto& light = sceneContext.pLights->GetDirectionalLight();
@@ -32,10 +32,17 @@ void DeferredLightRenderer::DirectionalLightPass(const SceneContext& sceneContex
 		//Prepare Effect
 
 		//Ambient SRV > Already on Main RenderTarget
-		//...
+		m_pDirectionalLightMaterial->SetVariable_Texture(L"gTextureDiffuse", gbufferSRVs[int(DeferredRenderer::eGBufferId::Diffuse)]);
+		m_pDirectionalLightMaterial->SetVariable_Texture(L"gTextureSpecular", gbufferSRVs[int(DeferredRenderer::eGBufferId::Specular)]);
+		m_pDirectionalLightMaterial->SetVariable_Texture(L"gTextureNormal", gbufferSRVs[int(DeferredRenderer::eGBufferId::Normal)]);
+		m_pDirectionalLightMaterial->SetVariable_Texture(L"gTextureDepth", gbufferSRVs[int(DeferredRenderer::eGBufferId::Depth)]);
+
+		m_pDirectionalLightMaterial->SetVariable_Matrix(L"gMatrixViewProjInv", sceneContext.pCamera->GetViewProjectionInverse());
+		m_pDirectionalLightMaterial->SetVariable_Vector(L"gEyePos", sceneContext.pCamera->GetTransform()->GetWorldPosition());
+		m_pDirectionalLightMaterial->SetVariable(L"gDirectionalLight", &light, 0, sizeof(Light) - 4);
 
 		//Draw Effect (Full Screen Quad)
-		//...
+		QuadRenderer::Get()->Draw(m_pDirectionalLightMaterial);
 	}
 }
 

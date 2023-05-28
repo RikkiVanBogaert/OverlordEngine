@@ -49,6 +49,9 @@ SpongebobScene::~SpongebobScene()
 
 void SpongebobScene::Initialize()
 {
+	//Deferred rendering
+	m_SceneContext.useDeferredRendering = true;
+
 	m_SceneContext.settings.enableOnGUI = true;
 	m_SceneContext.settings.drawPhysXDebug = false;
 
