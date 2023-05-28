@@ -51,6 +51,9 @@
     <ClCompile Include="Scenes\ExamAssignment\EndScene.cpp" />
     <ClCompile Include="Prefabs\Jellyfish.cpp" />
     <ClCompile Include="Prefabs\Hans.cpp" />
+    <ClCompile Include="Scenes\Week 11\DeferredRenderingScene.cpp" />
+    <ClCompile Include="Materials\BasicMaterial.cpp" />
+    <ClCompile Include="Materials\BasicMaterial_Deferred.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -103,5 +106,8 @@
     <ClInclude Include="Scenes\ExamAssignment\EndScene.h" />
     <ClInclude Include="Prefabs\Jellyfish.h" />
     <ClInclude Include="Prefabs\Hans.h" />
+    <ClInclude Include="Scenes\Week 11\DeferredRenderingScene.h" />
+    <ClInclude Include="Materials\BasicMaterial.h" />
+    <ClInclude Include="Materials\BasicMaterial_Deferred.h" />
   </ItemGroup>
 </Project>

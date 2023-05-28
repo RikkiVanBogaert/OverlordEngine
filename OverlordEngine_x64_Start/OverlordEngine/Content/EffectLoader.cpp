@@ -33,7 +33,7 @@ ID3DX11Effect* EffectLoader::LoadContent(const ContentLoadInfo& loadInfo)
 		&pErrorBlob);
 
 	if(FAILED(hr))
-	{\
+	{
 		std::wstringstream ss;
 		if(pErrorBlob!=nullptr)
 		{

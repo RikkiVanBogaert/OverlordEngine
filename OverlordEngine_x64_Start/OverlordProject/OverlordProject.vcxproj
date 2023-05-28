@@ -93,6 +93,8 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Materials\BasicMaterial.cpp" />
+    <ClCompile Include="Materials\BasicMaterial_Deferred.cpp" />
     <ClCompile Include="Prefabs\Hans.cpp" />
     <ClCompile Include="Prefabs\Jellyfish.cpp" />
     <ClCompile Include="Scenes\ExamAssignment\EndScene.cpp" />
@@ -112,6 +114,7 @@
     <ClCompile Include="Materials\DiffuseMaterial.cpp" />
     <ClCompile Include="Prefabs\Character.cpp" />
     <ClCompile Include="Scenes\Week 10\PostProcessingScene.cpp" />
+    <ClCompile Include="Scenes\Week 11\DeferredRenderingScene.cpp" />
     <ClCompile Include="Scenes\Week 4\ModelTestScene.cpp" />
     <ClCompile Include="Scenes\Week 3\ComponentTestScene.cpp" />
     <ClCompile Include="Prefabs\CubePrefab.cpp" />
@@ -162,6 +165,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Materials\BasicMaterial.h" />
+    <ClInclude Include="Materials\BasicMaterial_Deferred.h" />
     <ClInclude Include="Prefabs\Hans.h" />
     <ClInclude Include="Prefabs\Jellyfish.h" />
     <ClInclude Include="Scenes\ExamAssignment\EndScene.h" />
@@ -182,6 +187,7 @@
     <ClInclude Include="Materials\DiffuseMaterial.h" />
     <ClInclude Include="Prefabs\Character.h" />
     <ClInclude Include="Scenes\Week 10\PostProcessingScene.h" />
+    <ClInclude Include="Scenes\Week 11\DeferredRenderingScene.h" />
     <ClInclude Include="Scenes\Week 4\ModelTestScene.h" />
     <ClInclude Include="Scenes\Week 3\ComponentTestScene.h" />
     <ClInclude Include="Prefabs\CubePrefab.h" />

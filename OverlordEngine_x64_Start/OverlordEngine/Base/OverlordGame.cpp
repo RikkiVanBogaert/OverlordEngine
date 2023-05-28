@@ -25,6 +25,10 @@ OverlordGame::~OverlordGame()
 	SpriteRenderer::Destroy();
 	TextRenderer::Destroy();
 	ShadowMapRenderer::Destroy();
+
+	DeferredRenderer::Destroy();
+	QuadRenderer::Destroy();
+
 	Logger::Release(); //TODO > Singleton
 
 	//ImGui Cleanup
@@ -234,6 +238,7 @@ HRESULT OverlordGame::InitializeDirectX()
 
 	RENDERTARGET_DESC rtDesc;
 	rtDesc.pColor = pBackbuffer;
+
 	HANDLE_ERROR(m_pDefaultRenderTarget->Create(rtDesc))
 
 	//Set Default Rendertarget 
@@ -328,6 +333,9 @@ HRESULT OverlordGame::InitializeGame()
 	SpriteRenderer::Create(m_GameContext);
 	TextRenderer::Create(m_GameContext);
 	ShadowMapRenderer::Create(m_GameContext);
+
+	DeferredRenderer::Create(m_GameContext);
+	QuadRenderer::Create(m_GameContext);
 
 	//***************
 	//GAME INITIALIZE

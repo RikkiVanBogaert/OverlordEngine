@@ -85,7 +85,7 @@ void TestScene::Update()
 
 void TestScene::CheckDeletedObjects()
 {
-	for (auto child : this->GetChildren())
+	for (auto child : GetChildren())
 	{
 		if (child->NeedsDeleting())
 			this->RemoveChild(child, true);
