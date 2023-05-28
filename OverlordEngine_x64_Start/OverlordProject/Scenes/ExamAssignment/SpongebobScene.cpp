@@ -69,6 +69,11 @@ void SpongebobScene::Initialize()
 	auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
 	AddPostProcessingEffect(m_pPostEffect);
 
+	//Music
+
+	auto soundManager = SoundManager::Get();
+	soundManager->GetSystem()->createSound("../OverlordProject/Resources/Exam/LevelMusic.mp3",
+		FMOD_DEFAULT, nullptr, &m_pSound);
 
 }
 
@@ -84,6 +89,10 @@ void SpongebobScene::OnSceneActivated()
 	sponge->ResetVariables();
 
 	CreateItems();
+
+	FMOD::System* fmodSystem = SoundManager::Get()->GetSystem();
+	fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
+	m_pChannel->setVolume(.4f);
 }
 
 void SpongebobScene::OnSceneDeactivated()
@@ -95,6 +104,7 @@ void SpongebobScene::OnSceneDeactivated()
 			RemoveChild(c, true);
 		}
 	}
+	m_pChannel->setPaused(true);
 }
 
 void SpongebobScene::Update()

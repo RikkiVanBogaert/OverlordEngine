@@ -39,6 +39,15 @@ void Spatula::Initialize(const SceneContext&)
 			sponge->GetHUD()->IncreaseAmountSpatulas(1);
 
 			std::cout << "SPATULA PICKED UP\n";
+
+			FMOD::Sound* m_pSound{};
+			FMOD::Channel* m_pChannel{};
+			auto soundManager = SoundManager::Get();
+			soundManager->GetSystem()->createSound("../OverlordProject/Resources/Exam/PickupBling.mp3",
+				FMOD_DEFAULT, nullptr, &m_pSound);
+			FMOD::System* fmodSystem = soundManager->GetSystem();
+			fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
+			
 			MarkForDeletion();
 
 		}

@@ -51,7 +51,12 @@ private:
 	//HUD
 	UIElement* m_pUISpatula;
 
+	FMOD::Sound* m_pSound{};
+	FMOD::Channel* m_pChannel{};
+	bool m_MusicPlaying{};
+
 	bool m_IsLoaded;
+
 
 	enum State
 	{
