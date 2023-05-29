@@ -64,7 +64,7 @@ void DeferredRenderingScene::Initialize()
 
 	//Directional
 	auto& dirLight = m_SceneContext.pLights->GetDirectionalLight();
-	dirLight.isEnabled = true;
+	dirLight.isEnabled = false;
 	dirLight.direction = { -0.577f, -0.577f, 0.577f , 1.0f };
 
 	//Spot Light

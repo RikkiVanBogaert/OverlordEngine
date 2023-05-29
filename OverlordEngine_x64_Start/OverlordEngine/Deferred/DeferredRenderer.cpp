@@ -46,6 +46,9 @@ void DeferredRenderer::Initialize()
 	//LightPassRenderer Init
 	m_pLightPassRenderer = new DeferredLightRenderer();
 	m_pLightPassRenderer->Initialize(m_GameContext.d3dContext);
+
+	const auto descDefaultRT = pDefaultRenderTarget->GetDesc();
+	m_pLightPassRenderer->CreateReadOnlyDSV(m_GameContext.d3dContext, descDefaultRT.pDepth, descDefaultRT.depthFormat);
 }
 
 RenderTarget* DeferredRenderer::CreateRenderTarget(UINT width, UINT height, DXGI_FORMAT format) const

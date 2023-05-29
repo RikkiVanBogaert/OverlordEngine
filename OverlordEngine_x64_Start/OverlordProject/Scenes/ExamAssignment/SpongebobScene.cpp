@@ -73,11 +73,28 @@ void SpongebobScene::Initialize()
 	AddPostProcessingEffect(m_pPostEffect);
 
 	//Music
-
 	auto soundManager = SoundManager::Get();
 	soundManager->GetSystem()->createSound("../OverlordProject/Resources/Exam/LevelMusic.mp3",
 		FMOD_DEFAULT, nullptr, &m_pSound);
 
+	//LIGHTS
+	
+	//Directional
+	//auto& dirLight = m_SceneContext.pLights->GetDirectionalLight();
+	//dirLight.isEnabled = false;
+	//dirLight.direction = { -0.577f, -0.577f, 0.577f , 1.0f };
+
+	////Spot Light
+	//Light light = {};
+	//light.isEnabled = true;
+	//light.position = { m_StartPos.x, m_StartPos.y + 20, m_StartPos.z, 1 };
+	//light.direction = { 0.f,-1.f,1.f,0.f };
+	//light.color = { 0.7f,0.f,0.f,1.f };
+	//light.intensity = 1.0f;
+	//light.spotLightAngle = 35.f;
+	//light.range = 150.0f;
+	//light.type = LightType::Spot;
+	//m_SceneContext.pLights->AddLight(light);
 }
 
 void SpongebobScene::OnGUI()
@@ -149,7 +166,7 @@ void SpongebobScene::CreateLevel()
 	auto mtlInfo = mtlParser("../OverlordProject/Resources/Exam/Textures/Level/jellyfishfields.mtl");
 	for(auto m : mtlInfo)
 	{
-		auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
+		auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
 		for(int i{}; i < objInfo.size(); ++i)
 		{
 			if(objInfo[i].name == m.meshName)
