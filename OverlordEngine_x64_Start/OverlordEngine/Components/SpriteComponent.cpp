@@ -24,17 +24,13 @@ void SpriteComponent::Draw(const SceneContext& sceneContext)
 	if (!m_pTexture)
 		return;
 
-	//TransformComponent* pTransform{ GetGameObject()->GetComponent<TransformComponent>() };
-	TransformComponent* pTransform{GetTransform()};
+	const auto transform = m_pGameObject->GetTransform();
+	const XMFLOAT2 position = XMFLOAT2{ transform->GetPosition().x,  transform->GetPosition().y };
+	const XMFLOAT2 scale = XMFLOAT2{ transform->GetScale().x, transform->GetScale().y };
+	const float rotZ = MathHelper::QuaternionToEuler(transform->GetRotation()).z;
 
-	SpriteRenderer::Get()->DrawImmediate(
-		sceneContext.d3dContext, 
-		m_pTexture->GetShaderResourceView(),
-		XMFLOAT2{ pTransform->GetWorldPosition().x, pTransform->GetWorldPosition().y }, 
-		m_Color,
-		m_Pivot, 
-		XMFLOAT2{ pTransform->GetWorldScale().x, pTransform->GetWorldScale().y },
-		MathHelper::QuaternionToEuler(pTransform->GetWorldRotation()).z);
+	SpriteRenderer::Get()->AppendSprite(m_pTexture, position, XMFLOAT4{ Colors::White }, m_Pivot, scale, rotZ, transform->GetPosition().z);
+	SpriteRenderer::Get()->Draw(sceneContext);
 }
 
 	//Here you need to draw the SpriteComponent using the Draw of the sprite renderer

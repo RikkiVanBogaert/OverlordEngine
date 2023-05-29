@@ -77,6 +77,11 @@ void SpongebobScene::Initialize()
 	soundManager->GetSystem()->createSound("../OverlordProject/Resources/Exam/LevelMusic.mp3",
 		FMOD_DEFAULT, nullptr, &m_pSound);
 
+
+	auto inputAction = InputAction(Pause, InputState::down, 'P');
+	m_SceneContext.pInput->AddInputAction(inputAction);
+
+
 	//LIGHTS
 	
 	//Directional

@@ -53,7 +53,7 @@ void ExitGate::Initialize(const SceneContext&)
 			auto spatTextSprite = new SpriteComponent(L"Exam/HUD/CollectSpatulasText.png");
 			AddChild(m_Text);
 			m_Text->AddComponent<SpriteComponent>(spatTextSprite);
-			//m_Text->GetTransform()->Translate(300, 100, 0);
+			m_Text->GetTransform()->Translate(410, 160, 0);
 			//m_Text->GetTransform()->Scale(5);
 		}
 

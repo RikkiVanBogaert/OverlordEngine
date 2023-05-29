@@ -23,12 +23,7 @@ protected:
 private:
 	enum InputIds
 	{
-		CharacterMoveLeft,
-		CharacterMoveRight,
-		CharacterMoveForward,
-		CharacterMoveBackward,
-		CharacterJump,
-		Attack
+		Pause
 	};
 
 	GameObject* pSponge;
