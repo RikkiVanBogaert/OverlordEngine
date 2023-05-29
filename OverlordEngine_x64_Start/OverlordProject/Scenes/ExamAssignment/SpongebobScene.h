@@ -13,6 +13,9 @@ public:
 	SpongebobScene& operator=(const SpongebobScene& other) = delete;
 	SpongebobScene& operator=(SpongebobScene&& other) noexcept = delete;
 
+	void PauseScene();
+	void ReloadScene();
+
 protected:
 	void Initialize() override;
 	void OnGUI() override;

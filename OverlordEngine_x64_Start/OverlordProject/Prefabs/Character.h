@@ -52,6 +52,7 @@ public:
 	CameraComponent* GetCamera() const { return m_pCameraComponent; }
 	void SetCameraPitchYaw(float pitch, float yaw) { m_TotalPitch = pitch; m_TotalYaw = yaw; }
 	bool IsOnGround() const { return m_OnGround; }
+	void SetPaused(bool isPaused) { m_IsPaused = isPaused; }
 
 protected:
 	void Initialize(const SceneContext&) override;
@@ -75,5 +76,6 @@ private:
 	bool m_IsAttacking{};
 	bool m_OnGround{};
 	float m_TimeOffGround{};
+	bool m_IsPaused{};
 };
 

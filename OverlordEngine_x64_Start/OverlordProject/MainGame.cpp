@@ -117,8 +117,6 @@ void MainGame::Initialize()
 #ifdef Spongebob
 	SceneManager::Get()->AddGameScene(new MainMenuScene());
 	SceneManager::Get()->AddGameScene(new SpongebobScene());
-	SceneManager::Get()->AddGameScene(new PauseScene());
-	//SceneManager::Get()->AddGameScene(new TestScene());
 	SceneManager::Get()->AddGameScene(new EndScene());
 #endif
 

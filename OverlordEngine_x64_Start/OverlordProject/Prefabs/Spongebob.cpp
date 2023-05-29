@@ -5,7 +5,9 @@
 
 #include "Character.h"
 #include "HUDPrefab.h"
+#include "PauseMenu.h"
 #include "Materials/Shadow/DiffuseMaterial_Shadow_Skinned.h"
+#include "Scenes/ExamAssignment/SpongebobScene.h"
 
 Spongebob::Spongebob(HUDPrefab* hud):
 m_pHud(hud)
@@ -95,6 +97,9 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	inputAction = InputAction(CharacterJump, InputState::pressed, VK_SPACE, -1, XINPUT_GAMEPAD_A);
 	sceneContext.pInput->AddInputAction(inputAction);
 
+	inputAction = InputAction(Pause, InputState::pressed, 'P');
+	sceneContext.pInput->AddInputAction(inputAction);
+
 	//Light
 	sceneContext.pLights->SetDirectionalLight({ -5.6139526f,5.1346436f,-4.1850471f },
 		{ 0.740129888f, -0.597205281f, 0.309117377f });
@@ -104,10 +109,17 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	auto soundManager = SoundManager::Get();
 	soundManager->GetSystem()->createSound("../OverlordProject/Resources/Exam/WalkingSound.mp3", 
 		FMOD_DEFAULT, nullptr, &m_pWalkSound);
+
+	//Pause
+	//pPauseMenu = new PauseMenu();
 }
 
 void Spongebob::Update(const SceneContext& sceneContext)
 {
+	CheckPausePress();
+
+	if (m_IsPaused) return;
+
 	//Light
 	sceneContext.pLights->GetDirectionalLight().position.x = m_pSpongebobMesh->GetTransform()->GetPosition().x - 10;
 	sceneContext.pLights->GetDirectionalLight().position.y = m_pSpongebobMesh->GetTransform()->GetPosition().y + 30;
@@ -195,6 +207,33 @@ void Spongebob::UpdateSounds()
 		m_pSoundChannel->setPaused(true);
 		m_IsSoundPlaying = false;
 	}
+}
+
+void Spongebob::CheckPausePress()
+{
+	if (GetScene()->GetSceneContext().pInput->IsActionTriggered(Pause))
+	{
+		TurnPauseOnOff();
+	}
+}
+
+void Spongebob::TurnPauseOnOff()
+{
+	if (!m_IsPaused)
+	{
+		pPauseMenu = new PauseMenu(this);
+		AddChild(pPauseMenu);
+		m_IsPaused = true;
+	}
+	else
+	{
+		RemoveChild(pPauseMenu, true);
+		m_IsPaused = false;
+	}
+	m_pCharacter->SetPaused(m_IsPaused);
+
+	auto pSpongebobScene = dynamic_cast<SpongebobScene*>(GetScene());
+	pSpongebobScene->PauseScene();
 }
 
 void Spongebob::SetControllerPosition(const XMFLOAT3& pos)

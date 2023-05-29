@@ -95,6 +95,7 @@
   <ItemGroup>
     <ClCompile Include="Materials\BasicMaterial.cpp" />
     <ClCompile Include="Materials\BasicMaterial_Deferred.cpp" />
+    <ClCompile Include="Prefabs\PauseMenu.cpp" />
     <ClCompile Include="Prefabs\Hans.cpp" />
     <ClCompile Include="Prefabs\Jellyfish.cpp" />
     <ClCompile Include="Scenes\ExamAssignment\EndScene.cpp" />
@@ -167,6 +168,7 @@
   <ItemGroup>
     <ClInclude Include="Materials\BasicMaterial.h" />
     <ClInclude Include="Materials\BasicMaterial_Deferred.h" />
+    <ClInclude Include="Prefabs\PauseMenu.h" />
     <ClInclude Include="Prefabs\Hans.h" />
     <ClInclude Include="Prefabs\Jellyfish.h" />
     <ClInclude Include="Scenes\ExamAssignment\EndScene.h" />

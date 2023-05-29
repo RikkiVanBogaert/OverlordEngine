@@ -14,6 +14,7 @@ public:
 	void SetControllerPosition(const XMFLOAT3& pos);
 	void ResetVariables();
 	HUDPrefab* GetHUD() { return m_pHud; };
+	void TurnPauseOnOff();
 
 private:
 	enum InputIds
@@ -23,7 +24,8 @@ private:
 		CharacterMoveForward,
 		CharacterMoveBackward,
 		CharacterJump,
-		Attack
+		Attack,
+		Pause
 	};
 
 	Character* m_pCharacter{};
@@ -45,7 +47,11 @@ private:
 	FMOD::Channel* m_pSoundChannel{};
 	bool m_IsSoundPlaying{};
 
+	GameObject* pPauseMenu{};
+	bool m_IsPaused{};
+
 	void UpdateAnimations();
 	void UpdateSounds();
+	void CheckPausePress();
 };
 

@@ -67,19 +67,17 @@ void SpongebobScene::Initialize()
 	//Character
 	pSponge = new Spongebob(pHud);
 	AddChild(pSponge);
+	auto sponge = dynamic_cast<Spongebob*>(pSponge);
+	sponge->SetControllerPosition(m_StartPos);
 
 	//PostProcessing
-	auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
-	AddPostProcessingEffect(m_pPostEffect);
+	//auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
+	//AddPostProcessingEffect(m_pPostEffect);
 
 	//Music
 	auto soundManager = SoundManager::Get();
 	soundManager->GetSystem()->createSound("../OverlordProject/Resources/Exam/LevelMusic.mp3",
 		FMOD_DEFAULT, nullptr, &m_pSound);
-
-
-	auto inputAction = InputAction(Pause, InputState::down, 'P');
-	m_SceneContext.pInput->AddInputAction(inputAction);
 
 
 	//LIGHTS
@@ -109,27 +107,12 @@ void SpongebobScene::OnGUI()
 
 void SpongebobScene::OnSceneActivated()
 {
-	auto sponge = dynamic_cast<Spongebob*>(pSponge);
-	sponge->SetControllerPosition(m_StartPos);
-	sponge->ResetVariables();
 
-	CreateItems();
-
-	FMOD::System* fmodSystem = SoundManager::Get()->GetSystem();
-	fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
-	m_pChannel->setVolume(.4f);
 }
 
 void SpongebobScene::OnSceneDeactivated()
 {
-	for(auto c : GetChildren())
-	{
-		if(typeid(c) == typeid(Spatula*) || typeid(c) == typeid(Tiki*))
-		{
-			RemoveChild(c, true);
-		}
-	}
-	m_pChannel->setPaused(true);
+
 }
 
 void SpongebobScene::Update()
@@ -214,6 +197,8 @@ void SpongebobScene::CreateObjects()
 	pHans->GetTransform()->Translate(492.334f, 160.f, 185.318f);
 	pHans->GetTransform()->Rotate(0, -30, 0);
 	AddChild(pHans);
+
+	CreateItems();
 }
 
 void SpongebobScene::CreateItems()
@@ -235,6 +220,37 @@ void SpongebobScene::CreateItems()
 	pTiki->GetTransform()->Translate(m_StartPos.x + 15, m_StartPos.y - 3, m_StartPos.z + 5);
 	AddChild(pTiki);
 }
+
+void SpongebobScene::PauseScene()
+{
+	//pause/unpause music
+	//stop moving items
+}
+
+void SpongebobScene::ReloadScene()
+{
+	//Deactivate scene
+	for (auto c : GetChildren())
+	{
+		if (typeid(c) == typeid(Spatula*) || typeid(c) == typeid(Tiki*))
+		{
+			RemoveChild(c, true);
+		}
+	}
+	m_pChannel->setPaused(true);
+
+	//Reload scene
+	auto sponge = dynamic_cast<Spongebob*>(pSponge);
+	sponge->SetControllerPosition(m_StartPos);
+	sponge->ResetVariables();
+
+	CreateItems();
+
+	FMOD::System* fmodSystem = SoundManager::Get()->GetSystem();
+	fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
+	m_pChannel->setVolume(.4f);
+}
+
 
 std::wstring SpongebobScene::ConvertToWideString(const std::string& str)
 {

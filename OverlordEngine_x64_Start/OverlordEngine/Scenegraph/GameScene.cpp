@@ -207,7 +207,7 @@ void GameScene::RootDraw()
 	//TODO_W10(L"Add Post-Processing PASS logic")
 
 	//No need to swap RenderTargets is there aren't any PP Effects...
-	if (m_PostProcessingMaterials.size() == 0)
+	if (m_PostProcessingMaterials.size() != 0)
 	{
 
 		//1. [PREV_RT & INIT_RT] Retrieve the current RenderTarget (OverlordGame::GetRenderTarget, every scene has access to the OverlordGame > m_pGame)
@@ -229,9 +229,8 @@ void GameScene::RootDraw()
 
 		//3. All Materials are applied after each other, time to draw the final result to the screen
 		//		- If PREV_RT is still equal to INIT_RT, do nothing (means no PP effect was applied, nothing has changed)
-		if (PREV_RT == INIT_RT)
+		if (PREV_RT != INIT_RT)
 		{
-
 			//		- Else, reset the RenderTarget of the game to default (OverlordGame::SetRenderTarget)
 			m_pGame->SetRenderTarget(nullptr);
 			//		- Use SpriteRenderer::DrawImmediate to render the ShaderResourceView from PREV_RT to the screen
