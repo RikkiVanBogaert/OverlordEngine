@@ -47,7 +47,6 @@
     <ClCompile Include="Materials\Post\PostMyEffect.cpp" />
     <ClCompile Include="Prefabs\Spongebob.cpp" />
     <ClCompile Include="Prefabs\ExitGate.cpp" />
-    <ClCompile Include="Scenes\ExamAssignment\EndScene.cpp" />
     <ClCompile Include="Prefabs\Jellyfish.cpp" />
     <ClCompile Include="Prefabs\Hans.cpp" />
     <ClCompile Include="Scenes\Week 11\DeferredRenderingScene.cpp" />
@@ -103,7 +102,6 @@
     <ClInclude Include="Materials\Post\PostMyEffect.h" />
     <ClInclude Include="Prefabs\Spongebob.h" />
     <ClInclude Include="Prefabs\ExitGate.h" />
-    <ClInclude Include="Scenes\ExamAssignment\EndScene.h" />
     <ClInclude Include="Prefabs\Jellyfish.h" />
     <ClInclude Include="Prefabs\Hans.h" />
     <ClInclude Include="Scenes\Week 11\DeferredRenderingScene.h" />

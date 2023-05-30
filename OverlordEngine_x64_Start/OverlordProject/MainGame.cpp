@@ -94,7 +94,6 @@
 #include "Scenes/ExamAssignment/SpongebobScene.h"
 #include "Scenes/ExamAssignment/TestScene.h"
 #include "Scenes/ExamAssignment/MainMenuScene.h"
-#include "Scenes/ExamAssignment/EndScene.h"
 #endif
 
 //Game is preparing
@@ -116,7 +115,6 @@ void MainGame::Initialize()
 #ifdef Spongebob
 	SceneManager::Get()->AddGameScene(new MainMenuScene());
 	SceneManager::Get()->AddGameScene(new SpongebobScene());
-	SceneManager::Get()->AddGameScene(new EndScene());
 #endif
 
 #ifdef W3

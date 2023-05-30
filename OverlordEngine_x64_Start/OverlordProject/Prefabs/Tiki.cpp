@@ -20,6 +20,7 @@ void Tiki::Initialize(const SceneContext&)
 	pModel->SetMaterial(pMat);
 	AddChild(pModelObject);
 	pModel->GetTransform()->Translate(0, 0.f, 0);
+	pModel->GetTransform()->Rotate(0, float(rand() % 360), 0);
 
 	//Collision
 	auto& phys = PxGetPhysics();

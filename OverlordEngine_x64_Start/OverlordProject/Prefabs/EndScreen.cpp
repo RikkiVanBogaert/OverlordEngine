@@ -13,6 +13,13 @@ void EndScreen::Initialize(const SceneContext&)
 	constexpr float scale{ 0.4f };
 	constexpr float yPos{ 240 };
 
+	auto pEndObj = new GameObject();
+	auto pEndSprite = new SpriteComponent(L"Exam/HUD/TheEndFrame.png");
+	pEndObj->AddComponent<SpriteComponent>(pEndSprite);
+	AddChild(pEndObj);
+	pEndObj->GetTransform()->Translate(470, 170, 0);
+	pEndObj->GetTransform()->Scale(.5f);
+
 	auto pResumeObj = new GameObject();
 	m_pResumeSprite = new SpriteComponent(L"Exam/HUD/MainMenuButton.png");
 	pResumeObj->AddComponent<SpriteComponent>(m_pResumeSprite);

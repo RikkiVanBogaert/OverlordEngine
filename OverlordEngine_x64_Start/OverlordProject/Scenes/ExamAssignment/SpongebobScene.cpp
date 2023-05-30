@@ -182,7 +182,7 @@ void SpongebobScene::CreateObjects()
 {
 	auto pGate = new ExitGate();
 	pGate->GetTransform()->Translate(388.383f, 0.495f, -176.235f);
-	pGate->GetTransform()->Rotate(0, -30, 0);
+	pGate->GetTransform()->Rotate(0, -45, 0);
 	AddChild(pGate);
 
 	auto pJelly = new Jellyfish();
@@ -212,9 +212,25 @@ void SpongebobScene::CreateItems()
 	spat3->GetTransform()->Translate(493.961f, 147.045f, 153.425f);
 	AddChild(spat3);
 
-	auto pTiki = new Tiki();
-	pTiki->GetTransform()->Translate(m_StartPos.x + 15, m_StartPos.y - 3, m_StartPos.z + 5);
-	AddChild(pTiki);
+	std::vector<XMFLOAT3> tikiPositions;
+	tikiPositions.emplace_back(XMFLOAT3{ 325.298f, 36.6f, -855.795f }); //start
+	tikiPositions.emplace_back(XMFLOAT3{ 374.88f, 18.0335f, -660.487f });
+	tikiPositions.emplace_back(XMFLOAT3{ 151.844f, 35.384f, -603.422f });
+
+	tikiPositions.emplace_back(XMFLOAT3{ 301.575f, 14.4461f, -397.826f }); //rocks left
+	tikiPositions.emplace_back(XMFLOAT3{ 629.043f, 41.9164f, -192.13f }); //back
+	tikiPositions.emplace_back(XMFLOAT3{ 620.043f, 41.9164f, -190.13f }); //back 2
+	tikiPositions.emplace_back(XMFLOAT3{ 625.043f, 41.9164f, -182.13f }); //back 3
+	tikiPositions.emplace_back(XMFLOAT3{ 543.827f, 42.1792f, -465.691f }); //up right
+
+
+	for(auto t : tikiPositions)
+	{
+		auto pTiki = new Tiki();
+		t.y -= 6.6f;
+		pTiki->GetTransform()->Translate(t);
+		AddChild(pTiki);
+	}
 }
 
 void SpongebobScene::SetPaused(bool isPaused)

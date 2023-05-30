@@ -37,13 +37,6 @@ void PauseMenu::Initialize(const SceneContext& )
 	pRestartObj->GetTransform()->Scale(scale);
 	m_Buttons.emplace_back(m_pRestartSprite);
 
-	/*m_pScreen = new GameObject();
-	m_pScreenSprite = new SpriteComponent(L"Exam/HUD/PauseMenu.jpg");
-	m_pScreen->AddComponent<SpriteComponent>(m_pScreenSprite);
-	AddChild(m_pScreen);
-	m_pScreen->GetTransform()->Translate(120, 100, 0);
-	m_pScreen->GetTransform()->Scale(.8f);*/
-
 }
 
 

@@ -14,9 +14,6 @@ protected:
 private:
 	Spongebob* m_pSponge{};
 
-	GameObject* m_pScreen{};
-	SpriteComponent* m_pScreenSprite{};
-
 	SpriteComponent* m_pResumeSprite{};
 	SpriteComponent* m_pQuitSprite{};
 	SpriteComponent* m_pRestartSprite{};

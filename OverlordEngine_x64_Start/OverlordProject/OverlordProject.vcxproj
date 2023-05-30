@@ -99,7 +99,6 @@
     <ClCompile Include="Prefabs\PauseMenu.cpp" />
     <ClCompile Include="Prefabs\Hans.cpp" />
     <ClCompile Include="Prefabs\Jellyfish.cpp" />
-    <ClCompile Include="Scenes\ExamAssignment\EndScene.cpp" />
     <ClCompile Include="Prefabs\ExitGate.cpp" />
     <ClCompile Include="Materials\Post\PostMyEffect.cpp" />
     <ClCompile Include="Prefabs\BubbleParticles.cpp" />
@@ -172,7 +171,6 @@
     <ClInclude Include="Prefabs\PauseMenu.h" />
     <ClInclude Include="Prefabs\Hans.h" />
     <ClInclude Include="Prefabs\Jellyfish.h" />
-    <ClInclude Include="Scenes\ExamAssignment\EndScene.h" />
     <ClInclude Include="Prefabs\ExitGate.h" />
     <ClInclude Include="Materials\Post\PostMyEffect.h" />
     <ClInclude Include="Prefabs\BubbleParticles.h" />

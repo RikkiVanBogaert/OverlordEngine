@@ -239,8 +239,13 @@ void Spongebob::TurnPauseMenuOnOff()
 void Spongebob::PauseCharacter(bool isPaused)
 {
 	m_pCharacter->SetPaused(isPaused);
+
+	if(isPaused) pAnimator->Pause();
+	else pAnimator->Play();
+
 	m_pSoundChannel->setPaused(isPaused);
 	m_IsSoundPlaying = !isPaused;
+
 	m_IsPaused = isPaused;
 }
 
