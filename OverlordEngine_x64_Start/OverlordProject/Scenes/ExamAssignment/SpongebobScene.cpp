@@ -49,14 +49,16 @@ SpongebobScene::~SpongebobScene()
 
 void SpongebobScene::Initialize()
 {
-	//Deferred rendering
-	m_SceneContext.useDeferredRendering = true;
+	//Deferred rendering //Causes pink effect on postProcessing
+	//m_SceneContext.useDeferredRendering = true;
 
 	m_SceneContext.settings.enableOnGUI = true;
 	m_SceneContext.settings.drawPhysXDebug = false;
 
-	//m_StartPos = { 493.961f, 147.045f, 153.425f }; //jellyfish
 	m_StartPos = { 300.858f, 47.2426f, -865.813f }; //start
+	//m_StartPos = { 493.961f, 147.045f, 153.425f }; //jellyfish
+	//m_StartPos = { 378.383f, 10.495f, -166.235f }; //Gate
+
 	CreateLevel();
 	CreateObjects();
 
@@ -71,33 +73,20 @@ void SpongebobScene::Initialize()
 	sponge->SetControllerPosition(m_StartPos);
 
 	//PostProcessing
-	//auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
-	//AddPostProcessingEffect(m_pPostEffect);
+	auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
+	AddPostProcessingEffect(m_pPostEffect);
 
 	//Music
 	auto soundManager = SoundManager::Get();
-	soundManager->GetSystem()->createSound("../OverlordProject/Resources/Exam/LevelMusic.mp3",
+	auto path = ContentManager::GetFullAssetPath(L"Exam/LevelMusic.mp3").string().c_str();
+	soundManager->GetSystem()->createSound(path,
 		FMOD_DEFAULT, nullptr, &m_pSound);
-
-
+	FMOD::System* fmodSystem = SoundManager::Get()->GetSystem();
+	fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
+	m_pChannel->setVolume(.4f);
+	m_pChannel->setPaused(true);
 	//LIGHTS
-	
-	//Directional
-	//auto& dirLight = m_SceneContext.pLights->GetDirectionalLight();
-	//dirLight.isEnabled = false;
-	//dirLight.direction = { -0.577f, -0.577f, 0.577f , 1.0f };
 
-	////Spot Light
-	//Light light = {};
-	//light.isEnabled = true;
-	//light.position = { m_StartPos.x, m_StartPos.y + 20, m_StartPos.z, 1 };
-	//light.direction = { 0.f,-1.f,1.f,0.f };
-	//light.color = { 0.7f,0.f,0.f,1.f };
-	//light.intensity = 1.0f;
-	//light.spotLightAngle = 35.f;
-	//light.range = 150.0f;
-	//light.type = LightType::Spot;
-	//m_SceneContext.pLights->AddLight(light);
 }
 
 void SpongebobScene::OnGUI()
@@ -107,12 +96,17 @@ void SpongebobScene::OnGUI()
 
 void SpongebobScene::OnSceneActivated()
 {
+	m_pChannel->setPaused(false);
 
+	auto sponge = dynamic_cast<Spongebob*>(pSponge);
+	sponge->PauseCharacter(false);
 }
 
 void SpongebobScene::OnSceneDeactivated()
 {
-
+	m_pChannel->setPaused(true);
+	auto sponge = dynamic_cast<Spongebob*>(pSponge);
+	sponge->PauseCharacter(true);
 }
 
 void SpongebobScene::Update()
@@ -149,9 +143,11 @@ void SpongebobScene::CreateLevel()
 	pGroundMaterial->SetDiffuseTexture(L"Textures/GroundBrick.jpg");
 	pLevelMesh->SetMaterial(pGroundMaterial);
 
-	auto objInfo = ParseOBJFile("../OverlordProject/Resources/Exam/Meshes/jellyfishfields.obj");
+	auto path = ContentManager::GetFullAssetPath(L"Exam/Meshes/jellyfishfields.obj");
+	auto objInfo = ParseOBJFile(path.string());
 
-	auto mtlInfo = mtlParser("../OverlordProject/Resources/Exam/Textures/Level/jellyfishfields.mtl");
+	path = ContentManager::GetFullAssetPath(L"Exam/Textures/Level/jellyfishfields.mtl");
+	auto mtlInfo = mtlParser(path.string());
 	for(auto m : mtlInfo)
 	{
 		auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
@@ -221,13 +217,16 @@ void SpongebobScene::CreateItems()
 	AddChild(pTiki);
 }
 
-void SpongebobScene::PauseScene()
+void SpongebobScene::SetPaused(bool isPaused)
 {
 	//pause/unpause music
 	//stop moving items
+
+	//m_MusicPlaying = !m_MusicPlaying;
+	m_pChannel->setPaused(isPaused);
 }
 
-void SpongebobScene::ReloadScene()
+void SpongebobScene::ReloadScene(bool pauseMusic)
 {
 	//Deactivate scene
 	for (auto c : GetChildren())
@@ -237,18 +236,20 @@ void SpongebobScene::ReloadScene()
 			RemoveChild(c, true);
 		}
 	}
-	m_pChannel->setPaused(true);
 
-	//Reload scene
+
 	auto sponge = dynamic_cast<Spongebob*>(pSponge);
 	sponge->SetControllerPosition(m_StartPos);
-	sponge->ResetVariables();
 
+	//Reload scene
 	CreateItems();
 
+
+	m_pChannel->stop();
 	FMOD::System* fmodSystem = SoundManager::Get()->GetSystem();
 	fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
 	m_pChannel->setVolume(.4f);
+	m_pChannel->setPaused(pauseMusic);
 }
 
 

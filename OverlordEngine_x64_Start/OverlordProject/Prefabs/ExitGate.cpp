@@ -8,6 +8,7 @@
 #include "HUDPrefab.h"
 #include "Pickup.h"
 #include "Spongebob.h"
+#include "EndScreen.h"
 
 void ExitGate::Initialize(const SceneContext&)
 {
@@ -37,12 +38,15 @@ void ExitGate::Initialize(const SceneContext&)
 	{
 		if (other->GetTag() != L"Player") return;
 
-		auto sponge = dynamic_cast<Spongebob*>(other->GetParent());
-		if(sponge->GetHUD()->GetAmountSpatulas() >= 3)
+		auto pSponge = dynamic_cast<Spongebob*>(other->GetParent());
+		if(pSponge->GetHUD()->GetAmountSpatulas() >= 3)
 		{
-			if (action != PxTriggerAction::ENTER) return;
+			if (action == PxTriggerAction::ENTER)
+			{
+				pEndScreen = new EndScreen(pSponge);
+				AddChild(pEndScreen);
+			}
 
-			SceneManager::Get()->SetActiveGameScene(L"EndScene");
 			return;
 			
 		}
@@ -54,12 +58,15 @@ void ExitGate::Initialize(const SceneContext&)
 			AddChild(m_Text);
 			m_Text->AddComponent<SpriteComponent>(spatTextSprite);
 			m_Text->GetTransform()->Translate(410, 160, 0);
-			//m_Text->GetTransform()->Scale(5);
 		}
 
 		if (action == PxTriggerAction::LEAVE)
 		{
-			RemoveChild(m_Text, true);
+			if (m_Text)
+			{
+				RemoveChild(m_Text, true);
+				m_Text = nullptr;
+			}
 		}
 	};
 

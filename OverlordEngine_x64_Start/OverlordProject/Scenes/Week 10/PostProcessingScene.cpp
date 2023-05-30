@@ -13,6 +13,7 @@
 
 void PostProcessingScene::Initialize()
 {
+	//m_SceneContext.useDeferredRendering = true;
 	m_SceneContext.settings.drawGrid = false;
 	m_SceneContext.settings.enableOnGUI = true;
 

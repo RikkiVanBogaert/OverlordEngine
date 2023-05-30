@@ -95,7 +95,6 @@
 #include "Scenes/ExamAssignment/TestScene.h"
 #include "Scenes/ExamAssignment/MainMenuScene.h"
 #include "Scenes/ExamAssignment/EndScene.h"
-#include "Scenes/ExamAssignment/PauseScene.h"
 #endif
 
 //Game is preparing

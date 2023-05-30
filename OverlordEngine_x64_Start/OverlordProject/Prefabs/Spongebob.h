@@ -14,7 +14,9 @@ public:
 	void SetControllerPosition(const XMFLOAT3& pos);
 	void ResetVariables();
 	HUDPrefab* GetHUD() { return m_pHud; };
-	void TurnPauseOnOff();
+	void TurnPauseMenuOnOff();
+	void PauseCharacter(bool isPaused);
+	void PauseScene(bool isPaused);
 
 private:
 	enum InputIds

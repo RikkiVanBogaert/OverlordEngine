@@ -107,11 +107,13 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	//Sound
 	// Load the m_pWalkSound
 	auto soundManager = SoundManager::Get();
-	soundManager->GetSystem()->createSound("../OverlordProject/Resources/Exam/WalkingSound.mp3", 
+	auto path = ContentManager::GetFullAssetPath(L"Exam/WalkingSound.mp3").string().c_str();
+	soundManager->GetSystem()->createSound(path, 
 		FMOD_DEFAULT, nullptr, &m_pWalkSound);
 
-	//Pause
-	//pPauseMenu = new PauseMenu();
+	soundManager->GetSystem()->playSound(m_pWalkSound, nullptr, false, &m_pSoundChannel);
+	m_pSoundChannel->setPaused(true);
+	m_IsSoundPlaying = false;
 }
 
 void Spongebob::Update(const SceneContext& sceneContext)
@@ -191,8 +193,7 @@ void Spongebob::UpdateSounds()
 		{
 			if (!m_IsSoundPlaying)
 			{
-				FMOD::System* fmodSystem = SoundManager::Get()->GetSystem();
-				fmodSystem->playSound(m_pWalkSound, nullptr, false, &m_pSoundChannel);
+				m_pSoundChannel->setPaused(false);
 				m_IsSoundPlaying = true;
 			}
 		}
@@ -213,11 +214,11 @@ void Spongebob::CheckPausePress()
 {
 	if (GetScene()->GetSceneContext().pInput->IsActionTriggered(Pause))
 	{
-		TurnPauseOnOff();
+		TurnPauseMenuOnOff();
 	}
 }
 
-void Spongebob::TurnPauseOnOff()
+void Spongebob::TurnPauseMenuOnOff()
 {
 	if (!m_IsPaused)
 	{
@@ -230,10 +231,23 @@ void Spongebob::TurnPauseOnOff()
 		RemoveChild(pPauseMenu, true);
 		m_IsPaused = false;
 	}
-	m_pCharacter->SetPaused(m_IsPaused);
 
+	PauseCharacter(m_IsPaused);
+	PauseScene(m_IsPaused);
+}
+
+void Spongebob::PauseCharacter(bool isPaused)
+{
+	m_pCharacter->SetPaused(isPaused);
+	m_pSoundChannel->setPaused(isPaused);
+	m_IsSoundPlaying = !isPaused;
+	m_IsPaused = isPaused;
+}
+
+void Spongebob::PauseScene(bool isPaused)
+{
 	auto pSpongebobScene = dynamic_cast<SpongebobScene*>(GetScene());
-	pSpongebobScene->PauseScene();
+	pSpongebobScene->SetPaused(isPaused);
 }
 
 void Spongebob::SetControllerPosition(const XMFLOAT3& pos)
@@ -243,14 +257,14 @@ void Spongebob::SetControllerPosition(const XMFLOAT3& pos)
 
 void Spongebob::ResetVariables()
 {
+	m_pCharacter->SetPaused(false);
+	
 	m_pSpongebobMesh->GetTransform()->Rotate(0,180,0);
 	m_pCharacter->SetCameraPitchYaw(0, 0);
 
 	m_pHud->SetAmountSpatulas(0);
 
-	if (m_IsSoundPlaying)
-	{
-		m_pSoundChannel->setPaused(true);
-		m_IsSoundPlaying = false;
-	}
+	m_pSoundChannel->setPaused(true);
+	m_IsSoundPlaying = false;
+	m_IsPaused = false;
 }

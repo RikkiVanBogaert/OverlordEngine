@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MainMenuScene.h"
 
+#include "SpongebobScene.h"
 #include "Materials/ColorMaterial.h"
 #include "Materials/DiffuseMaterial.h"
 #include "Prefabs/UIElement.h"
@@ -24,52 +25,91 @@ void MainMenuScene::Initialize()
 	pCamera->GetTransform()->Translate(0, 40, 0);
 	pCamera->GetComponent<CameraComponent>()->SetActive();
 
+
+	constexpr float scale{ 0.7f };
+	constexpr float xPos{ 840 };
+
+	auto pPlayObj = new GameObject();
+	m_pPlaySprite = new SpriteComponent(L"Exam/HUD/MainPlayButton.png");
+	pPlayObj->AddComponent<SpriteComponent>(m_pPlaySprite);
+	AddChild(pPlayObj);
+	pPlayObj->GetTransform()->Translate(xPos, 340, 0);
+	pPlayObj->GetTransform()->Scale(scale);
+	m_Buttons.emplace_back(m_pPlaySprite);
+
+	auto pQuitObj = new GameObject();
+	m_pQuitSprite = new SpriteComponent(L"Exam/HUD/MainQuitButton.png");
+	pQuitObj->AddComponent<SpriteComponent>(m_pQuitSprite);
+	AddChild(pQuitObj);
+	pQuitObj->GetTransform()->Translate(xPos, 430, 0);
+	pQuitObj->GetTransform()->Scale(scale);
+	m_Buttons.emplace_back(m_pQuitSprite);
+
+	auto pControlsObj = new GameObject();
+	auto pControlsSprite = new SpriteComponent(L"Exam/HUD/ControlsText.png");
+	pControlsObj->AddComponent<SpriteComponent>(pControlsSprite);
+	AddChild(pControlsObj);
+	pControlsObj->GetTransform()->Translate(xPos - 50, 510, 0);
+
 	auto pGameObject = new GameObject();
 	auto pSprite = new SpriteComponent(L"Exam/HUD/MainMenu.png");
 	pGameObject->AddComponent<SpriteComponent>(pSprite);
-
 	AddChild(pGameObject);
 
-	//Buttons-----
-	const auto pButtonObject = new GameObject();
-	pButtonObject->GetTransform()->Translate(12, 1, -1.8f);
-
-	const auto pMaterial = PxGetPhysics().createMaterial(.5f, .5f, .5f);
-	const auto pRigidBody = pButtonObject->AddComponent(new RigidBodyComponent(true));
-	pRigidBody->SetCollisionGroup(CollisionGroup::Group0);
-	pRigidBody->AddCollider(PxBoxGeometry{ 5, 1, 1 }, *pMaterial);
-
-	AddChild(pButtonObject);
-
-
-	const auto pQuitObject = new GameObject();
-	pQuitObject->GetTransform()->Translate(12, 1, -12.f);
-
-	//const auto pMaterial = PxGetPhysics().createMaterial(.5f, .5f, .5f);
-	const auto pQuitRigidBody = pQuitObject->AddComponent(new RigidBodyComponent(true));
-	pQuitRigidBody->SetCollisionGroup(CollisionGroup::Group1);
-	pQuitRigidBody->AddCollider(PxBoxGeometry{ 5, 1, 1 }, *pMaterial);
-
-	AddChild(pQuitObject);
-}
-
-void MainMenuScene::OnGUI()
-{
-	
 }
 
 void MainMenuScene::Update()
 {
-	if (InputManager::IsMouseButton(InputState::down, 1))
+	HoverOverButton(m_SceneContext);
+	CheckActiveButton();
+}
+
+bool MainMenuScene::MouseInRect(const SceneContext& sceneContext, const XMFLOAT2& pos, const XMFLOAT2& size) const
+{
+	auto mousePos = sceneContext.pInput->GetMousePosition();
+
+	if (mousePos.x > pos.x && mousePos.x < pos.x + size.x
+		&& mousePos.y > pos.y && mousePos.y < pos.y + size.y)
 	{
-		if (m_SceneContext.pCamera->Pick(CollisionGroup::Group1))
-		{
-			SceneManager::Get()->SetActiveGameScene(L"SpongebobScene");
-		}
-		if (m_SceneContext.pCamera->Pick(CollisionGroup::Group0))
-		{
-			std::exit(0);
-		}
+		return true;
 	}
 
+	return false;
+}
+
+void MainMenuScene::HoverOverButton(const SceneContext& sceneContext)
+{
+	for (auto b : m_Buttons)
+	{
+		const XMFLOAT2 pos{ b->GetTransform()->GetPosition().x, b->GetTransform()->GetPosition().y };
+		const XMFLOAT2 size{ b->GetDimensions().x * b->GetTransform()->GetScale().x,
+			b->GetDimensions().y * b->GetTransform()->GetScale().y };
+		if (MouseInRect(sceneContext, pos, size))
+		{
+			b->GetTransform()->Scale(.8f);
+			m_pActiveButton = b;
+			return;
+		}
+		else
+		{
+			b->GetTransform()->Scale(.7f);
+		}
+	}
+	m_pActiveButton = nullptr;
+}
+
+void MainMenuScene::CheckActiveButton()
+{
+	if (!m_pActiveButton) return;
+
+	if (!InputManager::IsMouseButton(InputState::released, 1)) return;
+
+	if (m_pActiveButton == m_pPlaySprite)
+	{
+		SceneManager::Get()->SetActiveGameScene(L"SpongebobScene");
+	}
+	else if (m_pActiveButton == m_pQuitSprite)
+	{
+		std::exit(0);
+	}
 }

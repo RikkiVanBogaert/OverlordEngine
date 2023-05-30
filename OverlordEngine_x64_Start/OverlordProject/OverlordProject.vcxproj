@@ -93,6 +93,7 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Prefabs\EndScreen.cpp" />
     <ClCompile Include="Materials\BasicMaterial.cpp" />
     <ClCompile Include="Materials\BasicMaterial_Deferred.cpp" />
     <ClCompile Include="Prefabs\PauseMenu.cpp" />
@@ -101,7 +102,6 @@
     <ClCompile Include="Scenes\ExamAssignment\EndScene.cpp" />
     <ClCompile Include="Prefabs\ExitGate.cpp" />
     <ClCompile Include="Materials\Post\PostMyEffect.cpp" />
-    <ClCompile Include="Scenes\ExamAssignment\PauseScene.cpp" />
     <ClCompile Include="Prefabs\BubbleParticles.cpp" />
     <ClCompile Include="Materials\Post\PostGrayscale.cpp" />
     <ClCompile Include="Materials\Post\PostBlur.cpp" />
@@ -166,6 +166,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Prefabs\EndScreen.h" />
     <ClInclude Include="Materials\BasicMaterial.h" />
     <ClInclude Include="Materials\BasicMaterial_Deferred.h" />
     <ClInclude Include="Prefabs\PauseMenu.h" />
@@ -174,7 +175,6 @@
     <ClInclude Include="Scenes\ExamAssignment\EndScene.h" />
     <ClInclude Include="Prefabs\ExitGate.h" />
     <ClInclude Include="Materials\Post\PostMyEffect.h" />
-    <ClInclude Include="Scenes\ExamAssignment\PauseScene.h" />
     <ClInclude Include="Prefabs\BubbleParticles.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="Materials\Post\PostGrayscale.h" />

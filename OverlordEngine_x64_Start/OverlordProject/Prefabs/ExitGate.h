@@ -1,5 +1,7 @@
 #pragma once
 
+class EndScreen;
+
 class ExitGate final : public GameObject
 {
 public:
@@ -12,5 +14,6 @@ protected:
 
 private:
 	GameObject* m_Text{};
+	EndScreen* pEndScreen{};
 };
 

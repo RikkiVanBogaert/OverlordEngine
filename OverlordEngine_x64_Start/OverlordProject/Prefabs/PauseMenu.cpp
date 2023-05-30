@@ -30,7 +30,7 @@ void PauseMenu::Initialize(const SceneContext& )
 	m_Buttons.emplace_back(m_pQuitSprite);
 
 	auto pRestartObj = new GameObject();
-	m_pRestartSprite = new SpriteComponent(L"Exam/HUD/ResumeButton.png");
+	m_pRestartSprite = new SpriteComponent(L"Exam/HUD/RestartButton.png");
 	pRestartObj->AddComponent<SpriteComponent>(m_pRestartSprite);
 	AddChild(pRestartObj);
 	pRestartObj->GetTransform()->Translate(880, yPos, 0);
@@ -91,11 +91,11 @@ void PauseMenu::CheckActiveButton()
 {
 	if (!m_pActiveButton) return;
 
-	if (!InputManager::IsMouseButton(InputState::down, 1)) return;
+	if (!InputManager::IsMouseButton(InputState::released, 1)) return;
 
 	if(m_pActiveButton == m_pResumeSprite)
 	{
-		m_pSponge->TurnPauseOnOff();
+		m_pSponge->TurnPauseMenuOnOff();
 	}
 	else if (m_pActiveButton == m_pQuitSprite)
 	{
@@ -105,6 +105,8 @@ void PauseMenu::CheckActiveButton()
 	{
 		auto pSpongebobScene = dynamic_cast<SpongebobScene*>(GetScene());
 		pSpongebobScene->ReloadScene();
-		m_pSponge->TurnPauseOnOff();
+
+		m_pSponge->TurnPauseMenuOnOff();
+		m_pSponge->ResetVariables();
 	}
 }

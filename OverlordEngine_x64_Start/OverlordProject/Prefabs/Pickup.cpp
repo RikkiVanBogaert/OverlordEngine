@@ -43,7 +43,8 @@ void Spatula::Initialize(const SceneContext&)
 			FMOD::Sound* m_pSound{};
 			FMOD::Channel* m_pChannel{};
 			auto soundManager = SoundManager::Get();
-			soundManager->GetSystem()->createSound("../OverlordProject/Resources/Exam/PickupBling.mp3",
+			auto path = ContentManager::GetFullAssetPath(L"Exam/PickupBling.mp3").string().c_str();
+			soundManager->GetSystem()->createSound(path,
 				FMOD_DEFAULT, nullptr, &m_pSound);
 			FMOD::System* fmodSystem = soundManager->GetSystem();
 			fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
