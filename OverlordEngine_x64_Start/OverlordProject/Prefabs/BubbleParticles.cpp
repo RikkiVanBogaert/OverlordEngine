@@ -2,7 +2,8 @@
 #include "BubbleParticles.h"
 
 BubbleParticles::BubbleParticles(float lifeTime):
-m_LifeTime{lifeTime},
+m_StopSpawningTime{lifeTime},
+m_DeleteTime(4),
 m_Timer(0)
 {
 	//Particle System
@@ -18,17 +19,28 @@ m_Timer(0)
 	settings.maxEmitterRadius = 15.f;
 	settings.color = { 1.f,1.f,1.f, .6f };
 
-	AddComponent(new ParticleEmitterComponent(L"Textures/Bubble.png", settings, 50));
+	m_pParticles = AddComponent(new ParticleEmitterComponent(L"Textures/Bubble.png", settings, 100));
 }
 
 void BubbleParticles::Update(const SceneContext& scene_context)
 {
-	
+	if (!m_IsActive) return;
 
 	m_Timer += scene_context.pGameTime->GetElapsed();
 
-	if(m_Timer > m_LifeTime)
+	if(m_Timer > m_DeleteTime)
 	{
 		GetScene()->RemoveChild(this, true);
+		return;
 	}
+	if(m_Timer > m_StopSpawningTime)
+	{
+		m_pParticles->StopSpawningParticles(true);
+	}
+}
+
+void BubbleParticles::SetActive(bool isActive)
+{
+	m_IsActive = isActive;
+	m_pParticles->SetActive(isActive);
 }

@@ -14,8 +14,8 @@ void Tiki::Initialize(const SceneContext&)
 
 	constexpr float size{ 5 };
 
-	auto pModelObject = new GameObject();
-	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/Tiki.ovm");
+	pModelObject = new GameObject();
+	pModel = new ModelComponent(L"Exam/Meshes/Tiki.ovm");
 	pModelObject->AddComponent<ModelComponent>(pModel);
 	pModel->SetMaterial(pMat);
 	AddChild(pModelObject);
@@ -27,23 +27,22 @@ void Tiki::Initialize(const SceneContext&)
 	auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
 
 
-	auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
-	pRigidBodyCp->AddCollider(PxSphereGeometry(1.8f * size), *pBouncyMaterial, true);
+	pRigidBody = AddComponent(new RigidBodyComponent(true));
+	pRigidBody->AddCollider(PxSphereGeometry(1.8f * size), *pBouncyMaterial, true);
 	
 	auto pConvexMesh = ContentManager::Load<PxConvexMesh>(L"Exam/Meshes/Tiki.ovpc");
-	pRigidBodyCp->AddCollider(PxConvexMeshGeometry{ pConvexMesh, PxMeshScale{size} }, *pBouncyMaterial);
+	pRigidBody->AddCollider(PxConvexMeshGeometry{ pConvexMesh, PxMeshScale{size} }, *pBouncyMaterial);
 
 	auto onTrigger = [&](GameObject*, GameObject* other, PxTriggerAction action)
 	{
 		if (other->GetTag() != L"Player") return;
+		if(NeedsDeleting()) return;
 
 		if (action == PxTriggerAction::ENTER)
 		{
 			m_IsVulnerable = true;
 			m_pPlayer = static_cast<Character*>(other);
-			//SpawnFlowers();
-			//SpawnBubbles();
-			//MarkForDeletion();
+
 		}
 
 		if (action == PxTriggerAction::LEAVE)
@@ -55,6 +54,11 @@ void Tiki::Initialize(const SceneContext&)
 	SetOnTriggerCallBack(onTrigger);
 
 	GetTransform()->Scale(size);
+
+	pBubbles = new BubbleParticles();
+	XMFLOAT3 pos = { GetTransform()->GetPosition().x - 10, GetTransform()->GetPosition().y + 5, GetTransform()->GetPosition().z };
+	pBubbles->GetTransform()->Translate(pos);
+	GetScene()->AddChild(pBubbles);
 }
 
 void Tiki::Update(const SceneContext& )
@@ -62,10 +66,13 @@ void Tiki::Update(const SceneContext& )
 	if (!m_IsVulnerable) return;
 	if (!m_pPlayer) return;
 	//if (NeedsDeleting()) return;
+	if (!pModelObject->HasComponent<ModelComponent>()) return;
 
 	if (m_pPlayer->IsAttacking())
 	{
-		SpawnBubbles();
+		//SpawnFlowers();
+		//SpawnBubbles();
+		pBubbles->SetActive(true);
 
 		FMOD::Sound* m_pSound{};
 		FMOD::Channel* m_pChannel{};
@@ -76,28 +83,25 @@ void Tiki::Update(const SceneContext& )
 		FMOD::System* fmodSystem = soundManager->GetSystem();
 		fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
 
-		GetScene()->RemoveChild(this, true);
+		//MarkForDeletion();
+		pModelObject->RemoveComponent(pModel);
+		GetTransform()->Translate(0, 0, 0);
+		//pRigidBody->RemoveCollider(pRigidBody->GetCollider(0));
+		//GetScene()->RemoveChild(this, true);
 	}
 }
 
 void Tiki::SpawnFlowers()
 {
-	for (int i{}; i < 5; ++i)
-	{
-		auto pFlower = new Flower();
-		auto pos = GetTransform()->GetPosition();
+	auto pFlower = new Flower();
+	auto pos = GetTransform()->GetPosition();
 
-		const int rndX{rand() % 53 - 12};
-		const int rndZ{ rand() % 53 - 12 };
+	const int rndX{rand() % 53 - 12};
+	const int rndZ{ rand() % 53 - 12 };
 
-		pFlower->GetTransform()->Translate(pos.x + rndX, pos.y + 15, pos.z + rndZ);
-		GetScene()->AddChild(pFlower);
-	}
+	pFlower->GetTransform()->Translate(pos.x + rndX, pos.y + 15, pos.z + rndZ);
+	SceneManager::Get()->GetActiveScene()->AddChild(pFlower);
 }
 
 void Tiki::SpawnBubbles()
-{
-	auto pBubbles = new BubbleParticles();
-	pBubbles->GetTransform()->Translate(GetTransform()->GetPosition());
-	GetScene()->AddChild(pBubbles);
-}
+{}

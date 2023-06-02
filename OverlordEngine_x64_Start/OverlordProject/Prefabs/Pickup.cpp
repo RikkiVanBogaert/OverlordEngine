@@ -50,7 +50,6 @@ void Spatula::Initialize(const SceneContext&)
 			fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
 			
 			MarkForDeletion();
-
 		}
 	};
 

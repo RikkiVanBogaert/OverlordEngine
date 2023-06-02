@@ -94,7 +94,7 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	inputAction = InputAction(Attack, InputState::down, 'E');
 	sceneContext.pInput->AddInputAction(inputAction);
 
-	inputAction = InputAction(CharacterJump, InputState::pressed, VK_SPACE, -1, XINPUT_GAMEPAD_A);
+	inputAction = InputAction(CharacterJump, InputState::pressed, VK_SPACE /*, -1, XINPUT_GAMEPAD_A*/);
 	sceneContext.pInput->AddInputAction(inputAction);
 
 	inputAction = InputAction(Pause, InputState::pressed, 'P');
@@ -123,16 +123,23 @@ void Spongebob::Update(const SceneContext& sceneContext)
 	if (m_IsPaused) return;
 
 	//Light
-	sceneContext.pLights->GetDirectionalLight().position.x = m_pSpongebobMesh->GetTransform()->GetPosition().x - 10;
-	sceneContext.pLights->GetDirectionalLight().position.y = m_pSpongebobMesh->GetTransform()->GetPosition().y + 30;
-	sceneContext.pLights->GetDirectionalLight().position.z = m_pSpongebobMesh->GetTransform()->GetPosition().z - 5;
+	sceneContext.pLights->GetDirectionalLight().position.x = m_pSpongebobMesh->GetTransform()->GetPosition().x - 50;
+	sceneContext.pLights->GetDirectionalLight().position.y = m_pSpongebobMesh->GetTransform()->GetPosition().y + 100;
+	sceneContext.pLights->GetDirectionalLight().position.z = m_pSpongebobMesh->GetTransform()->GetPosition().z - 50;
 
 	//used manual position adjustement instead of childing mesh to parent, 
 	//because the mesh always pointed to the camera when it was a child of the characterComponent
 
 	auto pos = m_pCharacter->GetTransform()->GetPosition();
-	pos.y -= 6.2f; //offset to put spongebob on same height as capsule
+	pos.y -= 6.4f; //offset to put spongebob on same height as capsule
 	m_pSpongebobMesh->GetTransform()->Translate(pos);
+
+	if(abs(m_pCharacter->GetVelocity().x) > 0 || abs(m_pCharacter->GetVelocity().z) > 0)
+	{
+		//Update Rotation if not standing still
+		auto rot = std::atan2f(m_pCharacter->GetVelocity().z, -m_pCharacter->GetVelocity().x) * float(180 / M_PI) + 90;
+		m_pSpongebobMesh->GetTransform()->Rotate(0, rot, 0);
+	}
 
 	UpdateAnimations();
 	UpdateSounds();
@@ -184,7 +191,7 @@ void Spongebob::UpdateAnimations()
 
 void Spongebob::UpdateSounds()
 {
-	if (abs(m_pCharacter->GetVelocity().x) > 0 || abs(m_pCharacter->GetVelocity().z) > 0)
+	/*if (abs(m_pCharacter->GetVelocity().x) > 0 || abs(m_pCharacter->GetVelocity().z) > 0)
 	{
 		auto rot = std::atan2f(m_pCharacter->GetVelocity().z, -m_pCharacter->GetVelocity().x) * float(180 / M_PI) + 90;
 		m_pSpongebobMesh->GetTransform()->Rotate(0, rot, 0);
@@ -204,6 +211,17 @@ void Spongebob::UpdateSounds()
 		}
 	}
 	else if (m_IsSoundPlaying)
+	{
+		m_pSoundChannel->setPaused(true);
+		m_IsSoundPlaying = false;
+	}*/
+
+	if(m_AnimationClipId == 3)
+	{
+		m_pSoundChannel->setPaused(false);
+		m_IsSoundPlaying = true;
+	}
+	else
 	{
 		m_pSoundChannel->setPaused(true);
 		m_IsSoundPlaying = false;

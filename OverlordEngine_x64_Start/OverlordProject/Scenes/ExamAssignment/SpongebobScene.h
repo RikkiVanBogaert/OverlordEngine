@@ -60,11 +60,12 @@ private:
 		Playing,
 		Paused
 	};
-	void UpdateGameState();
 	void CheckDeletedObjects();
 	void CreateLevel();
 	void CreateObjects();
 	void CreateItems();
+
+	void ReadCreatedFile(ModelComponent* levelMesh);
 
 	struct MaterialInfo
 	{

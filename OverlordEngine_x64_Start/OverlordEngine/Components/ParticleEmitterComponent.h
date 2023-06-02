@@ -45,6 +45,10 @@ public:
 	ParticleEmitterSettings& GetSettings() { return m_EmitterSettings; }; //EmitterSettings Getter (by reference) > allows settings changes
 	void DrawImGui();
 
+	//Other
+	void StopSpawningParticles(bool stopUpdating) { m_StopSpawningParticles = stopUpdating; }
+	void SetActive(bool isActive) { m_IsActive = isActive; }
+
 protected:
 	void Initialize(const SceneContext&) override;
 	void Update(const SceneContext&) override;
@@ -69,5 +73,9 @@ private:
 	std::wstring m_AssetFile{};
 
 	bool m_DrawImGui{ false };
+
+	//Other
+	bool m_StopSpawningParticles{};
+	bool m_IsActive{};
 };
 

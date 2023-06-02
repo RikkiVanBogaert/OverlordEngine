@@ -85,14 +85,6 @@ void SpongebobScene::Initialize()
 	fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
 	m_pChannel->setVolume(.4f);
 	m_pChannel->setPaused(true);
-
-
-
-	//TEST
-	/*auto pBubbles = new BubbleParticles();
-	pBubbles->GetTransform()->Translate(320.858f, 47.2426f, -865.813f);
-	AddChild(pBubbles);*/
-
 }
 
 void SpongebobScene::OnGUI()
@@ -149,24 +141,37 @@ void SpongebobScene::CreateLevel()
 	pGroundMaterial->SetDiffuseTexture(L"Textures/GroundBrick.jpg");
 	pLevelMesh->SetMaterial(pGroundMaterial);
 
-	auto path = ContentManager::GetFullAssetPath(L"Exam/Meshes/jellyfishfields.obj");
-	auto objInfo = ParseOBJFile(path.string());
+	//USED THIS TO GET THE INFO, THEN WROTE IT TO A FILE FOR QUICK ACCESS AND FOR CHANGING WRONG TEXTURES
+	//auto path = ContentManager::GetFullAssetPath(L"Exam/Meshes/jellyfishfields.obj");
+	//auto objInfo = ParseOBJFile(path.string());
+	//path = ContentManager::GetFullAssetPath(L"Exam/Textures/Level/jellyfishfields.mtl");
+	//auto mtlInfo = mtlParser(path.string());
+	//std::ofstream outFile("texture_names.txt"); // Open the file for writing
+	//if (outFile.is_open())
+	//{
+	//	for (auto m : mtlInfo)
+	//	{
+	//		auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
+	//		for (int i{}; i < objInfo.size(); ++i)
+	//		{
+	//			if (objInfo[i].name == m.meshName)
+	//			{
+	//				pMat->SetDiffuseTexture(L"Exam/Textures/Level/" + ConvertToWideString(m.textureName));
+	//				pLevelMesh->SetMaterial(pMat, UINT8(i));
+	//				std::cout << "Setting texture: " << m.textureName << " to mesh: " << i << '\n';
+	//				outFile << i << ": " << m.textureName << '\n'; // Write the textureName to the file
+	//			}
+	//		}
+	//	}
+	//	outFile.close(); // Close the file after writing
+	//}
+	//else
+	//{
+	//	std::cout << "Failed to open the file for writing.\n";
+	//}
 
-	path = ContentManager::GetFullAssetPath(L"Exam/Textures/Level/jellyfishfields.mtl");
-	auto mtlInfo = mtlParser(path.string());
-	for(auto m : mtlInfo)
-	{
-		auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
-		for(int i{}; i < objInfo.size(); ++i)
-		{
-			if(objInfo[i].name == m.meshName)
-			{
-				pMat->SetDiffuseTexture(L"Exam/Textures/Level/" + ConvertToWideString(m.textureName));
-				pLevelMesh->SetMaterial(pMat, UINT8(i));
-				std::cout << "Setting texture: " << m.textureName << " to mesh: " << objInfo[i].name << '\n';
-			}
-		}
-	}
+	ReadCreatedFile(pLevelMesh);
+
 
 	//Skybox
 	const auto pSkybox = AddChild(new GameObject());
@@ -239,6 +244,45 @@ void SpongebobScene::CreateItems()
 	}
 }
 
+void SpongebobScene::ReadCreatedFile(ModelComponent* levelMesh)
+{
+	std::ifstream inputFile("texture_names.txt"); // Replace "filename.txt" with the actual name of your file
+
+	if (inputFile.is_open())
+	{
+		std::vector<int> numbers;
+		std::vector<std::string> strings;
+
+		std::string line;
+		while (std::getline(inputFile, line)) {
+			size_t colonPos = line.find(' ');
+			if (colonPos != std::string::npos) {
+				int number = std::stoi(line.substr(0, colonPos));
+				std::string str = line.substr(colonPos + 1);
+				numbers.push_back(number);
+				strings.push_back(str);
+			}
+		}
+
+		inputFile.close();
+
+		// Access the numbers and strings as per your requirements
+		for (size_t i = 0; i < numbers.size(); ++i) 
+		{
+			int number = numbers[i];
+			std::string str = strings[i];
+			std::cout << "Number: " << number << ", String: " << str << std::endl;
+
+			auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
+			pMat->SetDiffuseTexture(L"Exam/Textures/Level/" + ConvertToWideString(str));
+			levelMesh->SetMaterial(pMat, UINT8(number));
+		}
+	}
+	else {
+		std::cerr << "Failed to open the file." << std::endl;
+	}
+}
+
 void SpongebobScene::SetPaused(bool isPaused)
 {
 	//pause/unpause music
@@ -253,7 +297,9 @@ void SpongebobScene::ReloadScene(bool pauseMusic)
 	//Deactivate scene
 	for (auto c : GetChildren())
 	{
-		if (typeid(c) == typeid(Spatula*) || typeid(c) == typeid(Tiki*))
+		if (dynamic_cast<Tiki*>(c) ||
+			dynamic_cast<Spatula*>(c) ||
+			c->GetComponent<ParticleEmitterComponent>())
 		{
 			RemoveChild(c, true);
 		}

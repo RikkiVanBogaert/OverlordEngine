@@ -77,6 +77,7 @@ VS_OUTPUT VS(VS_INPUT input)
 	// Transform the vertex position into clip space
 	output.pos = mul(float4(input.pos, 1.0f), gWorldViewProj);
 
+	output.normal = mul(input.normal, (float3x3)gWorld);
 	// Project the vertex position into light clip space
 	output.lPos = mul(float4(input.pos, 1.0f), gWorldViewProj_Light);
 
@@ -106,7 +107,7 @@ float EvaluateShadowMap(float4 lpos)
 	// Results in hard light frustum
 	if (lpos.x < -1.0f || lpos.x > 1.0f ||
 		lpos.y < -1.0f || lpos.y > 1.0f ||
-		lpos.z < 0.0f || lpos.z > 1.0f) return 1.0f;
+		lpos.z < 0.0f || lpos.z > 1.0f) return 0.5f;
 
 	// Transform clip space coords to texture space coords (-1:1 to 0:1)
 	lpos.x = lpos.x / 2.0f + 0.5f;
@@ -148,9 +149,12 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
 	
 	//HalfLambert Diffuse :)
 	float diffuseStrength = dot(input.normal, -gLightDirection);
-	diffuseStrength = diffuseStrength * 0.5 + 0.5;
 	diffuseStrength = saturate(diffuseStrength);
+	if (diffuseStrength < 0.5f) diffuseStrength = 0.5f;
 	color_rgb = color_rgb * diffuseStrength;
+
+	if (color_a < 1.f)
+		discard;
 
 	return float4( color_rgb * shadowValue , color_a );
 }

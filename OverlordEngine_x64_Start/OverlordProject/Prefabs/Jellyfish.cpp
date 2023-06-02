@@ -40,6 +40,15 @@ void Jellyfish::Initialize(const SceneContext&)
 		{
 			auto sponge = dynamic_cast<Character*>(other);
 			sponge->SetVelocity({0, 300, 0});
+
+			FMOD::Sound* m_pSound{};
+			FMOD::Channel* m_pChannel{};
+			auto soundManager = SoundManager::Get();
+			auto path = ContentManager::GetFullAssetPath(L"Exam/Boing.mp3").string().c_str();
+			soundManager->GetSystem()->createSound(path,
+				FMOD_DEFAULT, nullptr, &m_pSound);
+			FMOD::System* fmodSystem = soundManager->GetSystem();
+			fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
 		}
 
 	};
