@@ -85,7 +85,13 @@ void SpongebobScene::Initialize()
 	fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
 	m_pChannel->setVolume(.4f);
 	m_pChannel->setPaused(true);
-	//LIGHTS
+
+
+
+	//TEST
+	/*auto pBubbles = new BubbleParticles();
+	pBubbles->GetTransform()->Translate(320.858f, 47.2426f, -865.813f);
+	AddChild(pBubbles);*/
 
 }
 

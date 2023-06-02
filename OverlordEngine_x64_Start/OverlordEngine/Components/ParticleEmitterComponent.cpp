@@ -78,6 +78,7 @@ void ParticleEmitterComponent::Update(const SceneContext& sceneContext)
 		if (!particle.isActive && m_LastParticleInit >= particleInterval)
 		{
 			SpawnParticle(particle);
+			m_LastParticleInit = 0.f;
 		}
 
 		if (particle.isActive)

@@ -65,7 +65,7 @@ VS_DATA MainVS(VS_DATA input)
 void CreateVertex(inout TriangleStream<GS_DATA> triStream, float3 pos, float2 texCoord, float4 col, float2x2 uvRotation)
 {
 	// Step 1. Create a GS_DATA object
-	GS_DATA gsData;
+	GS_DATA gsData = (GS_DATA)0;
 
 	// Step 2. Transform the position using the WVP Matrix and assign it to (GS_DATA object).Position (Keep in mind: float3 -> float4, Homogeneous Coordinates)
 	float4 position = float4(pos, 1.0f);
@@ -73,11 +73,7 @@ void CreateVertex(inout TriangleStream<GS_DATA> triStream, float3 pos, float2 te
 	gsData.Position = position;
 
 	// Step 3. Assign texCoord to (GS_DATA object).TexCoord
-	// This is a little formula to do texture rotation by transforming the texture coordinates (Can cause artifacts)
-	float2 rotatedTexCoord = texCoord - float2(0.5f, 0.5f);
-	rotatedTexCoord = mul(rotatedTexCoord, uvRotation);
-	rotatedTexCoord += float2(0.5f, 0.5f);
-	gsData.TexCoord = rotatedTexCoord;
+	gsData.TexCoord = texCoord;
 
 	// Step 4. Assign color to (GS_DATA object).Color
 	gsData.Color = col;

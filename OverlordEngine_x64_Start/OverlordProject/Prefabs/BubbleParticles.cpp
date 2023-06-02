@@ -18,7 +18,7 @@ m_Timer(0)
 	settings.maxEmitterRadius = 15.f;
 	settings.color = { 1.f,1.f,1.f, .6f };
 
-	AddComponent(new ParticleEmitterComponent(L"Textures/Bubble.png", settings, 40));
+	AddComponent(new ParticleEmitterComponent(L"Textures/Bubble.png", settings, 50));
 }
 
 void BubbleParticles::Update(const SceneContext& scene_context)
