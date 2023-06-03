@@ -39,7 +39,7 @@ void ExitGate::Initialize(const SceneContext&)
 		if (other->GetTag() != L"Player") return;
 
 		auto pSponge = dynamic_cast<Spongebob*>(other->GetParent());
-		if(pSponge->GetHUD()->GetAmountSpatulas() >= 3)
+		//if(pSponge->GetHUD()->GetAmountSpatulas() >= 3)
 		{
 			if (action == PxTriggerAction::ENTER)
 			{

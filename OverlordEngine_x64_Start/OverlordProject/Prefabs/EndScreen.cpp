@@ -21,12 +21,12 @@ void EndScreen::Initialize(const SceneContext&)
 	pEndObj->GetTransform()->Scale(.5f);
 
 	auto pResumeObj = new GameObject();
-	m_pResumeSprite = new SpriteComponent(L"Exam/HUD/MainMenuButton.png");
-	pResumeObj->AddComponent<SpriteComponent>(m_pResumeSprite);
+	m_pMainMenuButton = new SpriteComponent(L"Exam/HUD/MainMenuButton.png");
+	pResumeObj->AddComponent<SpriteComponent>(m_pMainMenuButton);
 	AddChild(pResumeObj);
 	pResumeObj->GetTransform()->Translate(220, yPos, 0);
 	pResumeObj->GetTransform()->Scale(scale);
-	m_Buttons.emplace_back(m_pResumeSprite);
+	m_Buttons.emplace_back(m_pMainMenuButton);
 
 	auto pRestartObj = new GameObject();
 	m_pRestartSprite = new SpriteComponent(L"Exam/HUD/RestartButton.png");
@@ -44,8 +44,16 @@ void EndScreen::Initialize(const SceneContext&)
 
 void EndScreen::Update(const SceneContext& sceneContext)
 {
-	HoverOverButton(sceneContext);
-	CheckActiveButton();
+	if (sceneContext.pInput->GetMouseMovement().x != 0 || sceneContext.pInput->GetMouseMovement().y != 0)
+	{
+		HoverOverButton(sceneContext);
+	}
+	else
+	{
+		CheckControllerInput(sceneContext);
+	}
+
+	CheckActiveButton(sceneContext);
 }
 
 bool EndScreen::MouseInRect(const SceneContext& sceneContext, const XMFLOAT2& pos, const XMFLOAT2& size) const
@@ -82,13 +90,39 @@ void EndScreen::HoverOverButton(const SceneContext& sceneContext)
 	m_pActiveButton = nullptr;
 }
 
-void EndScreen::CheckActiveButton()
+void EndScreen::CheckControllerInput(const SceneContext& sceneContext)
+{
+	if (sceneContext.pInput->IsGamepadButton(InputState::released, XINPUT_GAMEPAD_DPAD_RIGHT) ||
+		sceneContext.pInput->IsGamepadButton(InputState::released, XINPUT_GAMEPAD_DPAD_LEFT))
+	{
+		if (!m_pActiveButton)
+		{
+			m_pActiveButton = m_pMainMenuButton;
+			m_pMainMenuButton->GetTransform()->Scale(.5f);
+		}
+		else if (m_pActiveButton == m_pMainMenuButton)
+		{
+			m_pActiveButton = m_pRestartSprite;
+			m_pMainMenuButton->GetTransform()->Scale(.4f);
+			m_pRestartSprite->GetTransform()->Scale(.5f);
+		}
+		else if (m_pActiveButton == m_pRestartSprite)
+		{
+			m_pActiveButton = m_pMainMenuButton;
+			m_pRestartSprite->GetTransform()->Scale(.4f);
+			m_pMainMenuButton->GetTransform()->Scale(.5f);
+		}
+	}
+}
+
+void EndScreen::CheckActiveButton(const SceneContext& sceneContext)
 {
 	if (!m_pActiveButton) return;
 
-	if (!InputManager::IsMouseButton(InputState::released, 1)) return;
+	if (!InputManager::IsMouseButton(InputState::released, 1) &&
+		!sceneContext.pInput->IsGamepadButton(InputState::released, XINPUT_GAMEPAD_A)) return;
 
-	if (m_pActiveButton == m_pResumeSprite)
+	if (m_pActiveButton == m_pMainMenuButton)
 	{
 		auto pSpongebobScene = dynamic_cast<SpongebobScene*>(GetScene());
 		pSpongebobScene->ReloadScene(true);
