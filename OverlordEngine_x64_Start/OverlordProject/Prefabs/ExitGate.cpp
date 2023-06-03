@@ -3,17 +3,17 @@
 
 #include "BubbleParticles.h"
 #include "Materials/DiffuseMaterial.h"
-#include "SpherePrefab.h"
 #include "Character.h"
 #include "HUDPrefab.h"
 #include "Pickup.h"
 #include "Spongebob.h"
 #include "EndScreen.h"
+#include "Materials/Deferred/BasicMaterial_Deferred.h"
 
 void ExitGate::Initialize(const SceneContext&)
 {
-	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	pMat->SetDiffuseTexture(L"Exam/Textures/Gate.png");
+	auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
+	pMat->SetDiffuseMap(L"Exam/Textures/Gate.png");
 
 	constexpr float size{ 8 };
 

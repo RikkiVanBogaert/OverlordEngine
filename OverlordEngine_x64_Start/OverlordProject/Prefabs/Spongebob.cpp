@@ -43,7 +43,7 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	characterDesc.maxFallSpeed = 70.f;
 	characterDesc.JumpSpeed = 80.f;
 
-	m_pCharacter = AddChild(new Character(characterDesc, { 0, 0, -50 }));
+	m_pCharacter = AddChild(new Character(characterDesc, { 0, 6, -50 }));
 	m_pCharacter->SetTag(L"Player");
 
 
@@ -92,18 +92,14 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	inputAction = InputAction(CharacterMoveBackward, InputState::down, 'S');
 	sceneContext.pInput->AddInputAction(inputAction);
 
-	inputAction = InputAction(Attack, InputState::down, 'E');
+	inputAction = InputAction(Attack, InputState::down, 'E', -1, XINPUT_GAMEPAD_X);
 	sceneContext.pInput->AddInputAction(inputAction);
 
-	inputAction = InputAction(CharacterJump, InputState::pressed, VK_SPACE /*, -1, XINPUT_GAMEPAD_A*/);
+	inputAction = InputAction(CharacterJump, InputState::pressed, VK_SPACE , -1, XINPUT_GAMEPAD_A);
 	sceneContext.pInput->AddInputAction(inputAction);
 
-	inputAction = InputAction(Pause, InputState::pressed, 'P');
+	inputAction = InputAction(Pause, InputState::pressed, 'P', -1, XINPUT_GAMEPAD_START);
 	sceneContext.pInput->AddInputAction(inputAction);
-
-	////Light
-	sceneContext.pLights->SetDirectionalLight({ -5.6139526f,5.1346436f,-4.1850471f },
-		{ 0.740129888f, -0.597205281f, 0.309117377f });
 
 
 	//Sound
@@ -111,7 +107,7 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	auto soundManager = SoundManager::Get();
 	auto path = ContentManager::GetFullAssetPath(L"Exam/WalkingSound.mp3").string().c_str();
 	soundManager->GetSystem()->createSound(path, 
-		FMOD_DEFAULT, nullptr, &m_pWalkSound);
+		FMOD_LOOP_NORMAL | FMOD_DEFAULT, nullptr, &m_pWalkSound);
 
 	soundManager->GetSystem()->playSound(m_pWalkSound, nullptr, false, &m_pSoundChannel);
 	m_pSoundChannel->setPaused(true);
@@ -125,18 +121,10 @@ void Spongebob::Update(const SceneContext& sceneContext)
 	if (m_IsPaused) return;
 
 	////Light
-	sceneContext.pLights->GetDirectionalLight().position.x = m_pSpongebobMesh->GetTransform()->GetPosition().x - 50;
-	sceneContext.pLights->GetDirectionalLight().position.y = m_pSpongebobMesh->GetTransform()->GetPosition().y + 100;
-	sceneContext.pLights->GetDirectionalLight().position.z = m_pSpongebobMesh->GetTransform()->GetPosition().z - 50;
-	//Spotlight
-	//auto meshPos = m_pSpongebobMesh->GetTransform()->GetPosition();
-	//XMFLOAT4 pos{};
-	//pos.x = meshPos.x - 10;
-	//pos.y = meshPos.y + 30;
-	//pos.z = meshPos.z - 80;
-	//pos.w = 1.0f;
-	//sceneContext.pLights->GetLight(0).position = pos;
-
+	auto meshPos = m_pSpongebobMesh->GetTransform()->GetPosition();
+	sceneContext.pLights->GetDirectionalLight().position.x = meshPos.x - 20;
+	sceneContext.pLights->GetDirectionalLight().position.y = meshPos.y + 30;
+	sceneContext.pLights->GetDirectionalLight().position.z = meshPos.z;
 
 	//used manual position adjustement instead of childing mesh to parent, 
 	//because the mesh always pointed to the camera when it was a child of the characterComponent

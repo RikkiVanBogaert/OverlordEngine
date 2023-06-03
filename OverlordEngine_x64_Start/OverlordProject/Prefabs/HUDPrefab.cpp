@@ -15,10 +15,13 @@ void HUDPrefab::Initialize(const SceneContext& sceneContext)
 	spriteObj->GetTransform()->Translate(m_SpatulaPos.x, 0, 0);
 
 	m_pFont = ContentManager::Load<SpriteFont>(L"SpriteFonts/Consolas_32.fnt");
-
 }
 
 void HUDPrefab::Update(const SceneContext&)
+{
+}
+
+void HUDPrefab::Draw(const SceneContext&)
 {
 	const XMFLOAT2 spatTextPos = { m_SpatulaPos.x + spriteCp->GetDimensions().x * spriteCp->GetTransform()->GetScale().x,
 		m_SpatulaPos.y + spriteCp->GetDimensions().y * spriteCp->GetTransform()->GetScale().y / 2 - 10 };

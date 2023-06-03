@@ -2,9 +2,9 @@
 #include "stdafx.h"
 #include "MinionScene.h"
 
-#include "Prefabs/CubePrefab.h"
-#include "Prefabs/SpherePrefab.h"
-#include "Prefabs/TorusPrefab.h"
+#include "Prefabs/EnginePrefabs/CubePrefab.h"
+#include "Prefabs/EnginePrefabs/SpherePrefab.h"
+#include "Prefabs/EnginePrefabs/TorusPrefab.h"
 
 
 MinionScene::MinionScene() :

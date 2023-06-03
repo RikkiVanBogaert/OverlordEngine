@@ -15,7 +15,6 @@
 
 #include "Helpers.h"
 #include "Prefabs/HUDPrefab.h"
-#include "Prefabs/UIElement.h"
 
 #include <iostream>
 #include <fstream>
@@ -75,14 +74,14 @@ void SpongebobScene::Initialize()
 	sponge->SetControllerPosition(m_StartPos);
 
 	//PostProcessing
-	//auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
-	//AddPostProcessingEffect(m_pPostEffect);
+	auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
+	AddPostProcessingEffect(m_pPostEffect);
 
 	//Music
 	auto soundManager = SoundManager::Get();
 	auto path = ContentManager::GetFullAssetPath(L"Exam/LevelMusic.mp3").string().c_str();
 	soundManager->GetSystem()->createSound(path,
-		FMOD_DEFAULT, nullptr, &m_pSound);
+		FMOD_LOOP_NORMAL | FMOD_DEFAULT, nullptr, &m_pSound);
 	FMOD::System* fmodSystem = SoundManager::Get()->GetSystem();
 	fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
 	m_pChannel->setVolume(.4f);
@@ -91,6 +90,20 @@ void SpongebobScene::Initialize()
 	//Lights
 	auto& dirLight = m_SceneContext.pLights->GetDirectionalLight();
 	dirLight.isEnabled = true;
+
+	dirLight.position = { -5.6139526f,5.1346436f,-4.1850471f, 1.f };
+	dirLight.direction = { 0.740129888f, -0.597205281f, 0.309117377f, 0.f };
+
+
+	//Point Light
+	Light light = {};
+	light.isEnabled = true;
+	light.position = { 0.f,700.f,0.f,1.0f };
+	light.color = { 0.f,0.f,0.6f,1.f };
+	light.intensity = 0.5f;
+	light.range = 5000.0f;
+	light.type = LightType::Point;
+	m_SceneContext.pLights->AddLight(light);
 }
 
 void SpongebobScene::OnGUI()
@@ -143,9 +156,9 @@ void SpongebobScene::CreateLevel()
 
 	pLevelObject->GetTransform()->Scale(levelScale);
 
-	const auto pGroundMaterial = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
+	/*const auto pGroundMaterial = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
 	pGroundMaterial->SetDiffuseTexture(L"Textures/GroundBrick.jpg");
-	pLevelMesh->SetMaterial(pGroundMaterial);
+	pLevelMesh->SetMaterial(pGroundMaterial);*/
 
 	//USED THIS TO GET THE INFO, THEN WROTE IT TO A FILE FOR QUICK ACCESS AND FOR CHANGING WRONG TEXTURES
 	//auto path = ContentManager::GetFullAssetPath(L"Exam/Meshes/jellyfishfields.obj");
@@ -252,7 +265,8 @@ void SpongebobScene::CreateItems()
 
 void SpongebobScene::ReadCreatedTextureFile(ModelComponent* levelMesh)
 {
-	std::ifstream inputFile("texture_names.txt"); // Put in diff location
+	auto path = ContentManager::GetFullAssetPath(L"Exam/texture_names.txt").string();
+	std::ifstream inputFile(path);
 
 	if (inputFile.is_open())
 	{
@@ -274,15 +288,15 @@ void SpongebobScene::ReadCreatedTextureFile(ModelComponent* levelMesh)
 
 		inputFile.close();
 
-		// Access the numbers and strings as per your requirements
+		// Access the numbers and strings
 		for (size_t i = 0; i < numbers.size(); ++i) 
 		{
 			int number = numbers[i];
 			std::string str = strings[i];
 			std::cout << "Number: " << number << ", String: " << str << std::endl;
 
-			const auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
-			pMat->SetDiffuseTexture(L"Exam/Textures/Level/" + ConvertToWideString(str));
+			const auto pMat = MaterialManager::Get()->CreateMaterial<ShadowMaterial_Deferred>();
+			pMat->SetDiffuseMap(L"Exam/Textures/Level/" + ConvertToWideString(str));
 			levelMesh->SetMaterial(pMat, UINT8(number));
 		}
 	}

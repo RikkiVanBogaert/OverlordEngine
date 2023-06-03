@@ -3,12 +3,13 @@
 
 #include "Character.h"
 #include "Materials/DiffuseMaterial.h"
+#include "Materials/Deferred/BasicMaterial_Deferred.h"
 
 
 void Hans::Initialize(const SceneContext&)
 {
-	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	pMat->SetDiffuseTexture(L"Exam/Textures/hans.png");
+	auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
+	pMat->SetDiffuseMap(L"Exam/Textures/hans.png");
 
 	constexpr float size{ 25 };
 

@@ -50,8 +50,6 @@ PS_INPUT VS(VS_INPUT input)
 
 // PIXEL SHADER
 // ------------
-// PIXEL SHADER
-// ------------
 float4 PS(PS_INPUT input) : SV_Target
 {
     // Step 1: Sample the texture
@@ -72,14 +70,12 @@ float4 PS(PS_INPUT input) : SV_Target
     float4 averageColor = (center + top + bottom + left + right) / 5.0f;
 
     // Step 4: Adjust the blending factor
-    float blendingFactor = 0.3f; // Adjust this value to control the blending strength
+    float blendingFactor = .5f; // Adjust this value to control the blending strength
 
     // Step 5: Blend the average color with the original texture color
     float4 finalColor = lerp(center, averageColor, blendingFactor);
 
     return finalColor;
-
-    return averageColor;
 }
 
 

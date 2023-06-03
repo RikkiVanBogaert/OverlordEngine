@@ -3,7 +3,7 @@
 #include "SoftwareSkinningScene_3.h"
 
 #include "Materials/ColorMaterial.h"
-#include "Prefabs/BoneObject.h"
+#include "Prefabs/EnginePrefabs/BoneObject.h"
 
 SoftwareSkinningScene_3::SoftwareSkinningScene_3() :
 	GameScene(L"SoftwareSkinningScene_2") {}

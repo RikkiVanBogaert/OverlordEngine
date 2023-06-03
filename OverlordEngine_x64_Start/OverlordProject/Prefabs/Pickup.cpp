@@ -5,11 +5,12 @@
 #include "HUDPrefab.h"
 #include "Spongebob.h"
 #include "Materials/DiffuseMaterial.h"
+#include "Materials/Deferred/BasicMaterial_Deferred.h"
 
 void Spatula::Initialize(const SceneContext&)
 {
-	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	pMat->SetDiffuseTexture(L"Exam/Textures/spatula_golden.png");
+	auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
+	pMat->SetDiffuseMap(L"Exam/Textures/spatula_golden.png");
 
 	auto pModelObject = new GameObject();
 	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/Spatula.ovm");

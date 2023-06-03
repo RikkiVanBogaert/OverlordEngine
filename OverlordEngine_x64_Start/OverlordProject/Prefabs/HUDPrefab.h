@@ -12,6 +12,7 @@ public:
 	HUDPrefab& operator=(HUDPrefab&& other) noexcept = delete;
 
 	void Update(const SceneContext&) override;
+	void Draw(const SceneContext&) override;
 
 	int GetAmountSpatulas() const { return m_SpatulaAmount; }
 	void SetAmountSpatulas(int amount);

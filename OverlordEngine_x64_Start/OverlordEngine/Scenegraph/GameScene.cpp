@@ -182,9 +182,9 @@ void GameScene::RootDraw()
 	{
 		pChild->RootDraw(m_SceneContext);
 	}
-
 	//DEFERRED END
 	DeferredRenderer::Get()->End(m_SceneContext);
+
 
 	//Object-Scene Post-Draw
 	PostDraw();

@@ -3,13 +3,14 @@
 
 #include "Character.h"
 #include "Materials/DiffuseMaterial.h"
+#include "Materials/Deferred/BasicMaterial_Deferred.h"
 #include "Prefabs/Spongebob.h"
 
 
 void Jellyfish::Initialize(const SceneContext&)
 {
-	auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial>();
-	pMat->SetDiffuseTexture(L"Exam/Textures/jellyfish_pink.RW3.png");
+	auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
+	pMat->SetDiffuseMap(L"Exam/Textures/jellyfish_pink.RW3.png");
 
 	constexpr float size{ 40 };
 

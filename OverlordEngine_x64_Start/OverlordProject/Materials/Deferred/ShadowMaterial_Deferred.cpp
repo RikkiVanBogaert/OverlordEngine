@@ -2,7 +2,7 @@
 #include "ShadowMaterial_Deferred.h"
 
 ShadowMaterial_Deferred::ShadowMaterial_Deferred() :
-	Material(L"Effects/Deferred/BasicEffect_Deferred.fx")
+	Material(L"Effects/Deferred/Shadow_Deferred.fx")
 {
 }
 
@@ -49,13 +49,11 @@ void ShadowMaterial_Deferred::UseTransparency(bool /*enable*/)
 void ShadowMaterial_Deferred::InitializeEffectVariables()
 {
 	//For SpongebobScene----
-	SetVariable_Scalar(L"gShininess", 85.f);
+	SetVariable_Scalar(L"gShininess", 100.f);
 }
 
 void ShadowMaterial_Deferred::OnUpdateModelVariables(const SceneContext& sceneContext, const ModelComponent* pModel) const
 {
-	SetVariable_Vector(L"gLightDirection", sceneContext.pLights->GetDirectionalLight().direction);
-
 	XMMATRIX lightWVPmatrix = (XMLoadFloat4x4(&pModel->GetGameObject()->GetTransform()->GetWorld()) *
 		XMLoadFloat4x4(&ShadowMapRenderer::Get()->GetLightVP()));
 	XMFLOAT4X4 lightWVP{};

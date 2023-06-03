@@ -4,7 +4,6 @@
 #include "SpongebobScene.h"
 #include "Materials/ColorMaterial.h"
 #include "Materials/DiffuseMaterial.h"
-#include "Prefabs/UIElement.h"
 
 
 MainMenuScene::~MainMenuScene()
@@ -60,13 +59,21 @@ void MainMenuScene::Initialize()
 
 void MainMenuScene::Update()
 {
-	HoverOverButton(m_SceneContext);
+	if(m_SceneContext.pInput->GetMouseMovement().x != 0 || m_SceneContext.pInput->GetMouseMovement().y != 0)
+	{
+		HoverOverButton();
+	}
+	else
+	{
+		CheckControllerInput();
+	}
+
 	CheckActiveButton();
 }
 
-bool MainMenuScene::MouseInRect(const SceneContext& sceneContext, const XMFLOAT2& pos, const XMFLOAT2& size) const
+bool MainMenuScene::MouseInRect(const XMFLOAT2& pos, const XMFLOAT2& size) const
 {
-	auto mousePos = sceneContext.pInput->GetMousePosition();
+	auto mousePos = m_SceneContext.pInput->GetMousePosition();
 
 	if (mousePos.x > pos.x && mousePos.x < pos.x + size.x
 		&& mousePos.y > pos.y && mousePos.y < pos.y + size.y)
@@ -77,14 +84,14 @@ bool MainMenuScene::MouseInRect(const SceneContext& sceneContext, const XMFLOAT2
 	return false;
 }
 
-void MainMenuScene::HoverOverButton(const SceneContext& sceneContext)
+void MainMenuScene::HoverOverButton()
 {
 	for (auto b : m_Buttons)
 	{
 		const XMFLOAT2 pos{ b->GetTransform()->GetPosition().x, b->GetTransform()->GetPosition().y };
 		const XMFLOAT2 size{ b->GetDimensions().x * b->GetTransform()->GetScale().x,
 			b->GetDimensions().y * b->GetTransform()->GetScale().y };
-		if (MouseInRect(sceneContext, pos, size))
+		if (MouseInRect( pos, size))
 		{
 			b->GetTransform()->Scale(.8f);
 			m_pActiveButton = b;
@@ -95,14 +102,41 @@ void MainMenuScene::HoverOverButton(const SceneContext& sceneContext)
 			b->GetTransform()->Scale(.7f);
 		}
 	}
+
 	m_pActiveButton = nullptr;
+}
+
+void MainMenuScene::CheckControllerInput()
+{
+	if(m_SceneContext.pInput->IsGamepadButton(InputState::released, XINPUT_GAMEPAD_DPAD_DOWN) ||
+		m_SceneContext.pInput->IsGamepadButton(InputState::released, XINPUT_GAMEPAD_DPAD_UP))
+	{
+		if(!m_pActiveButton)
+		{
+			m_pActiveButton = m_pPlaySprite;
+			m_pPlaySprite->GetTransform()->Scale(.8f);
+		}
+		else if (m_pActiveButton == m_pPlaySprite)
+		{
+			m_pActiveButton = m_pQuitSprite;
+			m_pPlaySprite->GetTransform()->Scale(.7f);
+			m_pQuitSprite->GetTransform()->Scale(.8f);
+		}
+		else if (m_pActiveButton == m_pQuitSprite)
+		{
+			m_pActiveButton = m_pPlaySprite;
+			m_pQuitSprite->GetTransform()->Scale(.7f);
+			m_pPlaySprite->GetTransform()->Scale(.8f);
+		}
+	}
 }
 
 void MainMenuScene::CheckActiveButton()
 {
 	if (!m_pActiveButton) return;
 
-	if (!InputManager::IsMouseButton(InputState::released, 1)) return;
+	if (!InputManager::IsMouseButton(InputState::released, 1) &&
+		!m_SceneContext.pInput->IsGamepadButton(InputState::released, XINPUT_GAMEPAD_A)) return;
 
 	if (m_pActiveButton == m_pPlaySprite)
 	{

@@ -24,7 +24,7 @@ void Character::Initialize(const SceneContext& /*sceneContext*/)
 	pCamera->GetTransform()->Translate(m_CameraOffset.x, m_CameraOffset.y, m_CameraOffset.z);
 }
 
-void Character::Update(const SceneContext& /*sceneContext*/)
+void Character::Update(const SceneContext& sceneContext)
 {
 	if (m_IsPaused) return;
 
@@ -38,6 +38,9 @@ void Character::Update(const SceneContext& /*sceneContext*/)
 		//## Input Gathering (move)
 		XMFLOAT2 move{}; //Uncomment
 		bool isMoving = false;
+
+		float stickX = sceneContext.pInput->GetThumbstickPosition(true).x;
+		float stickY = sceneContext.pInput->GetThumbstickPosition(true).y;
 		//move.y should contain a 1 (Forward) or -1 (Backward) based on the active input (check corresponding actionId in m_CharacterDesc)
 		if(GetScene()->GetSceneContext().pInput->IsActionTriggered(m_CharacterDesc.actionId_MoveForward))
 		{
@@ -47,6 +50,12 @@ void Character::Update(const SceneContext& /*sceneContext*/)
 		else if (GetScene()->GetSceneContext().pInput->IsActionTriggered(m_CharacterDesc.actionId_MoveBackward))
 		{
 			move.y = -1;
+			isMoving = true;
+		}
+		else if(move.y == 0 && stickY != 0)
+		{
+			if (stickY > 0) move.y = 1;
+			else if (stickY < 0) move.y = -1;
 			isMoving = true;
 		}
 		//Optional: if move.y is near zero (abs(move.y) < epsilon), you could use the ThumbStickPosition.y for movement
@@ -62,17 +71,35 @@ void Character::Update(const SceneContext& /*sceneContext*/)
 			move.x = -1;
 			isMoving = true;
 		}
+		else if (move.x == 0 && stickX != 0)
+		{
+			if (stickX > 0) move.x = 1;
+			else if (stickX < 0) move.x = -1;
+			isMoving = true;
+		}
 		//Optional: if move.x is near zero (abs(move.x) < epsilon), you could use the Left ThumbStickPosition.x for movement
 
 		//## Input Gathering (look)
 		XMFLOAT2 look{ 0.f, 0.f }; //Uncomment
 		//Only if the Left Mouse Button is Down >
 			// Store the MouseMovement in the local 'look' variable (cast is required)
+		stickX = sceneContext.pInput->GetThumbstickPosition(false).x;
+		stickY = sceneContext.pInput->GetThumbstickPosition(false).y;
+
 		if (InputManager::IsMouseButton(InputState::down, 1))
 		{
 			look.x = float(InputManager::GetMouseMovement().x);
+
 			look.y = float(InputManager::GetMouseMovement().y);
 		}
+		else if(stickX != 0 || stickY != 0)
+		{
+			const float rotationSpeedX = 3;
+			const float rotationSpeedY = 1.5f;
+			look.x += stickX * rotationSpeedX;
+			look.y -= stickY * rotationSpeedY;
+		}
+	
 		//Optional: in case look.x AND look.y are near zero, you could use the Right ThumbStickPosition for look
 
 		//************************
@@ -92,6 +119,11 @@ void Character::Update(const SceneContext& /*sceneContext*/)
 		//Make sure this calculated on a framerate independent way and uses CharacterDesc::rotationSpeed.
 		m_TotalYaw += m_CharacterDesc.rotationSpeed * elapsedTime * look.x;
 		m_TotalPitch += m_CharacterDesc.rotationSpeed * elapsedTime * look.y;
+
+		//clamp pitch
+		if (m_TotalPitch > 40) m_TotalPitch = 40;
+		if (m_TotalPitch < 0) m_TotalPitch = 0;
+
 		//Rotate this character based on the TotalPitch (X) and TotalYaw (Y)
 		GetTransform()->Rotate(m_TotalPitch, m_TotalYaw, 0);
 

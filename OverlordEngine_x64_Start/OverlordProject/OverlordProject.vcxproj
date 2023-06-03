@@ -110,16 +110,16 @@
     <ClCompile Include="Scenes\ExamAssignment\MainMenuScene.cpp" />
     <ClCompile Include="Materials\DiffuseMaterial_Skinned.cpp" />
     <ClCompile Include="Prefabs\Pickup.cpp" />
-    <ClCompile Include="Prefabs\BoneObject.cpp" />
+    <ClCompile Include="Prefabs\EnginePrefabs\BoneObject.cpp" />
     <ClCompile Include="Materials\DiffuseMaterial.cpp" />
     <ClCompile Include="Prefabs\Character.cpp" />
     <ClCompile Include="Scenes\Week 10\PostProcessingScene.cpp" />
     <ClCompile Include="Scenes\Week 11\DeferredRenderingScene.cpp" />
     <ClCompile Include="Scenes\Week 4\ModelTestScene.cpp" />
     <ClCompile Include="Scenes\Week 3\ComponentTestScene.cpp" />
-    <ClCompile Include="Prefabs\CubePrefab.cpp" />
-    <ClCompile Include="Prefabs\SpherePrefab.cpp" />
-    <ClCompile Include="Prefabs\TorusPrefab.cpp" />
+    <ClCompile Include="Prefabs\EnginePrefabs\CubePrefab.cpp" />
+    <ClCompile Include="Prefabs\EnginePrefabs\SpherePrefab.cpp" />
+    <ClCompile Include="Prefabs\EnginePrefabs\TorusPrefab.cpp" />
     <ClCompile Include="Materials\ColorMaterial.cpp" />
     <ClCompile Include="Scenes\Week 3\MinionScene.cpp" />
     <ClCompile Include="Materials\SpikyMaterial.cpp" />
@@ -159,7 +159,6 @@
     <ClCompile Include="Scenes\ExamAssignment\TestScene.cpp" />
     <ClCompile Include="Prefabs\Tiki.cpp" />
     <ClCompile Include="Prefabs\ThreeTikis.cpp" />
-    <ClCompile Include="Prefabs\UIElement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OverlordEngine\OverlordEngine.vcxproj">
@@ -185,16 +184,16 @@
     <ClInclude Include="Scenes\ExamAssignment\MainMenuScene.h" />
     <ClInclude Include="Materials\DiffuseMaterial_Skinned.h" />
     <ClInclude Include="Prefabs\Pickup.h" />
-    <ClInclude Include="Prefabs\BoneObject.h" />
+    <ClInclude Include="Prefabs\EnginePrefabs\BoneObject.h" />
     <ClInclude Include="Materials\DiffuseMaterial.h" />
     <ClInclude Include="Prefabs\Character.h" />
     <ClInclude Include="Scenes\Week 10\PostProcessingScene.h" />
     <ClInclude Include="Scenes\Week 11\DeferredRenderingScene.h" />
     <ClInclude Include="Scenes\Week 4\ModelTestScene.h" />
     <ClInclude Include="Scenes\Week 3\ComponentTestScene.h" />
-    <ClInclude Include="Prefabs\CubePrefab.h" />
-    <ClInclude Include="Prefabs\SpherePrefab.h" />
-    <ClInclude Include="Prefabs\TorusPrefab.h" />
+    <ClInclude Include="Prefabs\EnginePrefabs\CubePrefab.h" />
+    <ClInclude Include="Prefabs\EnginePrefabs\SpherePrefab.h" />
+    <ClInclude Include="Prefabs\EnginePrefabs\TorusPrefab.h" />
     <ClInclude Include="Materials\ColorMaterial.h" />
     <ClInclude Include="Scenes\Week 3\MinionScene.h" />
     <ClInclude Include="Materials\SpikyMaterial.h" />
@@ -221,7 +220,6 @@
     <ClInclude Include="Scenes\ExamAssignment\TestScene.h" />
     <ClInclude Include="Prefabs\Tiki.h" />
     <ClInclude Include="Prefabs\ThreeTikis.h" />
-    <ClInclude Include="Prefabs\UIElement.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

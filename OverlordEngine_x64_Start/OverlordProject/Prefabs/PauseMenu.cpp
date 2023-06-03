@@ -42,8 +42,16 @@ void PauseMenu::Initialize(const SceneContext& )
 
 void PauseMenu::Update(const SceneContext& sceneContext)
 {
-	HoverOverButton(sceneContext);
-	CheckActiveButton();
+	if (sceneContext.pInput->GetMouseMovement().x != 0 || sceneContext.pInput->GetMouseMovement().y != 0)
+	{
+		HoverOverButton(sceneContext);
+	}
+	else
+	{
+		CheckControllerInput(sceneContext);
+	}
+
+	CheckActiveButton(sceneContext);
 }
 
 bool PauseMenu::MouseInRect(const SceneContext& sceneContext, const XMFLOAT2& pos, const XMFLOAT2& size) const
@@ -80,11 +88,68 @@ void PauseMenu::HoverOverButton(const SceneContext& sceneContext)
 	m_pActiveButton = nullptr;
 }
 
-void PauseMenu::CheckActiveButton()
+void PauseMenu::CheckControllerInput(const SceneContext& sceneContext)
+{
+	if (sceneContext.pInput->IsGamepadButton(InputState::released, XINPUT_GAMEPAD_DPAD_RIGHT))
+	{
+		if (!m_pActiveButton)
+		{
+			m_pActiveButton = m_pResumeSprite;
+			m_pResumeSprite->GetTransform()->Scale(.5f);
+		}
+		else if (m_pActiveButton == m_pResumeSprite)
+		{
+			m_pActiveButton = m_pQuitSprite;
+			m_pResumeSprite->GetTransform()->Scale(.4f);
+			m_pQuitSprite->GetTransform()->Scale(.5f);
+		}
+		else if (m_pActiveButton == m_pQuitSprite)
+		{
+			m_pActiveButton = m_pRestartSprite;
+			m_pQuitSprite->GetTransform()->Scale(.4f);
+			m_pRestartSprite->GetTransform()->Scale(.5f);
+		}
+		else if (m_pActiveButton == m_pRestartSprite)
+		{
+			m_pActiveButton = m_pResumeSprite;
+			m_pRestartSprite->GetTransform()->Scale(.4f);
+			m_pResumeSprite->GetTransform()->Scale(.5f);
+		}
+	}
+	else if(sceneContext.pInput->IsGamepadButton(InputState::released, XINPUT_GAMEPAD_DPAD_LEFT))
+	{
+		if (!m_pActiveButton)
+		{
+			m_pActiveButton = m_pResumeSprite;
+			m_pResumeSprite->GetTransform()->Scale(.5f);
+		}
+		else if (m_pActiveButton == m_pResumeSprite)
+		{
+			m_pActiveButton = m_pRestartSprite;
+			m_pResumeSprite->GetTransform()->Scale(.4f);
+			m_pRestartSprite->GetTransform()->Scale(.5f);
+		}
+		else if (m_pActiveButton == m_pRestartSprite)
+		{
+			m_pActiveButton = m_pQuitSprite;
+			m_pRestartSprite->GetTransform()->Scale(.4f);
+			m_pQuitSprite->GetTransform()->Scale(.5f);
+		}
+		else if (m_pActiveButton == m_pQuitSprite)
+		{
+			m_pActiveButton = m_pResumeSprite;
+			m_pQuitSprite->GetTransform()->Scale(.4f);
+			m_pResumeSprite->GetTransform()->Scale(.5f);
+		}
+	}
+}
+
+void PauseMenu::CheckActiveButton(const SceneContext& sceneContext)
 {
 	if (!m_pActiveButton) return;
 
-	if (!InputManager::IsMouseButton(InputState::released, 1)) return;
+	if (!InputManager::IsMouseButton(InputState::released, 1) &&
+		!sceneContext.pInput->IsGamepadButton(InputState::released, XINPUT_GAMEPAD_A)) return;
 
 	if(m_pActiveButton == m_pResumeSprite)
 	{

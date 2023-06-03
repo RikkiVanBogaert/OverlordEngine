@@ -22,9 +22,10 @@ private:
 
 	std::vector<SpriteComponent*> m_Buttons;
 
-	void HoverOverButton(const SceneContext& sceneContext);
+	void HoverOverButton();
+	void CheckControllerInput();
 	void CheckActiveButton();
 
-	bool MouseInRect(const SceneContext& sceneContext, const XMFLOAT2& pos, const XMFLOAT2& size) const;
+	bool MouseInRect(const XMFLOAT2& pos, const XMFLOAT2& size) const;
 };
 

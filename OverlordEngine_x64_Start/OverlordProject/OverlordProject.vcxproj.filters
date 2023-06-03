@@ -6,9 +6,9 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Scenes\Week 3\MinionScene.cpp" />
     <ClCompile Include="Materials\ColorMaterial.cpp" />
-    <ClCompile Include="Prefabs\SpherePrefab.cpp" />
-    <ClCompile Include="Prefabs\TorusPrefab.cpp" />
-    <ClCompile Include="Prefabs\CubePrefab.cpp" />
+    <ClCompile Include="Prefabs\EnginePrefabs\SpherePrefab.cpp" />
+    <ClCompile Include="Prefabs\EnginePrefabs\TorusPrefab.cpp" />
+    <ClCompile Include="Prefabs\EnginePrefabs\CubePrefab.cpp" />
     <ClCompile Include="Scenes\Week 3\ComponentTestScene.cpp" />
     <ClCompile Include="Scenes\Week 3\PongScene.cpp" />
     <ClCompile Include="Scenes\Week 4\ModelTestScene.cpp" />
@@ -18,7 +18,7 @@
     <ClCompile Include="Materials\SpikyMaterial.cpp" />
     <ClCompile Include="Scenes\Week 4\SpikyScene.cpp" />
     <ClCompile Include="Scenes\Week 4\SpriteTestScene.cpp" />
-    <ClCompile Include="Prefabs\BoneObject.cpp" />
+    <ClCompile Include="Prefabs\EnginePrefabs\BoneObject.cpp" />
     <ClCompile Include="Scenes\Week 5\SoftwareSkinningScene_1.cpp" />
     <ClCompile Include="Scenes\Week 5\SoftwareSkinningScene_2.cpp" />
     <ClCompile Include="Scenes\Week 5\SoftwareSkinningScene_3.cpp" />
@@ -34,7 +34,6 @@
     <ClCompile Include="Prefabs\Tiki.cpp" />
     <ClCompile Include="Prefabs\ThreeTikis.cpp" />
     <ClCompile Include="Scenes\ExamAssignment\MainMenuScene.cpp" />
-    <ClCompile Include="Prefabs\UIElement.cpp" />
     <ClCompile Include="Prefabs\HUDPrefab.cpp" />
     <ClCompile Include="Scenes\Week 10\PostProcessingScene.cpp" />
     <ClCompile Include="Materials\Post\PostGrayscale.cpp" />
@@ -62,9 +61,9 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Scenes\Week 3\MinionScene.h" />
     <ClInclude Include="Materials\ColorMaterial.h" />
-    <ClInclude Include="Prefabs\SpherePrefab.h" />
-    <ClInclude Include="Prefabs\TorusPrefab.h" />
-    <ClInclude Include="Prefabs\CubePrefab.h" />
+    <ClInclude Include="Prefabs\EnginePrefabs\SpherePrefab.h" />
+    <ClInclude Include="Prefabs\EnginePrefabs\TorusPrefab.h" />
+    <ClInclude Include="Prefabs\EnginePrefabs\CubePrefab.h" />
     <ClInclude Include="Scenes\Week 3\ComponentTestScene.h" />
     <ClInclude Include="Scenes\Week 3\PongScene.h" />
     <ClInclude Include="Scenes\Week 4\ModelTestScene.h" />
@@ -74,7 +73,7 @@
     <ClInclude Include="Materials\SpikyMaterial.h" />
     <ClInclude Include="Scenes\Week 4\SpikyScene.h" />
     <ClInclude Include="Scenes\Week 4\SpriteTestScene.h" />
-    <ClInclude Include="Prefabs\BoneObject.h" />
+    <ClInclude Include="Prefabs\EnginePrefabs\BoneObject.h" />
     <ClInclude Include="Scenes\Week 5\SoftwareSkinningScene_1.h" />
     <ClInclude Include="Scenes\Week 5\SoftwareSkinningScene_2.h" />
     <ClInclude Include="Scenes\Week 5\SoftwareSkinningScene_3.h" />
@@ -91,7 +90,6 @@
     <ClInclude Include="Prefabs\Tiki.h" />
     <ClInclude Include="Prefabs\ThreeTikis.h" />
     <ClInclude Include="Scenes\ExamAssignment\MainMenuScene.h" />
-    <ClInclude Include="Prefabs\UIElement.h" />
     <ClInclude Include="Prefabs\HUDPrefab.h" />
     <ClInclude Include="Scenes\Week 10\PostProcessingScene.h" />
     <ClInclude Include="Materials\Post\PostGrayscale.h" />

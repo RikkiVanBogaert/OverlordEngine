@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "PickingScene.h"
 
-#include "Prefabs/SpherePrefab.h"
+#include "Prefabs/EnginePrefabs/SpherePrefab.h"
 
 void PickingScene::Initialize()
 {

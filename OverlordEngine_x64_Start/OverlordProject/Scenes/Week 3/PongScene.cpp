@@ -2,8 +2,8 @@
 #include "stdafx.h"
 #include "PongScene.h"
 
-#include "Prefabs/CubePrefab.h"
-#include "Prefabs/SpherePrefab.h"
+#include "Prefabs/EnginePrefabs/CubePrefab.h"
+#include "Prefabs/EnginePrefabs/SpherePrefab.h"
 
 PongScene::PongScene() :
 	GameScene(L"PongScene") {}
