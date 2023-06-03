@@ -22,6 +22,8 @@ float4x4 gViewInverse : VIEWINVERSE;
 // The World Matrix
 float4x4 gWorld : WORLD;
 
+float4x4 gBones[70];
+
 //STATES
 //******
 RasterizerState gRasterizerState
@@ -163,6 +165,8 @@ struct VS_Input
 	float3 Tangent: TANGENT;
 	float3 Binormal: BINORMAL;
 	float2 TexCoord: TEXCOORD0;
+	float4 blendIndices : BLENDINDICES;
+	float4 blendWeights : BLENDWEIGHTS;
 };
 
 struct VS_Output
@@ -187,9 +191,26 @@ VS_Output MainVS(VS_Input input) {
 
 	VS_Output output = (VS_Output)0;
 
-	output.Position = mul(float4(input.Position, 1.0), gWorldViewProj);
+	float4 transformedPos;
+	float3 transformedNormal;
 
-	output.Normal = normalize(mul(input.Normal, (float3x3)gWorld));
+	for (int i = 0; i < 4; ++i)
+	{
+		const float boneIndex = input.blendIndices[i];
+
+		if (boneIndex < 0)
+			continue;
+
+		transformedPos += mul(float4(input.Position, 1.0f), gBones[boneIndex]) * input.blendWeights[i];
+		transformedNormal += mul(input.Normal, (float3x3)gBones[boneIndex]) * input.blendWeights[i];
+
+	}
+
+	transformedPos.w = 1.0f;
+
+	output.Position = mul(transformedPos, gWorldViewProj);
+
+	output.Normal = normalize(mul(transformedNormal, (float3x3)gWorld));
 	output.Tangent = normalize(mul(input.Tangent, (float3x3)gWorld));
 	output.Binormal = normalize(mul(input.Binormal, (float3x3)gWorld));
 
@@ -199,12 +220,12 @@ VS_Output MainVS(VS_Input input) {
 }
 
 // The main pixel shader
-PS_Output MainPS(VS_Output input){
+PS_Output MainPS(VS_Output input) {
 
 	PS_Output output = (PS_Output)0;
 
 	//Fill GBuffer
-	
+
 	//DIFFUSE-----
 	float4 diffuse = gDiffuseColor;
 	if (gUseDiffuseMap)

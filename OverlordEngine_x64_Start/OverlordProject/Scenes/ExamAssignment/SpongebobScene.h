@@ -65,7 +65,7 @@ private:
 	void CreateObjects();
 	void CreateItems();
 
-	void ReadCreatedFile(ModelComponent* levelMesh);
+	void ReadCreatedTextureFile(ModelComponent* levelMesh);
 
 	struct MaterialInfo
 	{

@@ -27,6 +27,8 @@
 #include <codecvt>
 #include <string>
 
+#include "Materials/Deferred/BasicMaterial_Deferred.h"
+#include "Materials/Deferred/ShadowMaterial_Deferred.h"
 #include "Materials/Post/PostGrayscale.h"
 #include "Materials/Post/PostMyEffect.h"
 #include "Materials/Shadow/DiffuseMaterial_Shadow.h"
@@ -50,7 +52,7 @@ SpongebobScene::~SpongebobScene()
 void SpongebobScene::Initialize()
 {
 	//Deferred rendering //Causes pink effect on postProcessing
-	//m_SceneContext.useDeferredRendering = true;
+	m_SceneContext.useDeferredRendering = true;
 
 	m_SceneContext.settings.enableOnGUI = true;
 	m_SceneContext.settings.drawPhysXDebug = false;
@@ -73,8 +75,8 @@ void SpongebobScene::Initialize()
 	sponge->SetControllerPosition(m_StartPos);
 
 	//PostProcessing
-	auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
-	AddPostProcessingEffect(m_pPostEffect);
+	//auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
+	//AddPostProcessingEffect(m_pPostEffect);
 
 	//Music
 	auto soundManager = SoundManager::Get();
@@ -85,6 +87,10 @@ void SpongebobScene::Initialize()
 	fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
 	m_pChannel->setVolume(.4f);
 	m_pChannel->setPaused(true);
+
+	//Lights
+	auto& dirLight = m_SceneContext.pLights->GetDirectionalLight();
+	dirLight.isEnabled = true;
 }
 
 void SpongebobScene::OnGUI()
@@ -170,7 +176,7 @@ void SpongebobScene::CreateLevel()
 	//	std::cout << "Failed to open the file for writing.\n";
 	//}
 
-	ReadCreatedFile(pLevelMesh);
+	ReadCreatedTextureFile(pLevelMesh);
 
 
 	//Skybox
@@ -244,9 +250,9 @@ void SpongebobScene::CreateItems()
 	}
 }
 
-void SpongebobScene::ReadCreatedFile(ModelComponent* levelMesh)
+void SpongebobScene::ReadCreatedTextureFile(ModelComponent* levelMesh)
 {
-	std::ifstream inputFile("texture_names.txt"); // Replace "filename.txt" with the actual name of your file
+	std::ifstream inputFile("texture_names.txt"); // Put in diff location
 
 	if (inputFile.is_open())
 	{
@@ -254,9 +260,11 @@ void SpongebobScene::ReadCreatedFile(ModelComponent* levelMesh)
 		std::vector<std::string> strings;
 
 		std::string line;
-		while (std::getline(inputFile, line)) {
+		while (std::getline(inputFile, line)) 
+		{
 			size_t colonPos = line.find(' ');
-			if (colonPos != std::string::npos) {
+			if (colonPos != std::string::npos) 
+			{
 				int number = std::stoi(line.substr(0, colonPos));
 				std::string str = line.substr(colonPos + 1);
 				numbers.push_back(number);
@@ -273,12 +281,13 @@ void SpongebobScene::ReadCreatedFile(ModelComponent* levelMesh)
 			std::string str = strings[i];
 			std::cout << "Number: " << number << ", String: " << str << std::endl;
 
-			auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
+			const auto pMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
 			pMat->SetDiffuseTexture(L"Exam/Textures/Level/" + ConvertToWideString(str));
 			levelMesh->SetMaterial(pMat, UINT8(number));
 		}
 	}
-	else {
+	else 
+	{
 		std::cerr << "Failed to open the file." << std::endl;
 	}
 }

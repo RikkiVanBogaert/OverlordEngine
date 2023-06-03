@@ -6,6 +6,7 @@
 #include "Character.h"
 #include "HUDPrefab.h"
 #include "PauseMenu.h"
+#include "Materials/Deferred/SkinnedMaterial_Deferred.h"
 #include "Materials/Shadow/DiffuseMaterial_Shadow_Skinned.h"
 #include "Scenes/ExamAssignment/SpongebobScene.h"
 
@@ -49,8 +50,8 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	//Mesh
 	m_pSpongebobMesh = new GameObject();
 
-	auto pSpongeMat = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow_Skinned>();
-	pSpongeMat->SetDiffuseTexture(L"Exam/Textures/Spongebob.png");
+	auto pSpongeMat = MaterialManager::Get()->CreateMaterial<SkinnedMaterial_Deferred>();
+	pSpongeMat->SetDiffuseMap(L"Exam/Textures/Spongebob.png");
 
 	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/SpongeMesh.ovm");
 	m_pSpongebobMesh->AddComponent<ModelComponent>(pModel);
@@ -100,9 +101,10 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	inputAction = InputAction(Pause, InputState::pressed, 'P');
 	sceneContext.pInput->AddInputAction(inputAction);
 
-	//Light
+	////Light
 	sceneContext.pLights->SetDirectionalLight({ -5.6139526f,5.1346436f,-4.1850471f },
 		{ 0.740129888f, -0.597205281f, 0.309117377f });
+
 
 	//Sound
 	// Load the m_pWalkSound
@@ -122,17 +124,25 @@ void Spongebob::Update(const SceneContext& sceneContext)
 
 	if (m_IsPaused) return;
 
-	//Light
+	////Light
 	sceneContext.pLights->GetDirectionalLight().position.x = m_pSpongebobMesh->GetTransform()->GetPosition().x - 50;
 	sceneContext.pLights->GetDirectionalLight().position.y = m_pSpongebobMesh->GetTransform()->GetPosition().y + 100;
 	sceneContext.pLights->GetDirectionalLight().position.z = m_pSpongebobMesh->GetTransform()->GetPosition().z - 50;
+	//Spotlight
+	//auto meshPos = m_pSpongebobMesh->GetTransform()->GetPosition();
+	//XMFLOAT4 pos{};
+	//pos.x = meshPos.x - 10;
+	//pos.y = meshPos.y + 30;
+	//pos.z = meshPos.z - 80;
+	//pos.w = 1.0f;
+	//sceneContext.pLights->GetLight(0).position = pos;
+
 
 	//used manual position adjustement instead of childing mesh to parent, 
 	//because the mesh always pointed to the camera when it was a child of the characterComponent
-
-	auto pos = m_pCharacter->GetTransform()->GetPosition();
-	pos.y -= 6.4f; //offset to put spongebob on same height as capsule
-	m_pSpongebobMesh->GetTransform()->Translate(pos);
+	auto characterPos = m_pCharacter->GetTransform()->GetPosition();
+	characterPos.y -= 6.4f; //offset to put spongebob on same height as capsule
+	m_pSpongebobMesh->GetTransform()->Translate(characterPos);
 
 	if(abs(m_pCharacter->GetVelocity().x) > 0 || abs(m_pCharacter->GetVelocity().z) > 0)
 	{

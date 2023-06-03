@@ -51,9 +51,11 @@
     <ClCompile Include="Prefabs\Hans.cpp" />
     <ClCompile Include="Scenes\Week 11\DeferredRenderingScene.cpp" />
     <ClCompile Include="Materials\BasicMaterial.cpp" />
-    <ClCompile Include="Materials\BasicMaterial_Deferred.cpp" />
+    <ClCompile Include="Materials\Deferred\BasicMaterial_Deferred.cpp" />
     <ClCompile Include="Prefabs\PauseMenu.cpp" />
     <ClCompile Include="Prefabs\EndScreen.cpp" />
+    <ClCompile Include="Materials\Deferred\SkinnedMaterial_Deferred.cpp" />
+    <ClCompile Include="Materials\Deferred\ShadowMaterial_Deferred.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -106,8 +108,10 @@
     <ClInclude Include="Prefabs\Hans.h" />
     <ClInclude Include="Scenes\Week 11\DeferredRenderingScene.h" />
     <ClInclude Include="Materials\BasicMaterial.h" />
-    <ClInclude Include="Materials\BasicMaterial_Deferred.h" />
+    <ClInclude Include="Materials\Deferred\BasicMaterial_Deferred.h" />
     <ClInclude Include="Prefabs\PauseMenu.h" />
     <ClInclude Include="Prefabs\EndScreen.h" />
+    <ClInclude Include="Materials\Deferred\SkinnedMaterial_Deferred.h" />
+    <ClInclude Include="Materials\Deferred\ShadowMaterial_Deferred.h" />
   </ItemGroup>
 </Project>

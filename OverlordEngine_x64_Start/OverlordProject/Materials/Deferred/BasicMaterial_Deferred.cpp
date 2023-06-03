@@ -48,6 +48,8 @@ void BasicMaterial_Deferred::UseTransparency(bool /*enable*/)
 
 void BasicMaterial_Deferred::InitializeEffectVariables()
 {
+	//For SpongebobScene----
+	SetVariable_Scalar(L"gShininess", 70.f);
 }
 
 void BasicMaterial_Deferred::OnUpdateModelVariables(const SceneContext& sceneContext, const ModelComponent*) const

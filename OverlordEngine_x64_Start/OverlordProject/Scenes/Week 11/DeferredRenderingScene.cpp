@@ -2,7 +2,7 @@
 #include "DeferredRenderingScene.h"
 
 #include "Materials/BasicMaterial.h"
-#include "Materials/BasicMaterial_Deferred.h"
+#include "Materials/Deferred/BasicMaterial_Deferred.h"
 
 #define FULL_SPONZA
 
