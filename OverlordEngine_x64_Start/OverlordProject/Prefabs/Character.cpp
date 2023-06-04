@@ -39,8 +39,8 @@ void Character::Update(const SceneContext& sceneContext)
 		XMFLOAT2 move{}; //Uncomment
 		bool isMoving = false;
 
-		float stickX = sceneContext.pInput->GetThumbstickPosition(true).x;
-		float stickY = sceneContext.pInput->GetThumbstickPosition(true).y;
+		const float stickX = sceneContext.pInput->GetThumbstickPosition(true).x;
+		const float stickY = sceneContext.pInput->GetThumbstickPosition(true).y;
 		//move.y should contain a 1 (Forward) or -1 (Backward) based on the active input (check corresponding actionId in m_CharacterDesc)
 		if(GetScene()->GetSceneContext().pInput->IsActionTriggered(m_CharacterDesc.actionId_MoveForward))
 		{
@@ -83,8 +83,8 @@ void Character::Update(const SceneContext& sceneContext)
 		XMFLOAT2 look{ 0.f, 0.f }; //Uncomment
 		//Only if the Left Mouse Button is Down >
 			// Store the MouseMovement in the local 'look' variable (cast is required)
-		stickX = sceneContext.pInput->GetThumbstickPosition(false).x;
-		stickY = sceneContext.pInput->GetThumbstickPosition(false).y;
+		const auto rightStickX = sceneContext.pInput->GetThumbstickPosition(false).x;
+		const auto rightStickY = sceneContext.pInput->GetThumbstickPosition(false).y;
 
 		if (InputManager::IsMouseButton(InputState::down, 1))
 		{
@@ -92,12 +92,12 @@ void Character::Update(const SceneContext& sceneContext)
 
 			look.y = float(InputManager::GetMouseMovement().y);
 		}
-		else if(stickX != 0 || stickY != 0)
+		else if(rightStickX != 0 || rightStickY != 0)
 		{
 			constexpr float rotationSpeedX = 3;
 			constexpr float rotationSpeedY = 1.5f;
-			look.x += stickX * rotationSpeedX;
-			look.y -= stickY * rotationSpeedY;
+			look.x += rightStickX * rotationSpeedX;
+			look.y -= rightStickY * rotationSpeedY;
 		}
 	
 		//Optional: in case look.x AND look.y are near zero, you could use the Right ThumbStickPosition for look

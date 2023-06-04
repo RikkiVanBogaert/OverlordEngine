@@ -30,10 +30,10 @@ void MainMenuScene::Initialize()
 	m_pButtons.emplace_back(m_pQuitSprite);
 
 	const auto pControlsObj = new GameObject();
-	const auto pControlsSprite = new SpriteComponent(L"Exam/HUD/ControlsText.png");
+	const auto pControlsSprite = new SpriteComponent(L"Exam/HUD/MainMenuControls.png");
 	pControlsObj->AddComponent<SpriteComponent>(pControlsSprite);
 	AddChild(pControlsObj);
-	pControlsObj->GetTransform()->Translate(xPos - 50, 510, 0);
+	pControlsObj->GetTransform()->Translate(xPos - 85, 480, 0);
 
 	const auto pGameObject = new GameObject();
 	const auto pSprite = new SpriteComponent(L"Exam/HUD/MainMenu.png");
