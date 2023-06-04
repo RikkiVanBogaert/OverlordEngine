@@ -10,9 +10,12 @@
 #include "Materials/Shadow/DiffuseMaterial_Shadow_Skinned.h"
 #include "Scenes/ExamAssignment/SpongebobScene.h"
 
-Spongebob::Spongebob(HUDPrefab* hud):
-m_pHud(hud)
-{}
+Spongebob::Spongebob(HUDPrefab* hud, PauseMenu* pauseMenu):
+m_pHud(hud),
+m_pPauseMenu(pauseMenu)
+{
+	m_pPauseMenu->SetSpongebob(this);
+}
 
 Spongebob::~Spongebob()
 {
@@ -237,13 +240,12 @@ void Spongebob::TurnPauseMenuOnOff()
 {
 	if (!m_IsPaused)
 	{
-		pPauseMenu = new PauseMenu(this);
-		AddChild(pPauseMenu);
+		m_pPauseMenu->Activate();
 		m_IsPaused = true;
 	}
 	else
 	{
-		RemoveChild(pPauseMenu, true);
+		m_pPauseMenu->Deactivate();
 		m_IsPaused = false;
 	}
 

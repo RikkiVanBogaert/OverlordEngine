@@ -8,6 +8,9 @@ public:
 
 	void Update(const SceneContext&) override;
 
+	void Activate();
+	void Deactivate();
+
 protected:
 	void Initialize(const SceneContext& sceneContext) override;
 
@@ -17,12 +20,19 @@ private:
 	GameObject* m_pScreen{};
 	SpriteComponent* m_pScreenSprite{};
 
-	SpriteComponent* m_pMainMenuButton{};
+	GameObject* pEndObj{};
+	GameObject* pMainMenuObj{};
+	GameObject* pRestartObj{};
+
+	SpriteComponent* m_pEndSprite{};
+	SpriteComponent* m_pMainMenuSprite{};
 	SpriteComponent* m_pRestartSprite{};
 
 	SpriteComponent* m_pActiveButton{};
 
 	std::vector<SpriteComponent*> m_Buttons;
+
+	bool m_IsPaused{};
 
 	void HoverOverButton(const SceneContext& sceneContext);
 	void CheckControllerInput(const SceneContext& sceneContext);

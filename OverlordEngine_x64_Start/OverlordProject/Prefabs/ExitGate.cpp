@@ -10,6 +10,11 @@
 #include "EndScreen.h"
 #include "Materials/Deferred/BasicMaterial_Deferred.h"
 
+ExitGate::ExitGate(EndScreen* pEndScreen):
+m_pEndScreen(pEndScreen)
+{}
+
+
 void ExitGate::Initialize(const SceneContext&)
 {
 	auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
@@ -39,12 +44,11 @@ void ExitGate::Initialize(const SceneContext&)
 		if (other->GetTag() != L"Player") return;
 
 		auto pSponge = dynamic_cast<Spongebob*>(other->GetParent());
-		if(pSponge->GetHUD()->GetAmountSpatulas() >= 3)
+		if(pSponge->GetHUD()->GetAmountSpatulas() >= 0)
 		{
 			if (action == PxTriggerAction::ENTER)
 			{
-				pEndScreen = new EndScreen(pSponge);
-				AddChild(pEndScreen);
+				m_pEndScreen->Activate();
 			}
 
 			return;
@@ -80,4 +84,3 @@ void ExitGate::Update(const SceneContext&)
 	if (NeedsDeleting()) return;
 
 }
-

@@ -1,5 +1,6 @@
 #pragma once
 
+class EndScreen;
 class UIElement;
 class Character;
 
@@ -56,6 +57,8 @@ private:
 	SpriteComponent* pControlsSprite{};
 	float m_ShowControlsTimer{};
 	bool m_ShowControls{ true };
+
+	EndScreen* m_pEndScreen{};
 
 	enum State
 	{

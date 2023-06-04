@@ -1,11 +1,12 @@
 #pragma once
+class PauseMenu;
 class HUDPrefab;
 class Character;
 
 class Spongebob final : public GameObject
 {
 public:
-	Spongebob(HUDPrefab* hud);
+	Spongebob(HUDPrefab* hud, PauseMenu* pauseMenu);
 	~Spongebob() override;
 
 	void Initialize(const SceneContext&) override;
@@ -49,7 +50,7 @@ private:
 	FMOD::Channel* m_pSoundChannel{};
 	bool m_IsSoundPlaying{};
 
-	GameObject* pPauseMenu{};
+	PauseMenu* m_pPauseMenu{};
 	bool m_IsPaused{};
 
 	void UpdateAnimations();

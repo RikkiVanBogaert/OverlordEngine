@@ -34,9 +34,11 @@
 #include "Materials/Shadow/DiffuseMaterial_Shadow_Skinned.h"
 #include "Prefabs/BubbleParticles.h"
 #include "Prefabs/ExitGate.h"
+#include "Prefabs/EndScreen.h"
 #include "Prefabs/Hans.h"
 #include "Prefabs/Spongebob.h"
 #include "Prefabs/Jellyfish.h"
+#include "Prefabs/PauseMenu.h"
 
 SpongebobScene::~SpongebobScene()
 {
@@ -71,15 +73,24 @@ void SpongebobScene::Initialize()
 	auto pHud = new HUDPrefab();
 	AddChild(pHud);
 
+	auto pPauseMenu = new PauseMenu();
+	AddChild(pPauseMenu);
+
+	pSponge = new Spongebob(pHud, pPauseMenu);
+	auto sponge = dynamic_cast<Spongebob*>(pSponge);
+
+	m_pEndScreen = new EndScreen(sponge);
+	AddChild(m_pEndScreen);
+
+
+	//Character
+	AddChild(pSponge);
+	sponge->SetControllerPosition(m_StartPos);
+
+
 	//Level
 	CreateLevel();
 	CreateObjects();
-
-	//Character
-	pSponge = new Spongebob(pHud);
-	AddChild(pSponge);
-	auto sponge = dynamic_cast<Spongebob*>(pSponge);
-	sponge->SetControllerPosition(m_StartPos);
 
 	//PostProcessing
 	auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
@@ -233,7 +244,7 @@ void SpongebobScene::CreateLevel()
 
 void SpongebobScene::CreateObjects()
 {
-	auto pGate = new ExitGate();
+	auto pGate = new ExitGate(m_pEndScreen);
 	pGate->GetTransform()->Translate(388.383f, 0.495f, -176.235f);
 	pGate->GetTransform()->Rotate(0, -45, 0);
 	AddChild(pGate);
