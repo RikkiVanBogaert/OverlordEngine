@@ -55,6 +55,14 @@ void MainMenuScene::Initialize()
 	pGameObject->AddComponent<SpriteComponent>(pSprite);
 	AddChild(pGameObject);
 
+	/*static FMOD::Sound* pSound = nullptr;
+	if (!pSound)
+	{
+		SoundManager::Get()->GetSystem()->createStream("Resources/Exam/LevelMusic.mp3", FMOD_DEFAULT, nullptr, &pSound);
+		pSound->setMode(FMOD_LOOP_NORMAL);
+	}
+	SoundManager::Get()->GetSystem()->playSound(pSound, nullptr, true, &m_pMainMenuChannel);
+	m_pMainMenuChannel->setVolume(0.2f);*/
 }
 
 void MainMenuScene::Update()

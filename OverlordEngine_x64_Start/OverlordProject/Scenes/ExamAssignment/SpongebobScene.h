@@ -34,8 +34,6 @@ private:
 	GameObject* m_pSpongebobMesh{};
 	XMFLOAT3 m_StartPos{};
 
-	//GameObject* m_pSpatula{};
-
 	//Animations
 	ModelAnimator* pAnimator{};
 
@@ -54,6 +52,9 @@ private:
 
 	bool m_IsLoaded;
 
+	GameObject* pControlsObj{};
+	float m_ShowControlsTimer{};
+	bool m_ShowControls{ true };
 
 	enum State
 	{
@@ -61,6 +62,7 @@ private:
 		Paused
 	};
 	void CheckDeletedObjects();
+	void CheckControlScemeTimer();
 	void CreateLevel();
 	void CreateObjects();
 	void CreateItems();

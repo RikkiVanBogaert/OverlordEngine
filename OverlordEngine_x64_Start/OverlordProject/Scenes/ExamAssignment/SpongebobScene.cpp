@@ -50,7 +50,7 @@ SpongebobScene::~SpongebobScene()
 
 void SpongebobScene::Initialize()
 {
-	//Deferred rendering //Causes pink effect on postProcessing
+	//Deferred rendering
 	m_SceneContext.useDeferredRendering = true;
 
 	m_SceneContext.settings.enableOnGUI = true;
@@ -79,8 +79,7 @@ void SpongebobScene::Initialize()
 
 	//Music
 	auto soundManager = SoundManager::Get();
-	auto path = ContentManager::GetFullAssetPath(L"Exam/LevelMusic.mp3").string().c_str();
-	soundManager->GetSystem()->createSound(path,
+	soundManager->GetSystem()->createStream("Resources/Exam/LevelMusic.mp3",
 		FMOD_LOOP_NORMAL | FMOD_DEFAULT, nullptr, &m_pSound);
 	FMOD::System* fmodSystem = SoundManager::Get()->GetSystem();
 	fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
@@ -104,6 +103,13 @@ void SpongebobScene::Initialize()
 	light.range = 5000.0f;
 	light.type = LightType::Point;
 	m_SceneContext.pLights->AddLight(light);
+
+	//ControlScheme
+	pControlsObj = new GameObject();
+	auto pControlsSprite = new SpriteComponent(L"Exam/HUD/ControlScheme.png");
+	pControlsObj->AddComponent<SpriteComponent>(pControlsSprite);
+	AddChild(pControlsObj);
+	pControlsObj->GetTransform()->Scale(0.65f);
 }
 
 void SpongebobScene::OnGUI()
@@ -129,6 +135,7 @@ void SpongebobScene::OnSceneDeactivated()
 void SpongebobScene::Update()
 {
 	CheckDeletedObjects();
+	CheckControlScemeTimer();
 }
 
 
@@ -138,6 +145,18 @@ void SpongebobScene::CheckDeletedObjects()
 	{
 		if (child->NeedsDeleting())
 			RemoveChild(child, true);
+	}
+}
+
+void SpongebobScene::CheckControlScemeTimer()
+{
+	if (!m_ShowControls) return;
+
+	m_ShowControlsTimer += m_SceneContext.pGameTime->GetElapsed();
+	if (m_ShowControlsTimer > 5.f)
+	{
+		pControlsObj->MarkForDeletion();
+		m_ShowControls = false;
 	}
 }
 

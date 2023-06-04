@@ -27,5 +27,7 @@ private:
 	void CheckActiveButton();
 
 	bool MouseInRect(const XMFLOAT2& pos, const XMFLOAT2& size) const;
+
+	FMOD::Channel* m_pMainMenuChannel{};
 };
 

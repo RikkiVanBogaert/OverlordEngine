@@ -71,24 +71,18 @@ void Tiki::Update(const SceneContext& )
 
 	if (m_pPlayer->IsAttacking())
 	{
-		//SpawnFlowers();
-		//SpawnBubbles();
 		pBubbles->SetActive(true);
 
 		FMOD::Sound* m_pSound{};
 		FMOD::Channel* m_pChannel{};
 		auto soundManager = SoundManager::Get();
-		auto path = ContentManager::GetFullAssetPath(L"Exam/TikiBreak.mp3").string().c_str();
-		soundManager->GetSystem()->createSound(path,
+		soundManager->GetSystem()->createStream("Resources/Exam/TikiBreak.mp3",
 			FMOD_DEFAULT, nullptr, &m_pSound);
 		FMOD::System* fmodSystem = soundManager->GetSystem();
 		fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
 
 		//MarkForDeletion();
-		pModelObject->RemoveComponent(pModel);
-		GetTransform()->Translate(0, 0, 0);
-		//pRigidBody->RemoveCollider(pRigidBody->GetCollider(0));
-		//GetScene()->RemoveChild(this, true);
+		GetTransform()->Translate(0, -500, 0);
 	}
 }
 
