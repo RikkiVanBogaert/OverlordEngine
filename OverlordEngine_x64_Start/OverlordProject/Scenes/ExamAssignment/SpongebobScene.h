@@ -14,7 +14,7 @@ public:
 	SpongebobScene& operator=(const SpongebobScene& other) = delete;
 	SpongebobScene& operator=(SpongebobScene&& other) noexcept = delete;
 
-	void SetPaused(bool isPaused) const;
+	void SetPaused(bool isPaused);
 	void ReloadScene(bool pauseMusic = false);
 
 protected:
@@ -44,7 +44,7 @@ private:
 	FMOD::Channel* m_pChannel{};
 	bool m_MusicPlaying{};
 
-	bool m_IsLoaded{};
+	bool m_IsPaused{};
 
 	GameObject* m_pControlsObj{};
 	SpriteComponent* m_pControlsSprite{};

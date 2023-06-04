@@ -46,19 +46,19 @@ void SpongebobScene::Initialize()
 	//m_StartPos = { 493.961f, 147.045f, 153.425f }; //jellyfish
 	//m_StartPos = { 378.383f, 10.495f, -166.235f }; //Gate
 
+	const auto pPauseMenu = new PauseMenu();
+	AddChild(pPauseMenu);
+
+	//HUD
+	const auto pHud = new HUDPrefab();
+	AddChild(pHud);
+
 	//ControlScheme
 	m_pControlsObj = new GameObject();
 	m_pControlsSprite = new SpriteComponent(L"Exam/HUD/ControlScheme.png");
 	m_pControlsObj->AddComponent<SpriteComponent>(m_pControlsSprite);
 	AddChild(m_pControlsObj);
 	m_pControlsObj->GetTransform()->Scale(0.65f);
-
-	//HUD
-	const auto pHud = new HUDPrefab();
-	AddChild(pHud);
-
-	const auto pPauseMenu = new PauseMenu();
-	AddChild(pPauseMenu);
 
 	m_pSponge = new Spongebob(pHud, pPauseMenu);
 	const auto sponge = dynamic_cast<Spongebob*>(m_pSponge);
@@ -81,7 +81,7 @@ void SpongebobScene::Initialize()
 
 	//Music
 	const auto soundManager = SoundManager::Get();
-	soundManager->GetSystem()->createStream("Resources/Exam/LevelMusic.mp3",
+	soundManager->GetSystem()->createStream("Resources/Exam/Sounds/LevelMusic.mp3",
 		FMOD_LOOP_NORMAL | FMOD_DEFAULT, nullptr, &m_pSound);
 	FMOD::System* fmodSystem = SoundManager::Get()->GetSystem();
 	fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
@@ -143,6 +143,7 @@ void SpongebobScene::CheckDeletedObjects()
 
 void SpongebobScene::CheckControlSchemeTimer()
 {
+	if (m_IsPaused) return;
 	if (!m_ShowControls) return;
 
 	m_ShowControlsTimer += m_SceneContext.pGameTime->GetElapsed();
@@ -299,7 +300,7 @@ void SpongebobScene::ReadCreatedTextureFile(ModelComponent* levelMesh)
 		{
 			const auto number = numbers[i];
 			std::string str = strings[i];
-			std::cout << "Number: " << number << ", String: " << str << std::endl;
+			//std::cout << "Number: " << number << ", String: " << str << std::endl;
 
 			const auto pMat = MaterialManager::Get()->CreateMaterial<ShadowMaterial_Deferred>();
 			pMat->SetDiffuseMap(L"Exam/Textures/Level/" + ConvertToWideString(str));
@@ -312,9 +313,10 @@ void SpongebobScene::ReadCreatedTextureFile(ModelComponent* levelMesh)
 	}
 }
 
-void SpongebobScene::SetPaused(bool isPaused) const
+void SpongebobScene::SetPaused(bool isPaused)
 { 
 	m_pChannel->setPaused(isPaused);
+	m_IsPaused = isPaused;
 }
 
 void SpongebobScene::ReloadScene(bool pauseMusic)

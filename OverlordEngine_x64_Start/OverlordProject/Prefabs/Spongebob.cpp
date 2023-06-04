@@ -108,7 +108,7 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	//Sound
 	// Load the m_pWalkSound
 	const auto soundManager = SoundManager::Get();
-	soundManager->GetSystem()->createStream("Resources/Exam/WalkingSound.mp3",
+	soundManager->GetSystem()->createStream("Resources/Exam/Sounds/WalkingSound.mp3",
 		FMOD_LOOP_NORMAL | FMOD_DEFAULT, nullptr, &m_pWalkSound);
 
 	soundManager->GetSystem()->playSound(m_pWalkSound, nullptr, false, &m_pSoundChannel);

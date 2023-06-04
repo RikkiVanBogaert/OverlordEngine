@@ -74,7 +74,7 @@ void Tiki::Update(const SceneContext& )
 		FMOD::Sound* m_pSound{};
 		FMOD::Channel* m_pChannel{};
 		const auto soundManager = SoundManager::Get();
-		soundManager->GetSystem()->createStream("Resources/Exam/TikiBreak.mp3",
+		soundManager->GetSystem()->createStream("Resources/Exam/Sounds/TikiBreak.mp3",
 			FMOD_DEFAULT, nullptr, &m_pSound);
 		FMOD::System* fmodSystem = soundManager->GetSystem();
 		fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);

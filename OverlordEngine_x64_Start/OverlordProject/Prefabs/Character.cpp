@@ -142,9 +142,9 @@ void Character::Update(const SceneContext& sceneContext)
 		{
 			isMoving = false;
 			m_IsAttacking = true;
-			std::cout << GetTransform()->GetPosition().x << ", "
+			/*std::cout << GetTransform()->GetPosition().x << ", "
 				<< GetTransform()->GetPosition().y << ", "
-				<< GetTransform()->GetPosition().z << "\n";
+				<< GetTransform()->GetPosition().z << "\n";*/
 		}
 		else
 		{

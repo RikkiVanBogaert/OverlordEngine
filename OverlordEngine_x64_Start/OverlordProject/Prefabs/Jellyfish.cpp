@@ -56,7 +56,7 @@ void Jellyfish::Initialize(const SceneContext& sceneContext)
 			FMOD::Sound* m_pSound{};
 			FMOD::Channel* m_pChannel{};
 			auto soundManager = SoundManager::Get();
-			soundManager->GetSystem()->createStream("Resources/Exam/Boing.mp3",
+			soundManager->GetSystem()->createStream("Resources/Exam/Sounds/Boing.mp3",
 				FMOD_DEFAULT, nullptr, &m_pSound);
 			FMOD::System* fmodSystem = soundManager->GetSystem();
 			fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);

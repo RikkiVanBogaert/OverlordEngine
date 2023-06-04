@@ -65,13 +65,17 @@ void PauseMenu::Activate()
 
 void PauseMenu::Deactivate()
 {
+	if (m_pActiveButton)
+	{
+		m_pActiveButton->GetTransform()->Scale(.4f);
+		m_pActiveButton = nullptr;
+	}
+
 	m_pResumeObj->RemoveComponent(m_pResumeSprite, true);
 	m_pQuitObj->RemoveComponent(m_pQuitSprite, true);
 	m_pRestartObj->RemoveComponent(m_pRestartSprite, true);
 
 	m_pButtons.clear();
-	m_pActiveButton = nullptr;
-
 	m_IsPaused = false;
 }
 
