@@ -262,7 +262,8 @@ PS_Output MainPS(VS_Output input){
 }
 
 // Default Technique
-technique10 Default {
+technique10 Default 
+{
 	pass p0 {
 		SetDepthStencilState(gDepthState, 0);
 		SetRasterizerState(gRasterizerState);

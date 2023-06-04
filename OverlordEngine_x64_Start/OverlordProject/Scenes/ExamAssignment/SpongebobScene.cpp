@@ -60,12 +60,20 @@ void SpongebobScene::Initialize()
 	//m_StartPos = { 493.961f, 147.045f, 153.425f }; //jellyfish
 	//m_StartPos = { 378.383f, 10.495f, -166.235f }; //Gate
 
-	CreateLevel();
-	CreateObjects();
+	//ControlScheme
+	pControlsObj = new GameObject();
+	pControlsSprite = new SpriteComponent(L"Exam/HUD/ControlScheme.png");
+	pControlsObj->AddComponent<SpriteComponent>(pControlsSprite);
+	AddChild(pControlsObj);
+	pControlsObj->GetTransform()->Scale(0.65f);
 
 	//HUD
 	auto pHud = new HUDPrefab();
 	AddChild(pHud);
+
+	//Level
+	CreateLevel();
+	CreateObjects();
 
 	//Character
 	pSponge = new Spongebob(pHud);
@@ -104,12 +112,6 @@ void SpongebobScene::Initialize()
 	light.type = LightType::Point;
 	m_SceneContext.pLights->AddLight(light);
 
-	//ControlScheme
-	pControlsObj = new GameObject();
-	auto pControlsSprite = new SpriteComponent(L"Exam/HUD/ControlScheme.png");
-	pControlsObj->AddComponent<SpriteComponent>(pControlsSprite);
-	AddChild(pControlsObj);
-	pControlsObj->GetTransform()->Scale(0.65f);
 }
 
 void SpongebobScene::OnGUI()
@@ -144,7 +146,9 @@ void SpongebobScene::CheckDeletedObjects()
 	for (auto child : GetChildren())
 	{
 		if (child->NeedsDeleting())
+		{
 			RemoveChild(child, true);
+		}
 	}
 }
 
@@ -155,7 +159,7 @@ void SpongebobScene::CheckControlScemeTimer()
 	m_ShowControlsTimer += m_SceneContext.pGameTime->GetElapsed();
 	if (m_ShowControlsTimer > 5.f)
 	{
-		pControlsObj->MarkForDeletion();
+		pControlsObj->RemoveComponent(pControlsSprite, true);
 		m_ShowControls = false;
 	}
 }
@@ -314,7 +318,7 @@ void SpongebobScene::ReadCreatedTextureFile(ModelComponent* levelMesh)
 			std::string str = strings[i];
 			std::cout << "Number: " << number << ", String: " << str << std::endl;
 
-			const auto pMat = MaterialManager::Get()->CreateMaterial<ShadowMaterial_Deferred>();
+			const auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
 			pMat->SetDiffuseMap(L"Exam/Textures/Level/" + ConvertToWideString(str));
 			levelMesh->SetMaterial(pMat, UINT8(number));
 		}
@@ -360,6 +364,14 @@ void SpongebobScene::ReloadScene(bool pauseMusic)
 	fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
 	m_pChannel->setVolume(.4f);
 	m_pChannel->setPaused(pauseMusic);
+
+	if(!m_ShowControls)
+	{
+		pControlsSprite = new SpriteComponent(L"Exam/HUD/ControlScheme.png");
+		pControlsObj->AddComponent<SpriteComponent>(pControlsSprite);
+		m_ShowControls = true;
+	}
+	m_ShowControlsTimer = 0;
 }
 
 

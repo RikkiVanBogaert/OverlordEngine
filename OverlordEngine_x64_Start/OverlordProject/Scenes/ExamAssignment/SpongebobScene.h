@@ -53,6 +53,7 @@ private:
 	bool m_IsLoaded;
 
 	GameObject* pControlsObj{};
+	SpriteComponent* pControlsSprite{};
 	float m_ShowControlsTimer{};
 	bool m_ShowControls{ true };
 
