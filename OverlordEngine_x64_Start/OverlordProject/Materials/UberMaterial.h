@@ -1,3 +1,4 @@
+#pragma once
 
 class UberMaterial final : public Material<UberMaterial>
 {

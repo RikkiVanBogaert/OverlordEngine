@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "MainMenuScene.h"
 
-#include "SpongebobScene.h"
-#include "Materials/ColorMaterial.h"
-#include "Materials/DiffuseMaterial.h"
-
 
 MainMenuScene::~MainMenuScene()
 {}
@@ -13,56 +9,36 @@ void MainMenuScene::Initialize()
 {
 	m_SceneContext.settings.enableOnGUI = true;
 
-	//GameSettings
-	//GameScene::GetSceneSettings().clearColor = {};
-	//GameScene::GetSceneSettings().drawGrid = false;
-	//GameScene::GetSceneSettings().drawPhysXDebug = false;
-
-	auto pCamera = new FixedCamera();
-	AddChild(pCamera);
-	pCamera->GetTransform()->Rotate(90, 0, 0);
-	pCamera->GetTransform()->Translate(0, 40, 0);
-	pCamera->GetComponent<CameraComponent>()->SetActive();
-
-
+	
 	constexpr float scale{ 0.7f };
 	constexpr float xPos{ 840 };
 
-	auto pPlayObj = new GameObject();
+	const auto pPlayObj = new GameObject();
 	m_pPlaySprite = new SpriteComponent(L"Exam/HUD/MainPlayButton.png");
 	pPlayObj->AddComponent<SpriteComponent>(m_pPlaySprite);
 	AddChild(pPlayObj);
 	pPlayObj->GetTransform()->Translate(xPos, 340, 0);
 	pPlayObj->GetTransform()->Scale(scale);
-	m_Buttons.emplace_back(m_pPlaySprite);
+	m_pButtons.emplace_back(m_pPlaySprite);
 
-	auto pQuitObj = new GameObject();
+	const auto pQuitObj = new GameObject();
 	m_pQuitSprite = new SpriteComponent(L"Exam/HUD/MainQuitButton.png");
 	pQuitObj->AddComponent<SpriteComponent>(m_pQuitSprite);
 	AddChild(pQuitObj);
 	pQuitObj->GetTransform()->Translate(xPos, 430, 0);
 	pQuitObj->GetTransform()->Scale(scale);
-	m_Buttons.emplace_back(m_pQuitSprite);
+	m_pButtons.emplace_back(m_pQuitSprite);
 
-	auto pControlsObj = new GameObject();
-	auto pControlsSprite = new SpriteComponent(L"Exam/HUD/ControlsText.png");
+	const auto pControlsObj = new GameObject();
+	const auto pControlsSprite = new SpriteComponent(L"Exam/HUD/ControlsText.png");
 	pControlsObj->AddComponent<SpriteComponent>(pControlsSprite);
 	AddChild(pControlsObj);
 	pControlsObj->GetTransform()->Translate(xPos - 50, 510, 0);
 
-	auto pGameObject = new GameObject();
-	auto pSprite = new SpriteComponent(L"Exam/HUD/MainMenu.png");
+	const auto pGameObject = new GameObject();
+	const auto pSprite = new SpriteComponent(L"Exam/HUD/MainMenu.png");
 	pGameObject->AddComponent<SpriteComponent>(pSprite);
 	AddChild(pGameObject);
-
-	/*static FMOD::Sound* pSound = nullptr;
-	if (!pSound)
-	{
-		SoundManager::Get()->GetSystem()->createStream("Resources/Exam/LevelMusic.mp3", FMOD_DEFAULT, nullptr, &pSound);
-		pSound->setMode(FMOD_LOOP_NORMAL);
-	}
-	SoundManager::Get()->GetSystem()->playSound(pSound, nullptr, true, &m_pMainMenuChannel);
-	m_pMainMenuChannel->setVolume(0.2f);*/
 }
 
 void MainMenuScene::Update()
@@ -79,22 +55,9 @@ void MainMenuScene::Update()
 	CheckActiveButton();
 }
 
-bool MainMenuScene::MouseInRect(const XMFLOAT2& pos, const XMFLOAT2& size) const
-{
-	auto mousePos = m_SceneContext.pInput->GetMousePosition();
-
-	if (mousePos.x > pos.x && mousePos.x < pos.x + size.x
-		&& mousePos.y > pos.y && mousePos.y < pos.y + size.y)
-	{
-		return true;
-	}
-
-	return false;
-}
-
 void MainMenuScene::HoverOverButton()
 {
-	for (auto b : m_Buttons)
+	for (auto b : m_pButtons)
 	{
 		const XMFLOAT2 pos{ b->GetTransform()->GetPosition().x, b->GetTransform()->GetPosition().y };
 		const XMFLOAT2 size{ b->GetDimensions().x * b->GetTransform()->GetScale().x,
@@ -139,7 +102,7 @@ void MainMenuScene::CheckControllerInput()
 	}
 }
 
-void MainMenuScene::CheckActiveButton()
+void MainMenuScene::CheckActiveButton() const
 {
 	if (!m_pActiveButton) return;
 
@@ -154,4 +117,17 @@ void MainMenuScene::CheckActiveButton()
 	{
 		std::exit(0);
 	}
+}
+
+bool MainMenuScene::MouseInRect(const XMFLOAT2& pos, const XMFLOAT2& size) const
+{
+	const auto mousePos = m_SceneContext.pInput->GetMousePosition();
+
+	if (mousePos.x > pos.x && mousePos.x < pos.x + size.x
+		&& mousePos.y > pos.y && mousePos.y < pos.y + size.y)
+	{
+		return true;
+	}
+
+	return false;
 }

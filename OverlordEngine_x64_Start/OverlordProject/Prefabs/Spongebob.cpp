@@ -43,8 +43,8 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	characterDesc.moveAccelerationTime = 0.1f;
 	characterDesc.maxMoveSpeed = 70.f;
 	characterDesc.fallAccelerationTime = 0.3f;
-	characterDesc.maxFallSpeed = 70.f;
-	characterDesc.JumpSpeed = 80.f;
+	characterDesc.maxFallSpeed = 75.f;
+	characterDesc.JumpSpeed = 85.f;
 
 	m_pCharacter = AddChild(new Character(characterDesc, { 0, 6, -50 }));
 	m_pCharacter->SetTag(L"Player");
@@ -53,7 +53,7 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	//Mesh
 	m_pSpongebobMesh = new GameObject();
 
-	auto pSpongeMat = MaterialManager::Get()->CreateMaterial<SkinnedMaterial_Deferred>();
+	const auto pSpongeMat = MaterialManager::Get()->CreateMaterial<SkinnedMaterial_Deferred>();
 	pSpongeMat->SetDiffuseMap(L"Exam/Textures/Spongebob.png");
 
 	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/SpongeMesh.ovm");
@@ -65,16 +65,16 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 	AddChild(m_pSpongebobMesh);
 	
 	//Animations------------------------
-	pAnimator = pModel->GetAnimator();
-	pAnimator->SetAnimation(m_AnimationClipId);
-	pAnimator->SetAnimationSpeed(m_AnimationSpeed);
+	m_pAnimator = pModel->GetAnimator();
+	m_pAnimator->SetAnimation(m_AnimationClipId);
+	m_pAnimator->SetAnimationSpeed(m_AnimationSpeed);
 
 	//Gather Clip Names
-	m_ClipCount = pAnimator->GetClipCount();
+	m_ClipCount = m_pAnimator->GetClipCount();
 	m_ClipNames = new char* [m_ClipCount];
 	for (UINT i{ 0 }; i < m_ClipCount; ++i)
 	{
-		auto clipName = StringUtil::utf8_encode(pAnimator->GetClip(static_cast<int>(i)).name);
+		auto clipName = StringUtil::utf8_encode(m_pAnimator->GetClip(static_cast<int>(i)).name);
 		const auto clipSize = clipName.size();
 		m_ClipNames[i] = new char[clipSize + 1];
 		strncpy_s(m_ClipNames[i], clipSize + 1, clipName.c_str(), clipSize);
@@ -107,7 +107,7 @@ void Spongebob::Initialize(const SceneContext& sceneContext)
 
 	//Sound
 	// Load the m_pWalkSound
-	auto soundManager = SoundManager::Get();
+	const auto soundManager = SoundManager::Get();
 	soundManager->GetSystem()->createStream("Resources/Exam/WalkingSound.mp3",
 		FMOD_LOOP_NORMAL | FMOD_DEFAULT, nullptr, &m_pWalkSound);
 
@@ -122,8 +122,8 @@ void Spongebob::Update(const SceneContext& sceneContext)
 
 	if (m_IsPaused) return;
 
-	////Light
-	auto meshPos = m_pSpongebobMesh->GetTransform()->GetPosition();
+	//Light
+	const auto meshPos = m_pSpongebobMesh->GetTransform()->GetPosition();
 	sceneContext.pLights->GetDirectionalLight().position.x = meshPos.x - 20;
 	sceneContext.pLights->GetDirectionalLight().position.y = meshPos.y + 30;
 	sceneContext.pLights->GetDirectionalLight().position.z = meshPos.z;
@@ -150,7 +150,7 @@ void Spongebob::UpdateAnimations()
 	if (m_pCharacter->IsAttacking() &&
 		m_AnimationClipId != 2)
 	{
-		pAnimator->Pause();
+		m_pAnimator->Pause();
 		m_AnimationClipId = 2;
 	}
 
@@ -158,7 +158,7 @@ void Spongebob::UpdateAnimations()
 	{
 		if(m_AnimationClipId != 1)
 		{
-			pAnimator->Pause();
+			m_pAnimator->Pause();
 			m_AnimationClipId = 1;
 		}
 		
@@ -170,61 +170,42 @@ void Spongebob::UpdateAnimations()
 			if ((abs(m_pCharacter->GetVelocity().x) > 0 || abs(m_pCharacter->GetVelocity().z) > 0) &&
 				m_AnimationClipId != 3)
 			{
-				pAnimator->Pause();
+				m_pAnimator->Pause();
 				m_AnimationClipId = 3;
 			}
 			else if ((abs(m_pCharacter->GetVelocity().x) == 0 && abs(m_pCharacter->GetVelocity().z) == 0) &&
 				m_AnimationClipId != 0)
 			{
-				pAnimator->Pause();
+				m_pAnimator->Pause();
 				m_AnimationClipId = 0;
 			}
 		}
 	}
 
-	if (!pAnimator->IsPlaying())
+	if (!m_pAnimator->IsPlaying())
 	{
-		pAnimator->SetAnimation(m_AnimationClipId);
-		pAnimator->Play();
+		m_pAnimator->SetAnimation(m_AnimationClipId);
+		m_pAnimator->Play();
 	}
 }
 
 void Spongebob::UpdateSounds()
 {
-	/*if (abs(m_pCharacter->GetVelocity().x) > 0 || abs(m_pCharacter->GetVelocity().z) > 0)
-	{
-		auto rot = std::atan2f(m_pCharacter->GetVelocity().z, -m_pCharacter->GetVelocity().x) * float(180 / M_PI) + 90;
-		m_pSpongebobMesh->GetTransform()->Rotate(0, rot, 0);
-
-		if (m_pCharacter->IsOnGround())
-		{
-			if (!m_IsSoundPlaying)
-			{
-				m_pSoundChannel->setPaused(false);
-				m_IsSoundPlaying = true;
-			}
-		}
-		else if (m_IsSoundPlaying)
-		{
-			m_pSoundChannel->setPaused(true);
-			m_IsSoundPlaying = false;
-		}
-	}
-	else if (m_IsSoundPlaying)
-	{
-		m_pSoundChannel->setPaused(true);
-		m_IsSoundPlaying = false;
-	}*/
-
 	if(m_AnimationClipId == 3)
 	{
+		if (m_IsSoundPlaying) return;
+
 		m_pSoundChannel->setPaused(false);
 		m_IsSoundPlaying = true;
+		
 	}
 	else
 	{
+		if (!m_IsSoundPlaying) return;
+
 		m_pSoundChannel->setPaused(true);
 		m_IsSoundPlaying = false;
+		
 	}
 }
 
@@ -257,8 +238,8 @@ void Spongebob::PauseCharacter(bool isPaused)
 {
 	m_pCharacter->SetPaused(isPaused);
 
-	if(isPaused) pAnimator->Pause();
-	else pAnimator->Play();
+	if(isPaused) m_pAnimator->Pause();
+	else m_pAnimator->Play();
 
 	m_pSoundChannel->setPaused(isPaused);
 	m_IsSoundPlaying = !isPaused;
@@ -266,13 +247,13 @@ void Spongebob::PauseCharacter(bool isPaused)
 	m_IsPaused = isPaused;
 }
 
-void Spongebob::PauseScene(bool isPaused)
+void Spongebob::PauseScene(bool isPaused) const
 {
 	auto pSpongebobScene = dynamic_cast<SpongebobScene*>(GetScene());
 	pSpongebobScene->SetPaused(isPaused);
 }
 
-void Spongebob::SetControllerPosition(const XMFLOAT3& pos)
+void Spongebob::SetControllerPosition(const XMFLOAT3& pos) const
 {
 	m_pCharacter->GetTransform()->Translate(pos);
 }

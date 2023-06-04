@@ -1,38 +1,22 @@
 #include "stdafx.h"
 #include "SpongebobScene.h"
 
-#include "Prefabs/Character.h"
-#include "Prefabs/Pickup.h"
-#include"Prefabs/Tiki.h"
-#include "Prefabs/ThreeTikis.h"
-
-#include "Materials/ColorMaterial.h"
-#include "Materials/DiffuseMaterial.h"
-#include "Materials/DiffuseMaterial_Skinned.h"
-
-#define _USE_MATH_DEFINES
-#include <math.h>
-
-#include "Helpers.h"
-#include "Prefabs/HUDPrefab.h"
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <regex>
 #include <vector>
-
 #include <locale>
-#include <codecvt>
 #include <string>
 
-#include "Materials/Deferred/BasicMaterial_Deferred.h"
+#include "Materials/DiffuseMaterial.h"
 #include "Materials/Deferred/ShadowMaterial_Deferred.h"
-#include "Materials/Post/PostGrayscale.h"
 #include "Materials/Post/PostMyEffect.h"
-#include "Materials/Shadow/DiffuseMaterial_Shadow.h"
-#include "Materials/Shadow/DiffuseMaterial_Shadow_Skinned.h"
-#include "Prefabs/BubbleParticles.h"
+
+#include "Prefabs/Pickup.h"
+#include "Prefabs/Tiki.h"
+#include "Prefabs/HUDPrefab.h"
 #include "Prefabs/ExitGate.h"
 #include "Prefabs/EndScreen.h"
 #include "Prefabs/Hans.h"
@@ -63,28 +47,27 @@ void SpongebobScene::Initialize()
 	//m_StartPos = { 378.383f, 10.495f, -166.235f }; //Gate
 
 	//ControlScheme
-	pControlsObj = new GameObject();
-	pControlsSprite = new SpriteComponent(L"Exam/HUD/ControlScheme.png");
-	pControlsObj->AddComponent<SpriteComponent>(pControlsSprite);
-	AddChild(pControlsObj);
-	pControlsObj->GetTransform()->Scale(0.65f);
+	m_pControlsObj = new GameObject();
+	m_pControlsSprite = new SpriteComponent(L"Exam/HUD/ControlScheme.png");
+	m_pControlsObj->AddComponent<SpriteComponent>(m_pControlsSprite);
+	AddChild(m_pControlsObj);
+	m_pControlsObj->GetTransform()->Scale(0.65f);
 
 	//HUD
-	auto pHud = new HUDPrefab();
+	const auto pHud = new HUDPrefab();
 	AddChild(pHud);
 
-	auto pPauseMenu = new PauseMenu();
+	const auto pPauseMenu = new PauseMenu();
 	AddChild(pPauseMenu);
 
-	pSponge = new Spongebob(pHud, pPauseMenu);
-	auto sponge = dynamic_cast<Spongebob*>(pSponge);
+	m_pSponge = new Spongebob(pHud, pPauseMenu);
+	const auto sponge = dynamic_cast<Spongebob*>(m_pSponge);
 
 	m_pEndScreen = new EndScreen(sponge);
 	AddChild(m_pEndScreen);
 
-
 	//Character
-	AddChild(pSponge);
+	AddChild(m_pSponge);
 	sponge->SetControllerPosition(m_StartPos);
 
 
@@ -93,11 +76,11 @@ void SpongebobScene::Initialize()
 	CreateObjects();
 
 	//PostProcessing
-	auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
+	const auto m_pPostEffect = MaterialManager::Get()->CreateMaterial<PostMyEffect>();
 	AddPostProcessingEffect(m_pPostEffect);
 
 	//Music
-	auto soundManager = SoundManager::Get();
+	const auto soundManager = SoundManager::Get();
 	soundManager->GetSystem()->createStream("Resources/Exam/LevelMusic.mp3",
 		FMOD_LOOP_NORMAL | FMOD_DEFAULT, nullptr, &m_pSound);
 	FMOD::System* fmodSystem = SoundManager::Get()->GetSystem();
@@ -125,36 +108,31 @@ void SpongebobScene::Initialize()
 
 }
 
-void SpongebobScene::OnGUI()
-{
-	
-}
-
 void SpongebobScene::OnSceneActivated()
 {
 	m_pChannel->setPaused(false);
 
-	auto sponge = dynamic_cast<Spongebob*>(pSponge);
+	const auto sponge = dynamic_cast<Spongebob*>(m_pSponge);
 	sponge->PauseCharacter(false);
 }
 
 void SpongebobScene::OnSceneDeactivated()
 {
 	m_pChannel->setPaused(true);
-	auto sponge = dynamic_cast<Spongebob*>(pSponge);
+	const auto sponge = dynamic_cast<Spongebob*>(m_pSponge);
 	sponge->PauseCharacter(true);
 }
 
 void SpongebobScene::Update()
 {
 	CheckDeletedObjects();
-	CheckControlScemeTimer();
+	CheckControlSchemeTimer();
 }
 
 
 void SpongebobScene::CheckDeletedObjects()
 {
-	for (auto child : GetChildren())
+	for (const auto child : GetChildren())
 	{
 		if (child->NeedsDeleting())
 		{
@@ -163,14 +141,14 @@ void SpongebobScene::CheckDeletedObjects()
 	}
 }
 
-void SpongebobScene::CheckControlScemeTimer()
+void SpongebobScene::CheckControlSchemeTimer()
 {
 	if (!m_ShowControls) return;
 
 	m_ShowControlsTimer += m_SceneContext.pGameTime->GetElapsed();
 	if (m_ShowControlsTimer > 5.f)
 	{
-		pControlsObj->RemoveComponent(pControlsSprite, true);
+		m_pControlsObj->RemoveComponent(m_pControlsSprite, true);
 		m_ShowControls = false;
 	}
 }
@@ -189,10 +167,6 @@ void SpongebobScene::CreateLevel()
 	pLevelActor->AddCollider(PxTriangleMeshGeometry(pPxTriangleMesh, PxMeshScale({ levelScale, levelScale, levelScale })), *pDefaultMaterial);
 
 	pLevelObject->GetTransform()->Scale(levelScale);
-
-	/*const auto pGroundMaterial = MaterialManager::Get()->CreateMaterial<DiffuseMaterial_Shadow>();
-	pGroundMaterial->SetDiffuseTexture(L"Textures/GroundBrick.jpg");
-	pLevelMesh->SetMaterial(pGroundMaterial);*/
 
 	//USED THIS TO GET THE INFO, THEN WROTE IT TO A FILE FOR QUICK ACCESS AND FOR CHANGING WRONG TEXTURES
 	//auto path = ContentManager::GetFullAssetPath(L"Exam/Meshes/jellyfishfields.obj");
@@ -239,21 +213,20 @@ void SpongebobScene::CreateLevel()
 	//pSkyboxMesh->SetMaterial(pFlowerMat, 1);
 
 	pSkybox->GetTransform()->Scale(1.5f);
-	//pSkybox->GetTransform()->Rotate(0, 90, 0);
 }
 
 void SpongebobScene::CreateObjects()
 {
-	auto pGate = new ExitGate(m_pEndScreen);
+	const auto pGate = new ExitGate(m_pEndScreen);
 	pGate->GetTransform()->Translate(388.383f, 0.495f, -176.235f);
 	pGate->GetTransform()->Rotate(0, -45, 0);
 	AddChild(pGate);
 
-	auto pJelly = new Jellyfish();
+	const auto pJelly = new Jellyfish();
 	pJelly->GetTransform()->Translate(489.977f, -400.204f, 106.555f);
 	AddChild(pJelly);
 
-	auto pHans = new Hans();
+	const auto pHans = new Hans();
 	pHans->GetTransform()->Translate(492.334f, 160.f, 185.318f);
 	pHans->GetTransform()->Rotate(0, -30, 0);
 	AddChild(pHans);
@@ -263,7 +236,6 @@ void SpongebobScene::CreateObjects()
 
 void SpongebobScene::CreateItems()
 {
-	//Objects
 	auto spat1 = new Spatula();
 	spat1->GetTransform()->Translate(174.363f, 38.097f, -590.433f);
 	AddChild(spat1);
@@ -290,7 +262,7 @@ void SpongebobScene::CreateItems()
 
 	for(auto t : tikiPositions)
 	{
-		auto pTiki = new Tiki();
+		const auto pTiki = new Tiki();
 		t.y -= 6.6f;
 		pTiki->GetTransform()->Translate(t);
 		AddChild(pTiki);
@@ -299,7 +271,7 @@ void SpongebobScene::CreateItems()
 
 void SpongebobScene::ReadCreatedTextureFile(ModelComponent* levelMesh)
 {
-	auto path = ContentManager::GetFullAssetPath(L"Exam/texture_names.txt").string();
+	const auto path = ContentManager::GetFullAssetPath(L"Exam/texture_names.txt").string();
 	std::ifstream inputFile(path);
 
 	if (inputFile.is_open())
@@ -325,11 +297,11 @@ void SpongebobScene::ReadCreatedTextureFile(ModelComponent* levelMesh)
 		// Access the numbers and strings
 		for (size_t i = 0; i < numbers.size(); ++i) 
 		{
-			int number = numbers[i];
+			const auto number = numbers[i];
 			std::string str = strings[i];
 			std::cout << "Number: " << number << ", String: " << str << std::endl;
 
-			const auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
+			const auto pMat = MaterialManager::Get()->CreateMaterial<ShadowMaterial_Deferred>();
 			pMat->SetDiffuseMap(L"Exam/Textures/Level/" + ConvertToWideString(str));
 			levelMesh->SetMaterial(pMat, UINT8(number));
 		}
@@ -340,19 +312,14 @@ void SpongebobScene::ReadCreatedTextureFile(ModelComponent* levelMesh)
 	}
 }
 
-void SpongebobScene::SetPaused(bool isPaused)
-{
-	//pause/unpause music
-	//stop moving items
-
-	//m_MusicPlaying = !m_MusicPlaying;
+void SpongebobScene::SetPaused(bool isPaused) const
+{ 
 	m_pChannel->setPaused(isPaused);
 }
 
 void SpongebobScene::ReloadScene(bool pauseMusic)
 {
-	//Deactivate scene
-	for (auto c : GetChildren())
+	for (const auto c : GetChildren())
 	{
 		if (dynamic_cast<Tiki*>(c) ||
 			dynamic_cast<Spatula*>(c) ||
@@ -363,7 +330,7 @@ void SpongebobScene::ReloadScene(bool pauseMusic)
 	}
 
 
-	auto sponge = dynamic_cast<Spongebob*>(pSponge);
+	const auto sponge = dynamic_cast<Spongebob*>(m_pSponge);
 	sponge->SetControllerPosition(m_StartPos);
 
 	//Reload scene
@@ -378,17 +345,17 @@ void SpongebobScene::ReloadScene(bool pauseMusic)
 
 	if(!m_ShowControls)
 	{
-		pControlsSprite = new SpriteComponent(L"Exam/HUD/ControlScheme.png");
-		pControlsObj->AddComponent<SpriteComponent>(pControlsSprite);
+		m_pControlsSprite = new SpriteComponent(L"Exam/HUD/ControlScheme.png");
+		m_pControlsObj->AddComponent<SpriteComponent>(m_pControlsSprite);
 		m_ShowControls = true;
 	}
 	m_ShowControlsTimer = 0;
 }
 
 
-std::wstring SpongebobScene::ConvertToWideString(const std::string& str)
+std::wstring SpongebobScene::ConvertToWideString(const std::string& str) const
 {
-	int length = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
+	const auto length = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
 	if (length == 0)
 	{
 		// Error handling if conversion fails
@@ -407,7 +374,7 @@ std::wstring SpongebobScene::ConvertToWideString(const std::string& str)
 	return wideStr;
 }
 
-std::vector<SpongebobScene::MaterialInfo> SpongebobScene::mtlParser(const std::string& filename)
+std::vector<SpongebobScene::MaterialInfo> SpongebobScene::mtlParser(const std::string& filename) const
 {
 	std::ifstream file(filename);
 	std::vector<MaterialInfo> materialInfoList;
@@ -457,7 +424,7 @@ std::vector<SpongebobScene::MaterialInfo> SpongebobScene::mtlParser(const std::s
 }
 
 
-std::vector<SpongebobScene::MeshInfo> SpongebobScene::ParseOBJFile(const std::string& filepath)
+std::vector<SpongebobScene::MeshInfo> SpongebobScene::ParseOBJFile(const std::string& filepath) const
 {
 	std::ifstream file(filepath);
 	std::vector<MeshInfo> materialInfoList;
@@ -514,7 +481,7 @@ std::vector<SpongebobScene::MeshInfo> SpongebobScene::ParseOBJFile(const std::st
 	return materialInfoList;
 }
 
-std::vector<XMFLOAT3> SpongebobScene::readObjFile(const std::string& filePath)
+std::vector<XMFLOAT3> SpongebobScene::readObjFile(const std::string& filePath) const
 {
 	std::vector<XMFLOAT3> pivotPositions;
 	std::ifstream file(filePath);
@@ -524,9 +491,9 @@ std::vector<XMFLOAT3> SpongebobScene::readObjFile(const std::string& filePath)
 		return{};
 	}
 
-	std::string line;
-	std::string currentObjectName;
-	XMFLOAT3 currentPivotPosition;
+	std::string line{};
+	std::string currentObjectName{};
+	XMFLOAT3 currentPivotPosition{};
 
 	while (std::getline(file, line))
 	{

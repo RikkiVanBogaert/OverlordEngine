@@ -13,7 +13,5 @@ public:
 protected:
     void InitializeEffectVariables() override {};
 
-private:
-   
 };
 

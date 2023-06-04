@@ -14,14 +14,11 @@ protected:
 	void Initialize(const SceneContext& sceneContext) override;
 
 private:
-	GameObject* pModelObject{};
-	ModelComponent* pModel{};
-	RigidBodyComponent* pRigidBody{};
+	GameObject* m_pModelObject{};
+	ModelComponent* m_pModel{};
+	RigidBodyComponent* m_pRigidBody{};
 	bool m_IsVulnerable{};
 	Character* m_pPlayer{};
-	BubbleParticles* pBubbles{};
-
-	void SpawnFlowers();
-	void SpawnBubbles();
+	BubbleParticles* m_pBubbles{};
 };
 

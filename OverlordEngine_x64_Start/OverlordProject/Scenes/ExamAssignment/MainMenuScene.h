@@ -17,17 +17,16 @@ protected:
 private:
 	SpriteComponent* m_pPlaySprite{};
 	SpriteComponent* m_pQuitSprite{};
-
 	SpriteComponent* m_pActiveButton{};
+	std::vector<SpriteComponent*> m_pButtons;
 
-	std::vector<SpriteComponent*> m_Buttons;
+	FMOD::Channel* m_pMainMenuChannel{};
 
 	void HoverOverButton();
 	void CheckControllerInput();
-	void CheckActiveButton();
+	void CheckActiveButton() const;
 
 	bool MouseInRect(const XMFLOAT2& pos, const XMFLOAT2& size) const;
 
-	FMOD::Channel* m_pMainMenuChannel{};
 };
 

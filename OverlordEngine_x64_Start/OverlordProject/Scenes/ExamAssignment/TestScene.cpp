@@ -1,23 +1,19 @@
 #include "stdafx.h"
 #include "TestScene.h"
 
-#include "Prefabs/Character.h"
+
 #include "Prefabs/Pickup.h"
 #include "Prefabs/Tiki.h"
-#include "Prefabs/ThreeTikis.h"
+
 
 #include "Materials/ColorMaterial.h"
-#include "Materials/DiffuseMaterial.h"
-#include "Materials/DiffuseMaterial_Skinned.h"
+
 
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include "Materials/Post/PostGrayscale.h"
 #include "Materials/Shadow/DiffuseMaterial_Shadow.h"
-#include "Materials/Shadow/DiffuseMaterial_Shadow_Skinned.h"
-#include "Prefabs/HUDPrefab.h"
-#include "Prefabs/Spongebob.h"
+
 
 TestScene::~TestScene()
 {
@@ -64,10 +60,6 @@ void TestScene::Initialize()
 	AddChild(pTiki);
 	pTiki->GetTransform()->Translate(0, 0, 12);
 
-	auto pFlower = new Flower();
-	pFlower->GetTransform()->Translate(0, 0, 4);
-	AddChild(pFlower);
-
 }
 
 void TestScene::OnGUI()
@@ -76,9 +68,7 @@ void TestScene::OnGUI()
 
 void TestScene::Update()
 {
-	//used manual position adjustement instead of childing mesh to parent, 
-	//because the mesh always pointed to the camera when it was a child of the characterComponent
-
+	
 	CheckDeletedObjects();
 }
 

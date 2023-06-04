@@ -10,29 +10,29 @@
 
 void Tiki::Initialize(const SceneContext&)
 {
-	auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
+	const auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
 	pMat->SetDiffuseMap(L"Exam/Textures/tiki.png");
 
 	constexpr float size{ 5 };
 
-	pModelObject = new GameObject();
-	pModel = new ModelComponent(L"Exam/Meshes/Tiki.ovm");
-	pModelObject->AddComponent<ModelComponent>(pModel);
-	pModel->SetMaterial(pMat);
-	AddChild(pModelObject);
-	pModel->GetTransform()->Translate(0, 0.f, 0);
-	pModel->GetTransform()->Rotate(0, float(rand() % 360), 0);
+	m_pModelObject = new GameObject();
+	m_pModel = new ModelComponent(L"Exam/Meshes/Tiki.ovm");
+	m_pModelObject->AddComponent<ModelComponent>(m_pModel);
+	m_pModel->SetMaterial(pMat);
+	AddChild(m_pModelObject);
+	m_pModel->GetTransform()->Translate(0, 0.f, 0);
+	m_pModel->GetTransform()->Rotate(0, float(rand() % 360), 0);
 
 	//Collision
 	auto& phys = PxGetPhysics();
-	auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
+	const auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
 
 
-	pRigidBody = AddComponent(new RigidBodyComponent(true));
-	pRigidBody->AddCollider(PxSphereGeometry(1.8f * size), *pBouncyMaterial, true);
+	m_pRigidBody = AddComponent(new RigidBodyComponent(true));
+	m_pRigidBody->AddCollider(PxSphereGeometry(1.8f * size), *pBouncyMaterial, true);
 	
-	auto pConvexMesh = ContentManager::Load<PxConvexMesh>(L"Exam/Meshes/Tiki.ovpc");
-	pRigidBody->AddCollider(PxConvexMeshGeometry{ pConvexMesh, PxMeshScale{size} }, *pBouncyMaterial);
+	const auto pConvexMesh = ContentManager::Load<PxConvexMesh>(L"Exam/Meshes/Tiki.ovpc");
+	m_pRigidBody->AddCollider(PxConvexMeshGeometry{ pConvexMesh, PxMeshScale{size} }, *pBouncyMaterial);
 
 	auto onTrigger = [&](GameObject*, GameObject* other, PxTriggerAction action)
 	{
@@ -56,47 +56,29 @@ void Tiki::Initialize(const SceneContext&)
 
 	GetTransform()->Scale(size);
 
-	pBubbles = new BubbleParticles();
-	XMFLOAT3 pos = { GetTransform()->GetPosition().x - 10, GetTransform()->GetPosition().y + 5, GetTransform()->GetPosition().z };
-	pBubbles->GetTransform()->Translate(pos);
-	GetScene()->AddChild(pBubbles);
+	m_pBubbles = new BubbleParticles();
+	const XMFLOAT3 pos = { GetTransform()->GetPosition().x - 10, GetTransform()->GetPosition().y + 5, GetTransform()->GetPosition().z };
+	m_pBubbles->GetTransform()->Translate(pos);
+	GetScene()->AddChild(m_pBubbles);
 }
 
 void Tiki::Update(const SceneContext& )
 {
 	if (!m_IsVulnerable) return;
 	if (!m_pPlayer) return;
-	//if (NeedsDeleting()) return;
-	if (!pModelObject->HasComponent<ModelComponent>()) return;
-
+	
 	if (m_pPlayer->IsAttacking())
 	{
-		pBubbles->SetActive(true);
+		m_pBubbles->SetActive(true);
 
 		FMOD::Sound* m_pSound{};
 		FMOD::Channel* m_pChannel{};
-		auto soundManager = SoundManager::Get();
+		const auto soundManager = SoundManager::Get();
 		soundManager->GetSystem()->createStream("Resources/Exam/TikiBreak.mp3",
 			FMOD_DEFAULT, nullptr, &m_pSound);
 		FMOD::System* fmodSystem = soundManager->GetSystem();
 		fmodSystem->playSound(m_pSound, nullptr, false, &m_pChannel);
 
-		//MarkForDeletion();
 		GetTransform()->Translate(0, -500, 0);
 	}
 }
-
-void Tiki::SpawnFlowers()
-{
-	auto pFlower = new Flower();
-	auto pos = GetTransform()->GetPosition();
-
-	const int rndX{rand() % 53 - 12};
-	const int rndZ{ rand() % 53 - 12 };
-
-	pFlower->GetTransform()->Translate(pos.x + rndX, pos.y + 15, pos.z + rndZ);
-	SceneManager::Get()->GetActiveScene()->AddChild(pFlower);
-}
-
-void Tiki::SpawnBubbles()
-{}

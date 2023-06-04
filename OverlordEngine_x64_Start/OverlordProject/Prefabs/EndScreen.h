@@ -20,9 +20,9 @@ private:
 	GameObject* m_pScreen{};
 	SpriteComponent* m_pScreenSprite{};
 
-	GameObject* pEndObj{};
-	GameObject* pMainMenuObj{};
-	GameObject* pRestartObj{};
+	GameObject* m_pEndObj{};
+	GameObject* m_pMainMenuObj{};
+	GameObject* m_pRestartObj{};
 
 	SpriteComponent* m_pEndSprite{};
 	SpriteComponent* m_pMainMenuSprite{};
@@ -30,7 +30,7 @@ private:
 
 	SpriteComponent* m_pActiveButton{};
 
-	std::vector<SpriteComponent*> m_Buttons;
+	std::vector<SpriteComponent*> m_pButtons;
 
 	bool m_IsPaused{};
 

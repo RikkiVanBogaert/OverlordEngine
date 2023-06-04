@@ -1,19 +1,17 @@
 #include "stdafx.h"
 #include "Hans.h"
 
-#include "Character.h"
-#include "Materials/DiffuseMaterial.h"
 #include "Materials/Deferred/BasicMaterial_Deferred.h"
 
 
 void Hans::Initialize(const SceneContext&)
 {
-	auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
+	const auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
 	pMat->SetDiffuseMap(L"Exam/Textures/hans.png");
 
 	constexpr float size{ 25 };
 
-	auto pModelObject = new GameObject();
+	const auto pModelObject = new GameObject();
 	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/Hans.ovm");
 	pModelObject->AddComponent<ModelComponent>(pModel);
 	pModel->SetMaterial(pMat);
@@ -22,12 +20,12 @@ void Hans::Initialize(const SceneContext&)
 
 	//Collision
 	auto& phys = PxGetPhysics();
-	auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
+	const auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
 
 
-	auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
+	const auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
 
-	auto pConvexMesh = ContentManager::Load<PxConvexMesh>(L"Exam/Meshes/Hans.ovpc");
+	const auto pConvexMesh = ContentManager::Load<PxConvexMesh>(L"Exam/Meshes/Hans.ovpc");
 	pRigidBodyCp->AddCollider(PxConvexMeshGeometry{ pConvexMesh, PxMeshScale{size} }, *pBouncyMaterial);
 
 	

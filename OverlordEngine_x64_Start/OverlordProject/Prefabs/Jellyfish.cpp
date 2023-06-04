@@ -7,28 +7,39 @@
 #include "Prefabs/Spongebob.h"
 
 
-void Jellyfish::Initialize(const SceneContext&)
+void Jellyfish::Initialize(const SceneContext& sceneContext)
 {
-	auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
+	const auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
 	pMat->SetDiffuseMap(L"Exam/Textures/jellyfish_pink.RW3.png");
 
 	constexpr float size{ 40 };
 
-	auto pModelObject = new GameObject();
+	const auto pModelObject = new GameObject();
 	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/Jellyfish.ovm");
 	pModelObject->AddComponent<ModelComponent>(pModel);
 	pModel->SetMaterial(pMat);
 	AddChild(pModelObject);
 	pModel->GetTransform()->Translate(0, 0.f, 0);
 
+	//Point Light
+	Light light = {};
+	light.isEnabled = true;
+	light.position = { GetTransform()->GetPosition().x, GetTransform()->GetPosition().y + 95,
+		GetTransform()->GetPosition().z, 1 };
+	light.color = { 7.f,1.f,2.f,1.f };
+	light.intensity = .2f;
+	light.range = 400.0f;
+	light.type = LightType::Point;
+	sceneContext.pLights->AddLight(light);
+
 	//Collision
 	auto& phys = PxGetPhysics();
-	auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
+	const auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
 
 
-	auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
+	const auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
 
-	auto pConvexMesh = ContentManager::Load<PxConvexMesh>(L"Exam/Meshes/Jellyfish.ovpc");
+	const auto pConvexMesh = ContentManager::Load<PxConvexMesh>(L"Exam/Meshes/Jellyfish.ovpc");
 	pRigidBodyCp->AddCollider(PxConvexMeshGeometry{ pConvexMesh, PxMeshScale{size} }, *pBouncyMaterial, true);
 
 	auto onTrigger = [&](GameObject*, GameObject* other, PxTriggerAction action)
@@ -56,11 +67,5 @@ void Jellyfish::Initialize(const SceneContext&)
 	SetOnTriggerCallBack(onTrigger);
 
 	GetTransform()->Scale(size);
-}
-
-void Jellyfish::Update(const SceneContext&)
-{
-	if (NeedsDeleting()) return;
-
 }
 

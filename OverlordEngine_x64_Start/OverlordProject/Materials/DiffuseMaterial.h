@@ -1,3 +1,4 @@
+#pragma once
 
 class DiffuseMaterial final : public Material<DiffuseMaterial>
 {

@@ -32,7 +32,6 @@
     <ClCompile Include="Prefabs\Pickup.cpp" />
     <ClCompile Include="Scenes\ExamAssignment\TestScene.cpp" />
     <ClCompile Include="Prefabs\Tiki.cpp" />
-    <ClCompile Include="Prefabs\ThreeTikis.cpp" />
     <ClCompile Include="Scenes\ExamAssignment\MainMenuScene.cpp" />
     <ClCompile Include="Prefabs\HUDPrefab.cpp" />
     <ClCompile Include="Scenes\Week 10\PostProcessingScene.cpp" />
@@ -88,7 +87,6 @@
     <ClInclude Include="Prefabs\Pickup.h" />
     <ClInclude Include="Scenes\ExamAssignment\TestScene.h" />
     <ClInclude Include="Prefabs\Tiki.h" />
-    <ClInclude Include="Prefabs\ThreeTikis.h" />
     <ClInclude Include="Scenes\ExamAssignment\MainMenuScene.h" />
     <ClInclude Include="Prefabs\HUDPrefab.h" />
     <ClInclude Include="Scenes\Week 10\PostProcessingScene.h" />

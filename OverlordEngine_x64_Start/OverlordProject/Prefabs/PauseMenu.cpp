@@ -77,7 +77,7 @@ void PauseMenu::Deactivate()
 
 bool PauseMenu::MouseInRect(const SceneContext& sceneContext, const XMFLOAT2& pos, const XMFLOAT2& size) const
 {
-	auto mousePos = sceneContext.pInput->GetMousePosition();
+	const auto mousePos = sceneContext.pInput->GetMousePosition();
 
 	if (mousePos.x > pos.x && mousePos.x < pos.x + size.x
 		&& mousePos.y > pos.y && mousePos.y < pos.y + size.y)
@@ -165,7 +165,7 @@ void PauseMenu::CheckControllerInput(const SceneContext& sceneContext)
 	}
 }
 
-void PauseMenu::CheckActiveButton(const SceneContext& sceneContext)
+void PauseMenu::CheckActiveButton(const SceneContext& sceneContext) const
 {
 	if (!m_pActiveButton) return;
 

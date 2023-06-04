@@ -1,11 +1,8 @@
 #include "stdafx.h"
 #include "ExitGate.h"
 
-#include "BubbleParticles.h"
-#include "Materials/DiffuseMaterial.h"
-#include "Character.h"
+
 #include "HUDPrefab.h"
-#include "Pickup.h"
 #include "Spongebob.h"
 #include "EndScreen.h"
 #include "Materials/Deferred/BasicMaterial_Deferred.h"
@@ -17,12 +14,12 @@ m_pEndScreen(pEndScreen)
 
 void ExitGate::Initialize(const SceneContext&)
 {
-	auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
+	const auto pMat = MaterialManager::Get()->CreateMaterial<BasicMaterial_Deferred>();
 	pMat->SetDiffuseMap(L"Exam/Textures/Gate.png");
 
 	constexpr float size{ 8 };
 
-	auto pModelObject = new GameObject();
+	const auto pModelObject = new GameObject();
 	ModelComponent* pModel = new ModelComponent(L"Exam/Meshes/Gate.ovm");
 	pModelObject->AddComponent<ModelComponent>(pModel);
 	pModel->SetMaterial(pMat);
@@ -31,20 +28,20 @@ void ExitGate::Initialize(const SceneContext&)
 
 	//Collision
 	auto& phys = PxGetPhysics();
-	auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
+	const auto pBouncyMaterial = phys.createMaterial(0, 0, 1.f);
 
 
-	auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
+	const auto pRigidBodyCp = AddComponent(new RigidBodyComponent(true));
 
-	auto pConvexMesh = ContentManager::Load<PxConvexMesh>(L"Exam/Meshes/Gate.ovpc");
+	const auto pConvexMesh = ContentManager::Load<PxConvexMesh>(L"Exam/Meshes/Gate.ovpc");
 	pRigidBodyCp->AddCollider(PxConvexMeshGeometry{ pConvexMesh, PxMeshScale{size} }, *pBouncyMaterial, true);
 
-	auto onTrigger = [&](GameObject*, GameObject* other, PxTriggerAction action)
+	auto onTrigger = [&](GameObject*, const GameObject* other, PxTriggerAction action)
 	{
 		if (other->GetTag() != L"Player") return;
 
 		auto pSponge = dynamic_cast<Spongebob*>(other->GetParent());
-		if(pSponge->GetHUD()->GetAmountSpatulas() >= 0)
+		if(pSponge->GetHUD()->GetAmountSpatulas() >= 3)
 		{
 			if (action == PxTriggerAction::ENTER)
 			{
@@ -57,19 +54,19 @@ void ExitGate::Initialize(const SceneContext&)
 
 		if (action == PxTriggerAction::ENTER)
 		{
-			m_Text = new GameObject();
-			auto spatTextSprite = new SpriteComponent(L"Exam/HUD/CollectSpatulasText.png");
-			AddChild(m_Text);
-			m_Text->AddComponent<SpriteComponent>(spatTextSprite);
-			m_Text->GetTransform()->Translate(410, 160, 0);
+			m_pTextObj = new GameObject();
+			const auto spatTextSprite = new SpriteComponent(L"Exam/HUD/CollectSpatulasText.png");
+			AddChild(m_pTextObj);
+			m_pTextObj->AddComponent<SpriteComponent>(spatTextSprite);
+			m_pTextObj->GetTransform()->Translate(410, 160, 0);
 		}
 
 		if (action == PxTriggerAction::LEAVE)
 		{
-			if (m_Text)
+			if (m_pTextObj)
 			{
-				RemoveChild(m_Text, true);
-				m_Text = nullptr;
+				RemoveChild(m_pTextObj, true);
+				m_pTextObj = nullptr;
 			}
 		}
 	};

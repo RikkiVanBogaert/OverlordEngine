@@ -12,12 +12,12 @@ public:
 	void Initialize(const SceneContext&) override;
 	void Update(const SceneContext&) override;
 
-	void SetControllerPosition(const XMFLOAT3& pos);
+	void SetControllerPosition(const XMFLOAT3& pos) const;
 	void ResetVariables();
 	HUDPrefab* GetHUD() { return m_pHud; };
 	void TurnPauseMenuOnOff();
 	void PauseCharacter(bool isPaused);
-	void PauseScene(bool isPaused);
+	void PauseScene(bool isPaused) const;
 
 private:
 	enum InputIds
@@ -34,11 +34,11 @@ private:
 	Character* m_pCharacter{};
 	GameObject* m_pSpongebobMesh{};
 
-	RigidBodyComponent* pRigidBody{};
+	RigidBodyComponent* m_pRigidBody{};
 
 	HUDPrefab* m_pHud;
 	//Animations
-	ModelAnimator* pAnimator{};
+	ModelAnimator* m_pAnimator{};
 
 	int m_AnimationClipId{ 0 };
 	float m_AnimationSpeed{ 0.5f };

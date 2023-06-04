@@ -17,29 +17,32 @@ public:
 
 protected:
 	void Initialize(const SceneContext& sceneContext) override;
-};
 
-class Underwear final : public Pickup
-{
-public:
-	Underwear() = default;
-
-protected:
-	void Initialize(const SceneContext& sceneContext) override;
-};
-
-class Flower final : public Pickup
-{
-public:
-	Flower(int type = rand() % 5);
-	void Update(const SceneContext&) override;
-
-protected:
-	void Initialize(const SceneContext& sceneContext) override;
-	
 private:
-	int m_Type{};
-	bool m_HitGround{};
+	int m_LightId{};
 };
+
+//class Underwear final : public Pickup
+//{
+//public:
+//	Underwear() = default;
+//
+//protected:
+//	void Initialize(const SceneContext& sceneContext) override;
+//};
+//
+//class Flower final : public Pickup
+//{
+//public:
+//	Flower(int type = rand() % 5);
+//	void Update(const SceneContext&) override;
+//
+//protected:
+//	void Initialize(const SceneContext& sceneContext) override;
+//	
+//private:
+//	int m_Type{};
+//	bool m_HitGround{};
+//};
 
 

@@ -3,7 +3,7 @@
 
 #include <corecrt_math_defines.h>
 
-Character::Character(const CharacterDesc& characterDesc, const XMFLOAT3 cameraOffset) :
+Character::Character(const CharacterDesc& characterDesc, const XMFLOAT3& cameraOffset) :
 	m_CharacterDesc{ characterDesc },
 	m_MoveAcceleration(characterDesc.maxMoveSpeed / characterDesc.moveAccelerationTime),
 	m_FallAcceleration(characterDesc.maxFallSpeed / characterDesc.fallAccelerationTime),
@@ -94,8 +94,8 @@ void Character::Update(const SceneContext& sceneContext)
 		}
 		else if(stickX != 0 || stickY != 0)
 		{
-			const float rotationSpeedX = 3;
-			const float rotationSpeedY = 1.5f;
+			constexpr float rotationSpeedX = 3;
+			constexpr float rotationSpeedY = 1.5f;
 			look.x += stickX * rotationSpeedX;
 			look.y -= stickY * rotationSpeedY;
 		}
@@ -106,15 +106,15 @@ void Character::Update(const SceneContext& sceneContext)
 		//GATHERING TRANSFORM INFO
 
 		//Retrieve the TransformComponent
-		auto transform = m_pControllerComponent->GetTransform();
+		const auto transform = m_pControllerComponent->GetTransform();
 		//Retrieve the forward & right vector (as XMVECTOR) from the TransformComponent
-		XMVECTOR forward = XMLoadFloat3(&transform->GetForward());
-		XMVECTOR right = XMLoadFloat3(&transform->GetRight());
+		const XMVECTOR forward = XMLoadFloat3(&transform->GetForward());
+		const XMVECTOR right = XMLoadFloat3(&transform->GetRight());
 
 		//***************
 		//CAMERA ROTATION
 
-		auto elapsedTime = GetScene()->GetSceneContext().pGameTime->GetElapsed();
+		const auto elapsedTime = GetScene()->GetSceneContext().pGameTime->GetElapsed();
 		//Adjust the TotalYaw (m_TotalYaw) & TotalPitch (m_TotalPitch) based on the local 'look' variable
 		//Make sure this calculated on a framerate independent way and uses CharacterDesc::rotationSpeed.
 		m_TotalYaw += m_CharacterDesc.rotationSpeed * elapsedTime * look.x;
@@ -127,14 +127,13 @@ void Character::Update(const SceneContext& sceneContext)
 		//Rotate this character based on the TotalPitch (X) and TotalYaw (Y)
 		GetTransform()->Rotate(m_TotalPitch, m_TotalYaw, 0);
 
-		
 
 		//********
 		//MOVEMENT
 
 		//## Horizontal Velocity (Forward/Backward/Right/Left)
 		//Calculate the current move acceleration for this frame (m_MoveAcceleration * ElapsedTime)
-		auto moveAcc = m_MoveAcceleration * elapsedTime;
+		const auto moveAcc = m_MoveAcceleration * elapsedTime;
 
 		//If the character is moving (= input is pressed)
 
@@ -183,7 +182,7 @@ void Character::Update(const SceneContext& sceneContext)
 		m_TotalVelocity.z = m_CurrentDirection.z * m_MoveSpeed;
 		//It's important that you don't overwrite the y component of m_TotalVelocity (contains the vertical velocity)
 
-		////## Vertical Movement (Jump/Fall)
+		////## Vertical Movement (Jump/Fall) //Old System
 		////If the Controller Component is NOT grounded (= freefall)
 		//if (!(m_pControllerComponent->GetCollisionFlags() & PxControllerCollisionFlag::eCOLLISION_DOWN))
 		//{

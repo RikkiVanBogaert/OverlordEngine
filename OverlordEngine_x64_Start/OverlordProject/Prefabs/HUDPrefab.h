@@ -25,8 +25,8 @@ protected:
 private:
 	SpriteFont* m_pFont{};
 
-	GameObject* spriteObj{};
-	SpriteComponent* spriteCp{};
+	GameObject* m_pSpriteObj{};
+	SpriteComponent* m_pSpriteCp{};
 	XMFLOAT2 m_SpatulaPos{};
 	int m_SpatulaAmount{};
 };

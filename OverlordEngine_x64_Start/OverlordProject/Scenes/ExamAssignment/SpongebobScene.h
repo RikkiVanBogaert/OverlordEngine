@@ -14,29 +14,24 @@ public:
 	SpongebobScene& operator=(const SpongebobScene& other) = delete;
 	SpongebobScene& operator=(SpongebobScene&& other) noexcept = delete;
 
-	void SetPaused(bool isPaused);
+	void SetPaused(bool isPaused) const;
 	void ReloadScene(bool pauseMusic = false);
 
 protected:
 	void Initialize() override;
-	void OnGUI() override;
 	void Update() override;
 	void OnSceneActivated() override;
 	void OnSceneDeactivated() override;
 
 private:
-	enum InputIds
-	{
-		Pause
-	};
-
-	GameObject* pSponge;
+	
+	GameObject* m_pSponge{};
 	Character* m_pCharacter{};
 	GameObject* m_pSpongebobMesh{};
 	XMFLOAT3 m_StartPos{};
 
 	//Animations
-	ModelAnimator* pAnimator{};
+	ModelAnimator* m_pAnimator{};
 
 	int m_AnimationClipId{ 0 };
 	float m_AnimationSpeed{ 0.5f };
@@ -44,17 +39,15 @@ private:
 	char** m_ClipNames{};
 	UINT m_ClipCount{};
 
-	//HUD
-	UIElement* m_pUISpatula;
-
+	
 	FMOD::Sound* m_pSound{};
 	FMOD::Channel* m_pChannel{};
 	bool m_MusicPlaying{};
 
-	bool m_IsLoaded;
+	bool m_IsLoaded{};
 
-	GameObject* pControlsObj{};
-	SpriteComponent* pControlsSprite{};
+	GameObject* m_pControlsObj{};
+	SpriteComponent* m_pControlsSprite{};
 	float m_ShowControlsTimer{};
 	bool m_ShowControls{ true };
 
@@ -66,7 +59,7 @@ private:
 		Paused
 	};
 	void CheckDeletedObjects();
-	void CheckControlScemeTimer();
+	void CheckControlSchemeTimer();
 	void CreateLevel();
 	void CreateObjects();
 	void CreateItems();
@@ -78,16 +71,16 @@ private:
 		std::string textureName;
 		std::string meshName;
 	};
-	std::vector<MaterialInfo> mtlParser(const std::string& filename);
+	std::vector<MaterialInfo> mtlParser(const std::string& filename) const;
 
 	struct MeshInfo
 	{
 		std::string name;
 		std::string submeshId;
 	};
-	std::vector<MeshInfo> ParseOBJFile(const std::string& filepath);
+	std::vector<MeshInfo> ParseOBJFile(const std::string& filepath) const;
 
-	std::wstring ConvertToWideString(const std::string& str);
-	std::vector<XMFLOAT3> readObjFile(const std::string& filePath);
+	std::wstring ConvertToWideString(const std::string& str) const;
+	std::vector<XMFLOAT3> readObjFile(const std::string& filePath) const;
 };
 

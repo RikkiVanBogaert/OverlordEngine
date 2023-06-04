@@ -14,7 +14,7 @@ protected:
 	void Initialize(const SceneContext& sceneContext) override;
 
 private:
-	GameObject* m_Text{};
+	GameObject* m_pTextObj{};
 	EndScreen* m_pEndScreen{};
 };
 

@@ -33,7 +33,7 @@ private:
 	GameObject* m_pSpatula{};
 
 	////Animations
-	//ModelAnimator* pAnimator{};
+	//ModelAnimator* m_pAnimator{};
 
 	//int m_AnimationClipId{ 0 };
 	//float m_AnimationSpeed{ 0.5f };

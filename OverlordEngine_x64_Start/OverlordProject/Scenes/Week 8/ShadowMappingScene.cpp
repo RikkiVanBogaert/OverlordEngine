@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "ShadowMappingScene.h"
 
-#include "Materials/DiffuseMaterial.h"
 #include "Materials/Shadow/DiffuseMaterial_Shadow.h"
 #include "Materials/Shadow/DiffuseMaterial_Shadow_Skinned.h"
 

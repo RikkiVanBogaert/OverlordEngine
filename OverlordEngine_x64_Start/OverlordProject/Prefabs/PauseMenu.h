@@ -31,7 +31,7 @@ private:
 
 	void HoverOverButton(const SceneContext& sceneContext);
 	void CheckControllerInput(const SceneContext& sceneContext);
-	void CheckActiveButton(const SceneContext& sceneContext);
+	void CheckActiveButton(const SceneContext& sceneContext) const;
 
 	bool MouseInRect(const SceneContext& sceneContext, const XMFLOAT2& pos, const XMFLOAT2& size) const;
 };

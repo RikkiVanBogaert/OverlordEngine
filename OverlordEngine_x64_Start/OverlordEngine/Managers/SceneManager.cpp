@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include "SceneManager.h"
-#include <algorithm>
-
 
 void SceneManager::Initialize()
 {

@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 
-float wrapAngle(float angle) 
+inline float wrapAngle(float angle) 
 {
     if (angle > 180) {
         angle -= 360;
